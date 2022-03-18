@@ -21,7 +21,7 @@ function Signup(props) {
         const fullname = formData.get('name');
         const email = formData.get('email');
         const password = formData.get('password');
-        const accountType = formData.get('accountType') == 'Employer' ? 'Employer' : 'JobSeeker';
+        const accountType = formData.get('accountType') == 'Customer' ? 'Customer' : 'Freelancer';
 
         axios.post(`${backendServer}/api/signup`, {
             name: fullname,
@@ -34,24 +34,6 @@ function Signup(props) {
             } else {
                 //adding job seeker model in mongoDB after successful signup
                 console.log("signup data" + res.data);
-                if ("JobSeeker" === accountType) {
-                    console.log("calling mongo signup")
-                    axios.post("/api/signupJobSeekerMongo", {
-                        jobSeekerId: res.data.id,
-                        resumeUrl: " ",
-                        jobPreference: [],
-                        savedJobs: []
-                    }).then((response1) => {
-                        if (response1.status === 200) {
-                            alert('Successfully signed up');
-                            redirectToLogin();
-                        }
-                    })
-                        .catch((err) => {
-                            alert("Failed to signup");
-                            console.log(err);
-                        });
-                }
                 alert('Successfully signed up');
                 redirectToLogin();
             }
@@ -95,8 +77,8 @@ function Signup(props) {
                         <Form.Group className="mb-3">
                             <p><small><b>Your Role</b></small><br></br>
                                 <small style={{ color: 'gray' }}>Let us know how you'll be using our products</small></p>
-                            <Form.Check type="radio" label='Job Seeker' name="accountType" value="Job Seeker" required /><br></br>
-                            <Form.Check type="radio" label='Employer' name="accountType" value="Employer" />
+                            <Form.Check type="radio" label='Freelancer' name="accountType" value="Freelancer" required /><br></br>
+                            <Form.Check type="radio" label='Customer' name="accountType" value="Customer" />
                         </Form.Group>
                         <Button bsStyle="primary" bsSize="large" block style={{ width: '100%' }} type='submit'>
                             Create Account

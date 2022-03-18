@@ -40,12 +40,10 @@ function Login(props) {
     const password = formData.get('password');
     let accountType = "";
     switch(formData.get('accountType')) {
-        case 'Employer':
-            accountType = 'Employer';break;
-        case 'Job Seeker':
-            accountType = 'JobSeeker';break;
-        case 'Admin':
-            accountType = 'Admin';break;
+        case 'Freelancer':
+            accountType = 'Freelancer';break;
+        case 'Customer':
+            accountType = 'Customer';break;
         default:
             setErrMsg('Please do not mess with the radio button UI.');
             showErrorModal(true);
@@ -165,22 +163,15 @@ function Login(props) {
             <Form.Group className="mb-3">
               <Form.Check
                 type="radio"
-                label="Job Seeker"
+                label="Freelancer"
                 name="accountType"
-                value="Job Seeker"
-                required
+                value="Freelancer"
               />
               <Form.Check
                 type="radio"
-                label="Employer"
+                label="Freelancer"
                 name="accountType"
-                value="Employer"
-              />
-              <Form.Check
-                type="radio"
-                label="Admin"
-                name="accountType"
-                value="Admin"
+                value="Freelancer"
               />
             </Form.Group>
             

@@ -5,7 +5,6 @@ const session = require('express-session')
 var cors = require('cors')
 app.use(cors())
 
-// Connect to MySQL database
 // Connect to MongoDB
 conn2()
 
@@ -22,15 +21,14 @@ app.use(
 
 //Define all the models
 
-// require('./models/JobSeeker')
-// require('./models/Company')
-// require('./models/Photo')
+// require('./models/Freelancer')
+// require('./models/Customer')
 
 // //Define all the routes
-// app.use(require('./routes/loginRoute'))
+app.use(require('./routes/loginRoute'))
 // app.use(require('./routes/companyRoute'))
 // app.use(require('./routes/postNewJob'))
-// app.use(require('./routes/signupRoute'))
+app.use(require('./routes/signupRoute'))
 // app.use(require('./routes/jobSeekerHome'))
 // app.use(require('./routes/jobs'))
 // app.use(require('./routes/uploadPhotos'))
