@@ -6,7 +6,7 @@ import { Redirect } from 'react-router';
 import axios from 'axios';
 import backendServer from '../../webConfig';
 import JobSeekerNavbar from '../JobSeeker/JobSeekerNavbar';
-import logo from '../../images/Indeed_logo.png';
+import logo from '../../images/logo_signin.png';
 
 function Signup(props) {
 
@@ -50,12 +50,13 @@ function Signup(props) {
                     <img
                         src={logo}
                         alt=""
-                        width="120"
-                        height="30"
+                        width="150"
+                        height="80"
+                        style={{marginLeft:"30%"}}
                         class="d-inline-block align-text-top"
                     />
                 </a>
-            </div><br></br><br></br>
+            </div><br></br>
             <div className="row" style={{ background: 'whitesmoke', padding: '10% 5% 5% 5%' }}>
                 <div className="row">
                     <h5><b>Create an account(it's free)</b></h5>

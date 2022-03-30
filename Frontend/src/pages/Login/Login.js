@@ -10,7 +10,7 @@ import jwt_decode from 'jwt-decode'
 import backendServer from '../../webConfig'
 import { userActionCreator } from '../../reduxutils/actions.js'
 import {companyActionCreator} from '../../reduxutils/actions.js';
-import logo from '../../images/Indeed_logo.png'
+import logo from '../../images/logo_signin.png'
 import ErrorMsg from '../Error/ErrorMsg'
 
 function Login(props) {
@@ -105,13 +105,13 @@ function Login(props) {
           <img
             src={logo}
             alt=""
-            width="120"
-            height="30"
+            width="150"
+            height="80"
+            style={{marginLeft:"30%"}}
             class="d-inline-block align-text-top"
           />
         </a>
       </div>
-      <br></br>
       <br></br>
       <div
         className="row"
@@ -169,9 +169,9 @@ function Login(props) {
               />
               <Form.Check
                 type="radio"
-                label="Freelancer"
+                label="Customer"
                 name="accountType"
-                value="Freelancer"
+                value="Customer"
               />
             </Form.Group>
             

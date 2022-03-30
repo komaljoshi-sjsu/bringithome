@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Link } from 'react-router-dom'
-import logo from '../../images/Indeed_logo.png'
+import logo from '../../images/logo.png'
 import '../../CSS/JobSeekerNavbar.css'
 
 class JobSeekerNavbar extends Component {
@@ -40,7 +40,7 @@ class JobSeekerNavbar extends Component {
                   src={logo}
                   alt=""
                   width="120"
-                  height="30"
+                  height="50"
                   class="d-inline-block align-text-top"
                 />
               </Link>
