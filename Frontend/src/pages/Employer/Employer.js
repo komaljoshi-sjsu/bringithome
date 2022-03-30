@@ -56,7 +56,8 @@ class Employer extends Component {
       const compId = {
         companyId:companyId
       }
-      axios.post(`${backendServer}/getPostedJobs`,compId).then((response) => {
+      // axios.post(`${backendServer}/getPostedJobs`,compId).then((response) => {
+        axios.post(`${backendServer}/api/getPostedService`,compId).then((response) => {
         console.log(response.data)
         if(response.status === 200){
           
@@ -150,7 +151,7 @@ handleModalCloseProfile(){
 
   render() {
     const {applicantsName,statusmsg,liststatus,applicantProfile,jobPreference} = this.state;
-    var jobsList = null; var applicantsList = null; var profile = null;
+    var serviceList = null; var applicantsList = null; var profile = null;
     let paginationItemsTag = [];
     let items = this.state.postedJobs;
     let pgSize = this.state.pageSize;
@@ -324,28 +325,30 @@ handleModalCloseProfile(){
     }
     if(statusmsg === "Jobs Found"){
       
-      jobsList = (
+      serviceList = (
       <div >
        
         {displayitems && displayitems.length > 0 ? (
         <div className="card-list">
-            {displayitems.map(job=> {
+            {displayitems.map(service=> {
               return (
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                  
-                  <Card style={{ width: "18rem" }}>
+                  <Card style={{ width: "25rem" }}>
                   <Card.Body>
                   <Card.Title><Button  variant="link" 
                   onClick={() => {
-                    this.viewUsersList(job.jobId);
+                    this.viewUsersList(service.jobId);
                   }}>
-                    <h5>{job.jobTitle}</h5>
+                    <h5>{service.serviceName}</h5>
                     </Button>
                     </Card.Title>
                   <ListGroup className="list-group-flush">
-                    <ListGroupItem>{job.jobType}</ListGroupItem>
-                    <ListGroupItem>{new Date(job.jobPostedDate).toDateString()}</ListGroupItem>
-                    <ListGroupItem>Total Applicants : {job.applicantsNo}</ListGroupItem>
+                    <ListGroupItem>Category: {service.serviceCategory}</ListGroupItem>
+                    <ListGroupItem>Mode: {service.serviceMode}</ListGroupItem>
+                    <ListGroupItem>Price: ${service.maxPrice}</ListGroupItem>
+                    <ListGroupItem>From: {new Date(service.availability.startDate).toDateString()}, {service.availability.startTime} <br/>To: {new Date(service.availability.endDate).toDateString()}, {service.availability.endTime}</ListGroupItem>
+                    <ListGroupItem>Total Customers : {service.applicantsNo}</ListGroupItem>
                   </ListGroup> 
                   </Card.Body> 
                   </Card>                           
@@ -356,8 +359,8 @@ handleModalCloseProfile(){
       }
         </div>
         ):(
-        <div>
-          <h4 className="">No Jobs </h4>
+        <div style={{display: 'flex',justifyContent:"center",marginTop:"5%",color:"blue"}}>
+          <h4 className="">No Service Available </h4>
         </div>
         )
       }
@@ -389,7 +392,7 @@ handleModalCloseProfile(){
             <div class="col-4"></div>
             <div class="col-4">
               <h5 style={{ marginLeft: '120px' }}>
-                Freelancer:
+                Service Provider:
                 <span class="hoverUnderline" style={{ color: '#003399',marginLeft:"20px"}}>
                  <Button onClick={this.handleSubmit}>Post a Service</Button>
                 </span>
@@ -399,12 +402,12 @@ handleModalCloseProfile(){
           </div>
         </div>
         <hr />
-        <div className="container">  <h5 style={{ marginLeft: '40%' }}>Available Services</h5></div>
+        <div className="container">  <h5 style={{ marginLeft: '40%',marginBottom:'50px'}}>Available Services</h5></div>
  
-        {jobsList}
+        {serviceList}
         <Pagination 
                     onClick={this.onPage}
-                    className="pageJobs">
+                    className="pageJobs" style={{display: 'flex',justifyContent:"center",marginTop:"5%"}}>
                     {paginationItemsTag}
                 </Pagination>
         <div>

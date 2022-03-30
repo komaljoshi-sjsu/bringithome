@@ -385,7 +385,7 @@ class PostJob extends Component {
                     </Col>
                     </Row> */}
                     <Row>
-              <Col><b style={{fontSize:"larger", color:"blue"}}>Price Range:</b></Col>
+              <Col><b style={{fontSize:"larger", color:"blue"}}>Price Range(in $):</b></Col>
               </Row><br/>
               <Row>
               <Col><b>Price From</b></Col>
