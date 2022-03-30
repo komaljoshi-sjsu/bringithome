@@ -73,7 +73,7 @@ function Login(props) {
                     setResumeUrl(decoded.resumeUrl);
                 setPhone(user.jobSeekerContact);
                 redirectValFn(<Redirect to="/resume"/>);
-            } else if(accountType=='Employer')  {
+            } else if(accountType == 'Freelancer')  {
                 if(user.companyId==null) {
                     redirectValFn(<Redirect to="/employerprofile"/>);
                 }
@@ -189,7 +189,7 @@ function Login(props) {
         <div className="row" style={{ color: 'grey', textAlign: 'center' }}>
           <p>---------------or---------------</p>
           <p style={{ color: 'navy' }} onClick={redirectToSignUp}>
-            New to Indeed? Create an account
+            New to Bring It Home? Create an account
           </p>
         </div>
       </div>

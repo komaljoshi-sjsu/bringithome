@@ -23,7 +23,7 @@ const flSchema = new Schema({
         type:String,
     },
     availableServices: {
-        type: Object,
+        type: Array,
     }
 
 });

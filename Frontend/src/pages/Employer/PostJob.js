@@ -4,6 +4,7 @@ import axios from 'axios';
 import {
     Form, Button, Row, Col, Card, Container,
   } from 'react-bootstrap';
+  import logo from '../../images/logo_signin.png'
 import { CountryDropdown } from 'react-country-region-selector';
 import backendServer from '../../webConfig';
 import { connect } from "react-redux";
@@ -19,13 +20,19 @@ class PostJob extends Component {
           state: '',
           zipcode: '',
           country: '',
-          jobMode: 'Remote',
-          jobType: 'Part-time',
-          salaryDetails: '',
+          jobMode: 'In-person',
+          // jobType: 'Part-time',
+          // salaryDetails: '',
           shortJobDescription: '',
           responsibilities: '',
-          qualifications: '',
-          loveJobRole: '',
+          // qualifications: '',
+          // loveJobRole: '',
+          startDate:'',
+          endDate:'',
+          startTime:'',
+          endTime:'',
+          minPrice:0,
+          maxPrice:0,
           errors: {},
           successMsg: '',
           errorMsg: '',
@@ -61,20 +68,27 @@ class PostJob extends Component {
 		    history.push("/employer");
       }
       findFormErrors = () => {
-        const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
-            streetAddress, state, zipcode,country, jobMode, jobType, errors } = this.state;
+        // const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
+            // streetAddress, state, zipcode,country, jobMode, jobType, errors } = this.state;
+            const { companyName, jobTitle, industry, city, shortJobDescription,
+              streetAddress, state, zipcode,country, jobMode, errors,startDate,endDate,startTime,endTime,maxPrice } = this.state;
         if (!companyName || companyName === '') errors.companyName = 'Company Name cannot be blank!';
-        if (!jobTitle || jobTitle === '') errors.jobTitle = 'Job Title cannot be blank!';
-        if (!industry || industry === '') errors.industry = 'Please select the industry!';
+        if (!jobTitle || jobTitle === '') errors.jobTitle = 'Service name cannot be blank!';
+        if (!industry || industry === '') errors.industry = 'Please select the service category!';
         if (!city || city === '') errors.city = 'City cannot be blank!';
         if (!shortJobDescription || shortJobDescription === '') errors.shortJobDescription = 'Job Description cannot be blank!';
-        if (!salaryDetails || salaryDetails === '') errors.salaryDetails = 'Salary Details cannot be blank!';
+        // if (!salaryDetails || salaryDetails === '') errors.salaryDetails = 'Salary Details cannot be blank!';
         if (!streetAddress || streetAddress === '') errors.streetAddress = 'Street Address cannot be blank!';
         if (!state || state === '') errors.state = 'State cannot be blank!';
         if (!zipcode || zipcode === '') errors.zipcode = 'Zip code cannot be blank!';
         if (!country || country === '') errors.country = 'Please select the country!';
         if (!jobMode || jobMode === '') errors.jobMode = 'Please select the Job Mode!';
-        if (!jobType || jobType === '') errors.jobType = 'Please select the Job Type!';
+        // if (!jobType || jobType === '') errors.jobType = 'Please select the Job Type!';
+        if (!startDate ||startDate === '') errors.startDate ='Please select Start Date!';
+        if (!endDate ||endDate === '' || endDate < startDate)  errors.endDate ='Please select End Date and it should be greater than Start Date!';
+        if (!startTime || startTime === '' ) errors.startTime ='Please select Start Time!';
+        if (!endTime || endTime ==='' || startTime === endTime) errors.endTime = 'Start time and end time should be different! ';
+        if (!maxPrice || maxPrice === 0) errors.maxPrice='Please select Maximum price for the service!';
         return errors;
       }
     handleSubmit = (e) => {
@@ -88,9 +102,12 @@ class PostJob extends Component {
             // To-DO : Get logged in company id
             const companyId = this.props.company.compid;
             const employeeId = this.props.userInfo.id;
+            // const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
+            //     streetAddress, state, zipcode,country, jobMode, jobType,responsibilities,
+            //     qualifications, loveJobRole,startDate} = this.state;
             const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
-                streetAddress, state, zipcode,country, jobMode, jobType,responsibilities,
-                qualifications, loveJobRole} = this.state;
+                  streetAddress, state, zipcode,country, jobMode,responsibilities,
+                  startDate,endDate,startTime,endTime,minPrice,maxPrice} = this.state;
             const inputData = {
                 companyId,
                 employeeId,
@@ -100,21 +117,26 @@ class PostJob extends Component {
                 salaryDetails,
                 shortJobDescription,
                 jobMode,
-                jobType,
+                // jobType,
                 city,
                 streetAddress,
                 state,
                 zipcode,
                 country,
                 responsibilities,
-                qualifications, 
-                loveJobRole,
+                // qualifications, 
+                // loveJobRole,
+                startDate,
+                endDate,
+                startTime,
+                endTime,
+                minPrice,
+                maxPrice,
                 jobPostedDate : Date().toLocaleString(),
-
             };
-           // console.log(inputData);
+           console.log("input data",inputData);
             axios
-            .post(`${backendServer}/postNewJob`, inputData)
+            .post(`${backendServer}/api/postNewService`, inputData)
             .then((response) => {
               console.log("Response")
                 console.log(response)
@@ -133,8 +155,14 @@ class PostJob extends Component {
                   zipcode: '',
                   country: '',
                   responsibilities:'',
-                  qualifications:'',
-                  loveJobRole:''
+                  // qualifications:'',
+                  // loveJobRole:''
+                  startDate:'',
+                  endDate:'',
+                  startTime:'',
+                  endTime:'',
+                  minPrice:'',
+                  maxPrice:''
                 });
               } else {
                 this.setState({ errorMsg: response.data });
@@ -148,19 +176,29 @@ class PostJob extends Component {
     }
   
     render() {
-        const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
-            streetAddress, state, zipcode,country, errors,successMsg, errorMsg,
-            qualifications, responsibilities, loveJobRole } = this.state;
+        // const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
+        //     streetAddress, state, zipcode,country, errors,successMsg, errorMsg,
+        //     qualifications, responsibilities, loveJobRole } = this.state;
+            const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
+              streetAddress, state, zipcode,country, errors,successMsg, errorMsg,
+               responsibilities,startDate,endDate,startTime,endTime,minPrice,maxPrice } = this.state;
             console.log(successMsg)
       return (
         <div>
-            
-            <br></br>
-            <Container style={{ display: 'flex', justifyContent: 'center' }}>
-            
-            <Card style={{ width: '50rem', margin: '0.8em' }}>
+            <br/>
+            <Container style={{ display: 'flex', justifyContent: 'center'}}>
+            <Card style={{ width: '50rem', margin: '0.8em'}}>
             <Card.Title>
-               <Row><Col> Enter the job opening details</Col></Row>
+               <Row><Col style={{marginLeft:"10%",marginTop:"10px"}}>   
+               <img
+                src={logo}
+                alt=""
+                width="120"
+                height="50"
+                class="d-inline-block align-text-top"
+              /> 
+              <p style={{marginLeft:"250px",marginTop:"-50px",fontSize:"larger",color:"blue"}}>Post A Service</p><br/>
+              <p style={{marginLeft:"170px",marginTop:"-40px"}}>Enter the available service details</p></Col></Row>
             </Card.Title>
             <Card.Body>   
             <div data-testid="msgDiv">
@@ -169,6 +207,9 @@ class PostJob extends Component {
               {(errorMsg !== undefined && errorMsg != null)
                 ? <h4 style={{ color: 'brown' }}>{errorMsg}</h4> : null}
             </div>
+            <Row>
+              <Col><b style={{fontSize:"larger", color:"blue"}}>Basic Information:</b></Col>
+              </Row><br/>
              <Row>
               <Col><b>Company Name</b></Col>
               </Row>
@@ -184,12 +225,12 @@ class PostJob extends Component {
               </Col>
               </Row>
             <Row>
-              <Col><b>Job Title</b></Col>
+              <Col><b>Service Name</b></Col>
               </Row>
               <Row>
               <Col>
                 <Form.Group className="mb-3">
-                  <Form.Control name="jobTitle" type="text" className="mr-sm-2" onChange={this.handleChange} placeholder="Enter Job title" value={jobTitle} isInvalid={!!errors.companyName}/>
+                  <Form.Control name="jobTitle" type="text" className="mr-sm-2" onChange={this.handleChange} placeholder="Enter service name" value={jobTitle} isInvalid={!!errors.companyName}/>
                    <Form.Control.Feedback type="invalid">
                     { errors.jobTitle }
                   </Form.Control.Feedback>
@@ -197,18 +238,18 @@ class PostJob extends Component {
               </Col>
               </Row>
             <Row>
-              <Col><b>Industry</b></Col>
+              <Col><b>Service Category</b></Col>
               </Row>
               <Row>
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Control as="select" value={industry} onChange={this.handleChangeIndustry} isInvalid={!!errors.industry}>
-                    <option>Choose the job industry</option>
-                    <option value="Software">Software</option>
-                    <option value="Marketing">Marketing</option>
-                    <option value="Finance">Finance</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Electrical">Electrical</option>
+                    <option>Choose the service category</option>
+                    <option value="Cleaning">Cleaning</option>
+                    <option value="Painting">Painting</option>
+                    <option value="Repair">Repair</option>
+                    <option value="Salon">Salon </option>
+                    <option value="Therapy">Therapy</option>
                   </Form.Control>
                   <Form.Control.Feedback type="invalid">
                     { errors.industry }
@@ -217,20 +258,20 @@ class PostJob extends Component {
               </Col>
             </Row>
             <Row>
-            <Col><b>Select Job Mode</b></Col>
+            <Col><b>Select Service Mode</b></Col>
               </Row>
               <Row>
               <Col>
                 <Form.Group className="mb-3">
-                  <Form.Check inline value="Remote" label="Remote" name="jobMode" type="radio" id="Remote" onChange={this.handleChange} isInvalid={!!errors.jobMode} defaultChecked/>
-                  <Form.Check inline value="In-person" label="In-person" name="jobMode" type="radio" id="In-person" onChange={this.handleChange} isInvalid={!!errors.jobMode} />
+                  <Form.Check inline value="In-person" label="In-person" name="jobMode" type="radio" id="In-person" onChange={this.handleChange} isInvalid={!!errors.jobMode} defaultChecked/>
+                  <Form.Check inline value="Remote" label="Video Consultation" name="jobMode" type="radio" id="Remote" onChange={this.handleChange} isInvalid={!!errors.jobMode} />
                   <Form.Control.Feedback type="invalid">
                     { errors.jobMode }
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
-            <Row>
+            {/* <Row>
             <Col><b>Select Job Type</b></Col>
               </Row>
               <Row>
@@ -243,9 +284,9 @@ class PostJob extends Component {
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>
-            </Row>
+            </Row> */}
             <Row>
-                <Col><b>Enter Job Description</b></Col>
+                <Col><b>Enter Service Description</b></Col>
                 </Row>
                 <Row>
                     <Col>
@@ -270,7 +311,7 @@ class PostJob extends Component {
                 </Form.Group>
                     </Col>
                     </Row>
-                    <Row>
+                    {/* <Row>
                 <Col><b>Qualifications</b></Col>
                 </Row>
                 <Row>
@@ -282,8 +323,55 @@ class PostJob extends Component {
                   </Form.Control.Feedback>
                 </Form.Group>
                     </Col>
-                    </Row>
-                    <Row>
+                    </Row> */}
+                <Row>
+              <Col><b style={{fontSize:"larger", color:"blue"}}>Availability Details:</b></Col>
+              </Row><br/>
+              <Row>
+              <Col><b>Start Date </b></Col>
+              <Col><b>End Date </b></Col>
+              </Row>
+              <Row>
+              <Col>
+                <Form.Group className="mb-3">
+                  <Form.Control name="startDate" type="date" className="mr-sm-2" onChange={this.handleChange}  value={startDate} isInvalid={!!errors.startDate}/>
+                <Form.Control.Feedback type="invalid">
+                    { errors.startDate }
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group className="mb-3">
+                  <Form.Control name="endDate" type="date" className="mr-sm-2" onChange={this.handleChange}  value={endDate} isInvalid={!!errors.endDate}/>
+                <Form.Control.Feedback type="invalid">
+                    { errors.endDate }
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              </Row>
+              <Row>
+              <Col><b>Start Time</b></Col>
+              <Col><b>End Time</b></Col>
+              </Row>
+              <Row>
+              <Col>
+                <Form.Group className="mb-3">
+                  <Form.Control name="startTime" type="time" className="mr-sm-2" onChange={this.handleChange} value={startTime} isInvalid={!!errors.startTime}/>
+                  <Form.Control.Feedback type="invalid">
+                    { errors.startTime }
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group className="mb-3">
+                  <Form.Control name="endTime" type="time" className="mr-sm-2" onChange={this.handleChange}  value={salaryDetails} isInvalid={!!errors.endTime}/>
+                  <Form.Control.Feedback type="invalid">
+                    { errors.endTime }
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              </Row>
+                    {/* <Row>
                 <Col><b>Reasons for loving this job</b></Col>
                 </Row>
                 <Row>
@@ -295,20 +383,35 @@ class PostJob extends Component {
                   </Form.Control.Feedback>
                 </Form.Group>
                     </Col>
-                    </Row>
+                    </Row> */}
                     <Row>
-              <Col><b>Salary Details</b></Col>
+              <Col><b style={{fontSize:"larger", color:"blue"}}>Price Range:</b></Col>
+              </Row><br/>
+              <Row>
+              <Col><b>Price From</b></Col>
+              <Col><b>Price To</b></Col>
               </Row>
               <Row>
               <Col>
                 <Form.Group className="mb-3">
-                  <Form.Control name="salaryDetails" type="text" className="mr-sm-2" onChange={this.handleChange} placeholder="Enter Salary Details" value={salaryDetails} isInvalid={!!errors.salaryDetails}/>
-                  <Form.Control.Feedback type="invalid">
+                  <Form.Control name="minPrice" type="number" min="0" className="mr-sm-2" onChange={this.handleChange} placeholder="Enter minimum Price Value" value={minPrice} />
+                  {/* <Form.Control.Feedback type="invalid">
                     { errors.salaryDetails }
+                  </Form.Control.Feedback> */}
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group className="mb-3">
+                  <Form.Control name="maxPrice" type="number" min="0" className="mr-sm-2" onChange={this.handleChange} placeholder="Enter maximum Price Value" value={maxPrice} isInvalid={!!errors.maxPrice}/>
+                  <Form.Control.Feedback type="invalid">
+                    { errors.maxPrice }
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               </Row>
+              <Row>
+              <Col><b style={{fontSize:"larger", color:"blue"}}> Address Details:</b></Col>
+              </Row><br/>
             <Row>
               <Col><b>Street Address</b></Col>
               </Row>
@@ -379,20 +482,23 @@ class PostJob extends Component {
               </Col>
             </Row>
             <Row>
-              <Col colSpan="2">
+              <Col colSpan="2" style={{marginLeft:"30%"}}>
                 <Button variant="primary" type="submit" onClick={this.handleSubmit}>
-                  Post Job
+                  Post Service
+                </Button>
+                <Button variant="primary" type="submit" onClick={this.handleDashBoard} style={{marginLeft:"50px"}}>
+                  DashBoard
                 </Button>
               </Col>
               </Row>
-              <br/>
+              {/* <br/>
               <Row>
               <Col colSpan="2">
                 <Button variant="primary" type="submit" onClick={this.handleDashBoard}>
                   DashBoard
                 </Button>
               </Col>
-              </Row>
+              </Row> */}
               </Card.Body>
               </Card>
               </Container>
