@@ -389,9 +389,9 @@ handleModalCloseProfile(){
             <div class="col-4"></div>
             <div class="col-4">
               <h5 style={{ marginLeft: '120px' }}>
-                Employers:
-                <span class="hoverUnderline" style={{ color: '#003399' }}>
-                 <Button onClick={this.handleSubmit}>Post a Job</Button>
+                Freelancer:
+                <span class="hoverUnderline" style={{ color: '#003399',marginLeft:"20px"}}>
+                 <Button onClick={this.handleSubmit}>Post a Service</Button>
                 </span>
               </h5>
             </div>
@@ -399,9 +399,8 @@ handleModalCloseProfile(){
           </div>
         </div>
         <hr />
-        <div className="container">  <h5 style={{ marginLeft: '120px' }}>Jobs Posted</h5></div>
-        
-            
+        <div className="container">  <h5 style={{ marginLeft: '40%' }}>Available Services</h5></div>
+ 
         {jobsList}
         <Pagination 
                     onClick={this.onPage}
@@ -413,7 +412,7 @@ handleModalCloseProfile(){
           aria-labelledby="contained-modal-title-vcenter"
           centered
            show={this.state.show} onHide={()=>this.handleModalClose()}>
-             <Modal.Header closeButton><h4>Applicants List </h4>
+             <Modal.Header closeButton><h4>Services List </h4>
              
              </Modal.Header>
              

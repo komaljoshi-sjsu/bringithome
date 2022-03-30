@@ -60,6 +60,10 @@ app.use(require('./routes/signupRoute'))
 //Define all the routes
 //app.use('/postNewJob', postNewJob)
 
+//Freelancer
+// app.use(require("./routes/getPostedService"))
+app.use(require('./routes/postNewService'))
+
 const PORT = process.env.PORT || 5000
 //Server code will be running on port 5000
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`))

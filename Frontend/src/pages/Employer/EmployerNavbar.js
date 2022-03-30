@@ -1,7 +1,7 @@
 // Employeer Navigation bar
 
 import React, { Component } from 'react'
-import logo from '../../images/indeedemployers_logo.png'
+import logo from '../../images/logo.png'
 import {IoMdHelpCircle, IoMdChatboxes} from 'react-icons/io';
 import {BsFillBellFill, BsPersonFill} from 'react-icons/bs';
 import { Link } from 'react-router-dom'
@@ -34,7 +34,7 @@ class EmployerNavbar extends Component {
                 src={logo}
                 alt=""
                 width="120"
-                height="30"
+                height="50"
                 class="d-inline-block align-text-top"
               />
             </a>
@@ -54,7 +54,7 @@ class EmployerNavbar extends Component {
                                 color: '#474747',
                               }}
                             >
-                              <h5>Applicant Page</h5>
+                              <h5>Freelancer Page</h5>
                             </Link>
                     <h5></h5>
                   </a>
