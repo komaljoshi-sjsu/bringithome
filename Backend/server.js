@@ -61,7 +61,7 @@ app.use(require('./routes/signupRoute'))
 //app.use('/postNewJob', postNewJob)
 
 //Freelancer
-// app.use(require("./routes/getPostedService"))
+app.use(require("./routes/getPostedService"))
 app.use(require('./routes/postNewService'))
 
 const PORT = process.env.PORT || 5000

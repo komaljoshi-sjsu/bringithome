@@ -54,7 +54,7 @@ class EmployerNavbar extends Component {
                                 color: '#474747',
                               }}
                             >
-                              <h5>Freelancer Page</h5>
+                              <h5>Home</h5>
                             </Link>
                     <h5></h5>
                   </a>
