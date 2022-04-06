@@ -60,19 +60,21 @@ function Login(props) {
         } else {
             alert('Successfully logged in');
             //const jwt_decode = require('jwt-decode');
-            setToken(res.data);
-            var decoded = jwt_decode(res.data.split(' ')[1]);
-            const user = decoded.user;
-            console.log(decoded);
+            //setToken(res.data);
+            // var decoded = jwt_decode(res.data.split(' ')[1]);
+            // const user = decoded.user;
+            //console.log(decoded);
+            let user = res.data;
             setEmail(user.email);
             setName(user.name);
             setAccountType(accountType);
-            setId(user.id);
-            if(accountType=='JobSeeker')  {
-                if(decoded.resumeUrl!=null && decoded.resumeUrl.trim().length>0)
-                    setResumeUrl(decoded.resumeUrl);
-                setPhone(user.jobSeekerContact);
-                redirectValFn(<Redirect to="/resume"/>);
+            setId(user._id);
+            if(accountType=='Customer')  {
+                // if(decoded.resumeUrl!=null && decoded.resumeUrl.trim().length>0)
+                //     setResumeUrl(decoded.resumeUrl);
+                // setPhone(user.jobSeekerContact);
+                // redirectValFn(<Redirect to="/resume"/>);
+                alert('woohoo successful');
             } else if(accountType == 'Freelancer')  {
                 if(user.companyId==null) {
                     redirectValFn(<Redirect to="/employerprofile"/>);
