@@ -8,7 +8,12 @@ import {
 import { CountryDropdown } from 'react-country-region-selector';
 import backendServer from '../../webConfig';
 import { connect } from "react-redux";
-class PostJob extends Component {
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+ 
+const moment = extendMoment(Moment);
+
+class PostService extends Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -132,6 +137,13 @@ class PostJob extends Component {
                 servicePostedDate : Date().toLocaleString(),
             };
            console.log("input data",inputData);
+          //  const range = moment.range('2018-01-01 00:00', '2018-01-01 05:30');
+           const range = moment.range(startTime,endTime);
+           const hours = Array.from(range.by('hour', { excludeEnd: true }));
+          // hours.length == 5;
+          hours.map(m => m.format('HH:mm'))
+           console.log(hours);
+
             axios
             .post(`${backendServer}/api/postNewService`, inputData)
             .then((response) => {
@@ -170,6 +182,7 @@ class PostJob extends Component {
 
         }
     }
+  
   
     render() {
         // const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
@@ -495,4 +508,4 @@ class PostJob extends Component {
     company: state.company
   })
   
-  export default connect(mapStateToProps)(PostJob);
+  export default connect(mapStateToProps)(PostService);
