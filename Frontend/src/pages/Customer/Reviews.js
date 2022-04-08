@@ -9,8 +9,8 @@ import { FaLongArrowAltDown } from 'react-icons/fa';
   import ReactStars from "react-rating-stars-component";
 import backendServer from '../../webConfig';
 import '../../style/button-group.css';
-import ReviewModal from '../JobSeeker/ReviewModal';
-import Pagination from "./../JobSeeker/Pagination";
+import ReviewModal from '../Customer/ReviewModal';
+import Pagination from "./../Customer/Pagination";
 import CompanyTabs from '../Company/CompanyTabs';
 
 class Reviews extends Component {

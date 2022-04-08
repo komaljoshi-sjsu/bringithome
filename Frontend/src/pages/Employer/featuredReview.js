@@ -8,7 +8,7 @@ import { Button, Row, Col, Card, Container,
 import backendServer from '../../webConfig';
 import '../../style/button-group.css';
 import { FaCheckCircle } from 'react-icons/fa';
-import Pagination from "./../JobSeeker/Pagination";
+import Pagination from "./../Customer/Pagination";
 import EmployerNavbar from './EmployerNavbar';
 
 

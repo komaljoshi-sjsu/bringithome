@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/Button';
 import { Redirect } from 'react-router';
 import axios from 'axios';
 import backendServer from '../../webConfig';
-import JobSeekerNavbar from '../JobSeeker/JobSeekerNavbar';
 import logo from '../../images/logo_signin.png';
 
 function Signup(props) {

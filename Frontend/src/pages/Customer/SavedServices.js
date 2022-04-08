@@ -2,7 +2,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {useState, useEffect} from 'react';
 import {Redirect} from 'react-router';
 import JobSeekerNavbar from './JobSeekerNavbar';
-import MyJobs from './MyJobs';
 import axios from 'axios';
 import Card from "react-bootstrap/Card";
 import backendServer from '../../webConfig';
@@ -11,7 +10,8 @@ import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { userActionCreator } from '../../reduxutils/actions.js'
 import ErrorMsg from '../Error/ErrorMsg'
-import JobSeekerLoggedInNavbar from './JobSeekerLoggedInNavbar';
+import CustomerLoggedIn from './CustomerLoggedIn';
+import MyServices from './MyServices';
 
 function SavedServices(props) {
     const dispatch = useDispatch()
@@ -67,10 +67,10 @@ function SavedServices(props) {
 
         <div>
             <ErrorMsg err={errMsg}></ErrorMsg>
-            <JobSeekerLoggedInNavbar />
+            <CustomerLoggedIn />
             <div class="container-fluid">
                 <div class="row">
-                    <MyJobs></MyJobs>
+                    <MyServices></MyServices>
                 </div>
                 <div style={{marginLeft:'20%',marginRight:'20%'}}>
                         {jobs.map(job=>  {
