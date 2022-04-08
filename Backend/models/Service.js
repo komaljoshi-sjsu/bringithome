@@ -1,17 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const sSchema = new Schema({
-    // serviceCategory: {
-    //     type:Object,
-    //     required:true
-    // },
-    // freelancers: [{
-    //     type: Array,
-    // }]
-    companyName:  {
-            type:String,
-            required:true
-        },
+    freelancer: {
+        type: Object,
+    },
     serviceCategory:  {
         type:String,
         required:true
@@ -27,20 +19,20 @@ const sSchema = new Schema({
     serviceDescription:  {
         type:String
     },
-    description:  {
+    responsibilities:  {
         type:String
+    },
+    price: {
+        type:String,
+        required:true
     },
     availability: {
         type:Object,
         required:true
     },
-    minPrice: {
-        type:String,
-    },
-    maxPrice: {
-        type:String,
-        required:true
-    },
+    servicePostedDate :{
+        type:String
+    }
 });
 
 const Services = mongoose.model('Services',sSchema);

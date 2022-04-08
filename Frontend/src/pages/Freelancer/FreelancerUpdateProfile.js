@@ -6,7 +6,7 @@ import {
   } from 'react-bootstrap';
 import { CountryDropdown } from 'react-country-region-selector';
 import backendServer from '../../webConfig';
-import EmployerNavbar from './EmployerNavbar'
+import FreelancerNavbar from './FreelancerNavbar'
 import {MdModeEdit} from 'react-icons/md';
 import { Redirect } from 'react-router';
 import { connect } from "react-redux";
@@ -350,14 +350,13 @@ class EmployerProfile extends Component {
        if(this.state.empdetails || updated){
            empdetailscol = (
                <div>
-                    
                     <label className="dethead1">Name :</label> <label className="dethead">{this.state.employerDetails.name}</label>
                     <br/>
                     <br/>
                     <Row>
-                        <Col>
+                        {/* <Col>
                         <label className="dethead1">Role :</label><label className="dethead">{this.state.employerDetails.roleInCompany}</label>
-                        </Col>
+                        </Col> */}
                         <Col>
                         <label className="dethead1">Address :</label><label className="dethead">{this.state.employerDetails.address}</label>
                         </Col>
@@ -398,17 +397,16 @@ class EmployerProfile extends Component {
                  value={this.state.employerDetails.name}
                  onChange={(e) => { this.handleChangeEmpName(e)}}></input>
                  </Row>
-                 <br/>
+                 {/* <br/>
                  <Row>
                  <label>Role<span style={{color:'red'}}>*</span></label>
                  </Row>
                  <span style={{color:'red'}}>{errors.roleInCompany}</span>
-                 
                  <Row> 
                  &nbsp;&nbsp;&nbsp;<input className="detinput" name="roleInCompany" 
                  value={this.state.employerDetails.roleInCompany}
                  onChange={(e) => { this.handleChangeRole(e)}}></input>
-                 </Row>
+                 </Row> */}
                  <br/>
                  <Row>
                  <label>Address<span style={{color:'red'}}>*</span></label>
@@ -473,257 +471,257 @@ class EmployerProfile extends Component {
         )
     }    
    
-       if(this.state.compdetails || companyupdated ){
-        compdetailscol = (
-            <div>
-             <label className="dethead1">Company Name : </label><label className="dethead">{this.state.employerDetails.companyName}</label>
-              <br/>
-              <br/>
-              <Row>
-                <Col>
-                    <label className="dethead1">Website : </label><label className="dethead"></label><label className="dethead">{this.state.employerDetails.website}</label>
-                </Col>
-                <Col>
-                    <label className="dethead1">Company Size :</label><label className="dethead"></label><label className="dethead">{this.state.employerDetails.companySize}</label>
-                </Col>
-              </Row>
-              <br/>
+    //    if(this.state.compdetails || companyupdated ){
+    //     compdetailscol = (
+    //         <div>
+    //          <label className="dethead1">Company Name : </label><label className="dethead">{this.state.employerDetails.companyName}</label>
+    //           <br/>
+    //           <br/>
+    //           <Row>
+    //             <Col>
+    //                 <label className="dethead1">Website : </label><label className="dethead"></label><label className="dethead">{this.state.employerDetails.website}</label>
+    //             </Col>
+    //             <Col>
+    //                 <label className="dethead1">Company Size :</label><label className="dethead"></label><label className="dethead">{this.state.employerDetails.companySize}</label>
+    //             </Col>
+    //           </Row>
+    //           <br/>
              
-              <label className="dethead1">About :</label><label className="dethead">{this.state.employerDetails.about}</label>
-              <br/>
-              <br/>
-              <Row>
-                  <Col>
-                  <label className="dethead1">Company Type :</label><label className="dethead">{this.state.employerDetails.companyType}</label>
+    //           <label className="dethead1">About :</label><label className="dethead">{this.state.employerDetails.about}</label>
+    //           <br/>
+    //           <br/>
+    //           <Row>
+    //               <Col>
+    //               <label className="dethead1">Company Type :</label><label className="dethead">{this.state.employerDetails.companyType}</label>
                   
-                  </Col>  
-                  <Col>
-                  <label className="dethead1">Revenue :</label><label className="dethead">{this.state.employerDetails.revenue}</label>
+    //               </Col>  
+    //               <Col>
+    //               <label className="dethead1">Revenue :</label><label className="dethead">{this.state.employerDetails.revenue}</label>
                  
-                  </Col>
-              </Row>
-              <br/>
+    //               </Col>
+    //           </Row>
+    //           <br/>
              
-                  <label className="dethead1"> Description :</label><label className="dethead">{this.state.employerDetails.companyDescription} </label>
-              <br/>
-              <br/>
-              <Row>
-                  <Col>
-                   <label className="dethead1">Headquarters :</label><label className="dethead">{this.state.employerDetails.headquarters}</label>
-                  </Col>
-                  <Col>
-                  <label className="dethead1"> Industry :</label><label className="dethead">{this.state.employerDetails.industry}</label>
-                  </Col>
-             </Row>
-              <br/>
-              <Row>
-                  <Col>
-                  <label className="dethead1">Founded :</label><label className="dethead">{this.state.employerDetails.founded}</label>
-                  </Col>
-                  <Col>
-                  <label className="dethead1">CEO Name :</label><label className="dethead">{this.state.employerDetails.ceo}</label>
-                  </Col>
-              </Row>
-              <br/>
-              <Row>
-                  <Col>
-                  <label className="dethead1">Company Values :</label><label className="dethead">{this.state.employerDetails.companyValues}</label>
+    //               <label className="dethead1"> Description :</label><label className="dethead">{this.state.employerDetails.companyDescription} </label>
+    //           <br/>
+    //           <br/>
+    //           <Row>
+    //               <Col>
+    //                <label className="dethead1">Headquarters :</label><label className="dethead">{this.state.employerDetails.headquarters}</label>
+    //               </Col>
+    //               <Col>
+    //               <label className="dethead1"> Industry :</label><label className="dethead">{this.state.employerDetails.industry}</label>
+    //               </Col>
+    //          </Row>
+    //           <br/>
+    //           <Row>
+    //               <Col>
+    //               <label className="dethead1">Founded :</label><label className="dethead">{this.state.employerDetails.founded}</label>
+    //               </Col>
+    //               <Col>
+    //               <label className="dethead1">CEO Name :</label><label className="dethead">{this.state.employerDetails.ceo}</label>
+    //               </Col>
+    //           </Row>
+    //           <br/>
+    //           <Row>
+    //               <Col>
+    //               <label className="dethead1">Company Values :</label><label className="dethead">{this.state.employerDetails.companyValues}</label>
                  
-                  </Col>
-                  <Col>
-                  <label className="dethead1">WorkCulture :</label><label className="dethead">{this.state.employerDetails.workCulture}</label>
-                  </Col>
-              </Row>    
+    //               </Col>
+    //               <Col>
+    //               <label className="dethead1">WorkCulture :</label><label className="dethead">{this.state.employerDetails.workCulture}</label>
+    //               </Col>
+    //           </Row>    
               
-              <br/>
-              <label className="dethead1">Mission and Vision :</label><label className="dethead">{this.state.employerDetails.mission}</label>
-              <br/>
+    //           <br/>
+    //           <label className="dethead1">Mission and Vision :</label><label className="dethead">{this.state.employerDetails.mission}</label>
+    //           <br/>
               
-              <br/>
+    //           <br/>
               
-              <br/>
-               </div>
-           )
-       }else if(!this.state.compdetails){
-        compdetailscol = (
-            <div>
-                <Col>
-                <span style={{color:'red'}}>* </span> <span style={{color:'gray'}}>Required Fields</span>
-                <Row>
-                 <label>Company Name<span style={{color:'red'}}>*</span></label>
-                 </Row>
-                 <span style={{color:'red'}}>{errors.companyName}</span>
-                 <Row> 
-                 &nbsp;&nbsp;&nbsp;<input className="detinput" name="companyName"
-                 value={this.state.employerDetails.companyName }
-                 onChange={(e) => { this.handleChangeCompanyName(e)}}></input>
-                 </Row>
-                 <br/>
-                 <Row>
-                 <label>Website<span style={{color:'red'}}>*</span></label>
-                 </Row>
-                 <span style={{color:'red'}}>{errors.roleInCompany}</span>
-                 <Row> 
-                 &nbsp;&nbsp;&nbsp;<input className="detinput" name="website"
-                 value={this.state.employerDetails.website }
-                 onChange={(e) => { this.handleChangeWebsite(e)}}></input>
-                 </Row>
-                 <br/>
-                 <Row>
-                 <label>Company Size<span style={{color:'red'}}>*</span></label>    
-                 </Row>
-                 <span style={{color:'red'}}>{errors.companySize}</span>
-                 <Row> 
-                 &nbsp;&nbsp;&nbsp;<input className="detinput"
-                 name="companySize"
-                 value={this.state.employerDetails.companySize }
-                 onChange={(e) => { this.handleChangeCompanySize(e)}}></input>
-                 </Row>
-                 <br/>
-                 <Row>
-                 <label>About<span style={{color:'red'}}>*</span></label>    
-                 </Row>
-                 <span style={{color:'red'}}>{errors.about}</span>
-                 <Row> 
-                 &nbsp;&nbsp;&nbsp;<textarea className="detinput"
-                 name="about"
-                 value={this.state.employerDetails.about }
-                 onChange={(e) => { this.handleChangeAbout(e)}}></textarea>
-                 </Row>
-                 <br/>
-                 <Row>
-                 <label>Company Type<span style={{color:'red'}}>*</span></label> 
-                 </Row>
-                 <span style={{color:'red'}}>{errors.companyType}</span>
-                 <Row> 
-                 &nbsp;&nbsp;&nbsp;<input className="detinput"
-                 name="companyType"
-                 value={this.state.employerDetails.companyType }
-                 onChange={(e) => { this.handleChangeCompanyType(e)}}></input>
-                 </Row>
-                 <br/>
-                 <Row>
-                 <label>Description<span style={{color:'red'}}>*</span></label>    
-                 </Row>
-                 <span style={{color:'red'}}>{errors.companyDescription}</span>
-                 <Row> 
-                 &nbsp;&nbsp;&nbsp;<textarea className="detinput"
-                 name="companyDescription"
-                 value={this.state.employerDetails.companyDescription }
-                 onChange={(e) => { this.handleChangeDescription(e)}}></textarea>
-                 </Row>
-                 <br/>
-                 <Row>
-                 <label>Revenue<span style={{color:'red'}}>*</span></label>
-                 </Row>
-                 <span style={{color:'red'}}>{errors.revenue}</span>
-                 <Row> 
-                 &nbsp;&nbsp;&nbsp;<input className="detinput"
-                 name="revenue"
-                 value={this.state.employerDetails.revenue }
-                 onChange={(e) => { this.handleChangeRevenue(e)}}></input>
-                 </Row>
-                 <br/>
-                 <Row>
-                 <label>Headquarters<span style={{color:'red'}}>*</span></label>
-                 </Row>
-                 <span style={{color:'red'}}>{errors.headquarters}</span>
-                 <Row> 
-                 &nbsp;&nbsp;&nbsp;<input className="detinput"
-                 name="headquarters"
-                 value={this.state.employerDetails.headquarters }
-                 onChange={(e) => { this.handleChangeHeadquarters(e)}}></input>
-                 </Row>
-                 <br/>
-                 <Row>
-                 <label>Industry<span style={{color:'red'}}>*</span></label>
-                 </Row>
-                 <span style={{color:'red'}}>{errors.industry}</span>
-                 <Row> 
-                 &nbsp;&nbsp;&nbsp;<input className="detinput"
-                 name="industry"
-                 value={this.state.employerDetails.industry }
-                 onChange={(e) => { this.handleChangeIndustry(e)}}></input>
-                 </Row>
-                 <br/>
-                 <Row>
-                 <label>Founded<span style={{color:'red'}}>*</span></label>
-                 </Row>
-                 <span style={{color:'red'}}>{errors.founded}</span>
-                 <Row>
-                 &nbsp;&nbsp;&nbsp;<textarea className="detinput"
-                 name="founded"
-                 value={this.state.employerDetails.founded }
-                 onChange={(e) => { this.handleChangeFounded(e)}}></textarea>
-                 </Row>
-                 <br/>
-                 <Row>
-                 <label>Mission and Vision<span style={{color:'red'}}>*</span></label>
-                 </Row>
-                 <span style={{color:'red'}}>{errors.mission}</span>
-                 <Row> 
-                 &nbsp;&nbsp;&nbsp;<textarea className="detinput"
-                 name="mission"
-                 value={this.state.employerDetails.mission }
-                 onChange={(e) => { this.handleChangeMission(e)}}></textarea>
-                 </Row>
-                 <br/>
-                 <Row>
-                 <label>Work Culture<span style={{color:'red'}}>*</span></label>
-                 </Row>
-                 <span style={{color:'red'}}>{errors.workCulture}</span>
-                 <Row> 
-                 &nbsp;&nbsp;&nbsp;<textarea className="detinput"
-                 name="workCulture"
-                 value={this.state.employerDetails.workCulture }
-                 onChange={(e) => { this.handleChangeWorkculture(e)}}></textarea>
-                 </Row>
-                 <br/>
-                 <Row>
-                 <label>Company Values<span style={{color:'red'}}>*</span></label>
-                 </Row>
-                 <span style={{color:'red'}}>{errors.companyValues}</span>
-                 <Row> 
-                 &nbsp;&nbsp;&nbsp;<textarea className="detinput"
-                 name="companyValues"
-                 value={this.state.employerDetails.companyValues }
-                 onChange={(e) => { this.handleChangeCompanyValues(e)}}></textarea>
-                 </Row>
-                 <br/>
-                 <Row>
-                 <label>CEO Name<span style={{color:'red'}}>*</span></label>
-                 </Row>
-                 <span style={{color:'red'}}>{errors.ceo}</span>
-                 <Row> 
-                 &nbsp;&nbsp;&nbsp;<input className="detinput"
-                 name="ceo"
-                 value={this.state.employerDetails.ceo }
-                 onChange={(e) => { this.handleChangeCeo(e)}}></input>
-                 </Row>
-                 </Col>
-                 <Button onClick = {this.handleCompDetails}>Save</Button>
-            </div>
-        )
-    }     
+    //           <br/>
+    //            </div>
+    //        )
+    //    }else if(!this.state.compdetails){
+    //     compdetailscol = (
+    //         <div>
+    //             <Col>
+    //             <span style={{color:'red'}}>* </span> <span style={{color:'gray'}}>Required Fields</span>
+    //             <Row>
+    //              <label>Company Name<span style={{color:'red'}}>*</span></label>
+    //              </Row>
+    //              <span style={{color:'red'}}>{errors.companyName}</span>
+    //              <Row> 
+    //              &nbsp;&nbsp;&nbsp;<input className="detinput" name="companyName"
+    //              value={this.state.employerDetails.companyName }
+    //              onChange={(e) => { this.handleChangeCompanyName(e)}}></input>
+    //              </Row>
+    //              <br/>
+    //              <Row>
+    //              <label>Website<span style={{color:'red'}}>*</span></label>
+    //              </Row>
+    //              <span style={{color:'red'}}>{errors.roleInCompany}</span>
+    //              <Row> 
+    //              &nbsp;&nbsp;&nbsp;<input className="detinput" name="website"
+    //              value={this.state.employerDetails.website }
+    //              onChange={(e) => { this.handleChangeWebsite(e)}}></input>
+    //              </Row>
+    //              <br/>
+    //              <Row>
+    //              <label>Company Size<span style={{color:'red'}}>*</span></label>    
+    //              </Row>
+    //              <span style={{color:'red'}}>{errors.companySize}</span>
+    //              <Row> 
+    //              &nbsp;&nbsp;&nbsp;<input className="detinput"
+    //              name="companySize"
+    //              value={this.state.employerDetails.companySize }
+    //              onChange={(e) => { this.handleChangeCompanySize(e)}}></input>
+    //              </Row>
+    //              <br/>
+    //              <Row>
+    //              <label>About<span style={{color:'red'}}>*</span></label>    
+    //              </Row>
+    //              <span style={{color:'red'}}>{errors.about}</span>
+    //              <Row> 
+    //              &nbsp;&nbsp;&nbsp;<textarea className="detinput"
+    //              name="about"
+    //              value={this.state.employerDetails.about }
+    //              onChange={(e) => { this.handleChangeAbout(e)}}></textarea>
+    //              </Row>
+    //              <br/>
+    //              <Row>
+    //              <label>Company Type<span style={{color:'red'}}>*</span></label> 
+    //              </Row>
+    //              <span style={{color:'red'}}>{errors.companyType}</span>
+    //              <Row> 
+    //              &nbsp;&nbsp;&nbsp;<input className="detinput"
+    //              name="companyType"
+    //              value={this.state.employerDetails.companyType }
+    //              onChange={(e) => { this.handleChangeCompanyType(e)}}></input>
+    //              </Row>
+    //              <br/>
+    //              <Row>
+    //              <label>Description<span style={{color:'red'}}>*</span></label>    
+    //              </Row>
+    //              <span style={{color:'red'}}>{errors.companyDescription}</span>
+    //              <Row> 
+    //              &nbsp;&nbsp;&nbsp;<textarea className="detinput"
+    //              name="companyDescription"
+    //              value={this.state.employerDetails.companyDescription }
+    //              onChange={(e) => { this.handleChangeDescription(e)}}></textarea>
+    //              </Row>
+    //              <br/>
+    //              <Row>
+    //              <label>Revenue<span style={{color:'red'}}>*</span></label>
+    //              </Row>
+    //              <span style={{color:'red'}}>{errors.revenue}</span>
+    //              <Row> 
+    //              &nbsp;&nbsp;&nbsp;<input className="detinput"
+    //              name="revenue"
+    //              value={this.state.employerDetails.revenue }
+    //              onChange={(e) => { this.handleChangeRevenue(e)}}></input>
+    //              </Row>
+    //              <br/>
+    //              <Row>
+    //              <label>Headquarters<span style={{color:'red'}}>*</span></label>
+    //              </Row>
+    //              <span style={{color:'red'}}>{errors.headquarters}</span>
+    //              <Row> 
+    //              &nbsp;&nbsp;&nbsp;<input className="detinput"
+    //              name="headquarters"
+    //              value={this.state.employerDetails.headquarters }
+    //              onChange={(e) => { this.handleChangeHeadquarters(e)}}></input>
+    //              </Row>
+    //              <br/>
+    //              <Row>
+    //              <label>Industry<span style={{color:'red'}}>*</span></label>
+    //              </Row>
+    //              <span style={{color:'red'}}>{errors.industry}</span>
+    //              <Row> 
+    //              &nbsp;&nbsp;&nbsp;<input className="detinput"
+    //              name="industry"
+    //              value={this.state.employerDetails.industry }
+    //              onChange={(e) => { this.handleChangeIndustry(e)}}></input>
+    //              </Row>
+    //              <br/>
+    //              <Row>
+    //              <label>Founded<span style={{color:'red'}}>*</span></label>
+    //              </Row>
+    //              <span style={{color:'red'}}>{errors.founded}</span>
+    //              <Row>
+    //              &nbsp;&nbsp;&nbsp;<textarea className="detinput"
+    //              name="founded"
+    //              value={this.state.employerDetails.founded }
+    //              onChange={(e) => { this.handleChangeFounded(e)}}></textarea>
+    //              </Row>
+    //              <br/>
+    //              <Row>
+    //              <label>Mission and Vision<span style={{color:'red'}}>*</span></label>
+    //              </Row>
+    //              <span style={{color:'red'}}>{errors.mission}</span>
+    //              <Row> 
+    //              &nbsp;&nbsp;&nbsp;<textarea className="detinput"
+    //              name="mission"
+    //              value={this.state.employerDetails.mission }
+    //              onChange={(e) => { this.handleChangeMission(e)}}></textarea>
+    //              </Row>
+    //              <br/>
+    //              <Row>
+    //              <label>Work Culture<span style={{color:'red'}}>*</span></label>
+    //              </Row>
+    //              <span style={{color:'red'}}>{errors.workCulture}</span>
+    //              <Row> 
+    //              &nbsp;&nbsp;&nbsp;<textarea className="detinput"
+    //              name="workCulture"
+    //              value={this.state.employerDetails.workCulture }
+    //              onChange={(e) => { this.handleChangeWorkculture(e)}}></textarea>
+    //              </Row>
+    //              <br/>
+    //              <Row>
+    //              <label>Company Values<span style={{color:'red'}}>*</span></label>
+    //              </Row>
+    //              <span style={{color:'red'}}>{errors.companyValues}</span>
+    //              <Row> 
+    //              &nbsp;&nbsp;&nbsp;<textarea className="detinput"
+    //              name="companyValues"
+    //              value={this.state.employerDetails.companyValues }
+    //              onChange={(e) => { this.handleChangeCompanyValues(e)}}></textarea>
+    //              </Row>
+    //              <br/>
+    //              <Row>
+    //              <label>CEO Name<span style={{color:'red'}}>*</span></label>
+    //              </Row>
+    //              <span style={{color:'red'}}>{errors.ceo}</span>
+    //              <Row> 
+    //              &nbsp;&nbsp;&nbsp;<input className="detinput"
+    //              name="ceo"
+    //              value={this.state.employerDetails.ceo }
+    //              onChange={(e) => { this.handleChangeCeo(e)}}></input>
+    //              </Row>
+    //              </Col>
+    //              <Button onClick = {this.handleCompDetails}>Save</Button>
+    //         </div>
+    //     )
+    // }     
 
     
       return (
         <div>
-             <EmployerNavbar/>
+             <FreelancerNavbar/>
             <br></br>
             
             <div className="main-div1">
             <div className = "details">   
-            <h3>Employer Details</h3><span className="editdetails"/><Button onClick={this.employerdetails} variant = "white" ><MdModeEdit/></Button>
-            </div>   
-             {empdetailscol}
+            <h3 style={{color:"blue"}}>Update Profile</h3><span className="editdetails"/><Button onClick={this.employerdetails} variant = "white" ><MdModeEdit/></Button>
+            </div> <br/>  
+             {empdetailscol}<br/><br/>
             </div>
-            <div className="main-div1">
+            {/* <div className="main-div1">
             <div className = "details">   
             <h3>Company Details</h3><span className="editdetails"/><Button onClick={this.companydetails} variant = "white"><MdModeEdit/></Button>
             </div> 
               {compdetailscol}
-            </div>
+            </div> */}
             <div>
             <Modal size="md-down"
             aria-labelledby="contained-modal-title-vcenter"

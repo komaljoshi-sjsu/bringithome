@@ -15,11 +15,11 @@ class PostJob extends Component {
           companyName: '',
           industry: '',
           jobTitle: '',
-          streetAddress: '',
-          city: '',
-          state: '',
-          zipcode: '',
-          country: '',
+          // streetAddress: '',
+          // city: '',
+          // state: '',
+          // zipcode: '',
+          // country: '',
           jobMode: 'In-person',
           // jobType: 'Part-time',
           // salaryDetails: '',
@@ -31,8 +31,7 @@ class PostJob extends Component {
           endDate:'',
           startTime:'',
           endTime:'',
-          minPrice:0,
-          maxPrice:0,
+          price:0,
           errors: {},
           successMsg: '',
           errorMsg: '',
@@ -65,30 +64,30 @@ class PostJob extends Component {
       handleDashBoard = (e)=>{
         e.preventDefault();
         const { history } = this.props;
-		    history.push("/employer");
+		    history.push("/freelancerHome");
       }
       findFormErrors = () => {
         // const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
             // streetAddress, state, zipcode,country, jobMode, jobType, errors } = this.state;
-            const { companyName, jobTitle, industry, city, shortJobDescription,
-              streetAddress, state, zipcode,country, jobMode, errors,startDate,endDate,startTime,endTime,maxPrice } = this.state;
+            const { companyName, jobTitle, industry, shortJobDescription,
+              jobMode, errors,startDate,endDate,startTime,endTime,price } = this.state;
         if (!companyName || companyName === '') errors.companyName = 'Company Name cannot be blank!';
         if (!jobTitle || jobTitle === '') errors.jobTitle = 'Service name cannot be blank!';
         if (!industry || industry === '') errors.industry = 'Please select the service category!';
-        if (!city || city === '') errors.city = 'City cannot be blank!';
+        // if (!city || city === '') errors.city = 'City cannot be blank!';
         if (!shortJobDescription || shortJobDescription === '') errors.shortJobDescription = 'Job Description cannot be blank!';
         // if (!salaryDetails || salaryDetails === '') errors.salaryDetails = 'Salary Details cannot be blank!';
-        if (!streetAddress || streetAddress === '') errors.streetAddress = 'Street Address cannot be blank!';
-        if (!state || state === '') errors.state = 'State cannot be blank!';
-        if (!zipcode || zipcode === '') errors.zipcode = 'Zip code cannot be blank!';
-        if (!country || country === '') errors.country = 'Please select the country!';
+        // if (!streetAddress || streetAddress === '') errors.streetAddress = 'Street Address cannot be blank!';
+        // if (!state || state === '') errors.state = 'State cannot be blank!';
+        // if (!zipcode || zipcode === '') errors.zipcode = 'Zip code cannot be blank!';
+        // if (!country || country === '') errors.country = 'Please select the country!';
         if (!jobMode || jobMode === '') errors.jobMode = 'Please select the Job Mode!';
         // if (!jobType || jobType === '') errors.jobType = 'Please select the Job Type!';
         if (!startDate ||startDate === '') errors.startDate ='Please select Start Date!';
         if (!endDate ||endDate === '' || endDate < startDate)  errors.endDate ='Please select End Date and it should be greater than Start Date!';
         if (!startTime || startTime === '' ) errors.startTime ='Please select Start Time!';
         if (!endTime || endTime ==='' || startTime === endTime) errors.endTime = 'Start time and end time should be different! ';
-        if (!maxPrice || maxPrice === 0) errors.maxPrice='Please select Maximum price for the service!';
+        if (!price || price === 0) errors.price='Please select  Price for the service!';
         return errors;
       }
     handleSubmit = (e) => {
@@ -105,9 +104,8 @@ class PostJob extends Component {
             // const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
             //     streetAddress, state, zipcode,country, jobMode, jobType,responsibilities,
             //     qualifications, loveJobRole,startDate} = this.state;
-            const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
-                  streetAddress, state, zipcode,country, jobMode,responsibilities,
-                  startDate,endDate,startTime,endTime,minPrice,maxPrice} = this.state;
+            const { companyName, jobTitle, industry, shortJobDescription, salaryDetails, jobMode,responsibilities,
+                  startDate,endDate,startTime,endTime,price} = this.state;
             const inputData = {
                 companyId,
                 employeeId,
@@ -118,11 +116,11 @@ class PostJob extends Component {
                 shortJobDescription,
                 jobMode,
                 // jobType,
-                city,
-                streetAddress,
-                state,
-                zipcode,
-                country,
+                // city,
+                // streetAddress,
+                // state,
+                // zipcode,
+                // country,
                 responsibilities,
                 // qualifications, 
                 // loveJobRole,
@@ -130,9 +128,8 @@ class PostJob extends Component {
                 endDate,
                 startTime,
                 endTime,
-                minPrice,
-                maxPrice,
-                jobPostedDate : Date().toLocaleString(),
+                price,
+                servicePostedDate : Date().toLocaleString(),
             };
            console.log("input data",inputData);
             axios
@@ -149,11 +146,11 @@ class PostJob extends Component {
                   industry: '',
                   salaryDetails: '',
                   shortJobDescription: '',
-                  city: '',
-                  streetAddress: '',
-                  state: '',
-                  zipcode: '',
-                  country: '',
+                  // city: '',
+                  // streetAddress: '',
+                  // state: '',
+                  // zipcode: '',
+                  // country: '',
                   responsibilities:'',
                   // qualifications:'',
                   // loveJobRole:''
@@ -161,8 +158,7 @@ class PostJob extends Component {
                   endDate:'',
                   startTime:'',
                   endTime:'',
-                  minPrice:'',
-                  maxPrice:''
+                  price:''
                 });
               } else {
                 this.setState({ errorMsg: response.data });
@@ -179,9 +175,8 @@ class PostJob extends Component {
         // const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
         //     streetAddress, state, zipcode,country, errors,successMsg, errorMsg,
         //     qualifications, responsibilities, loveJobRole } = this.state;
-            const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
-              streetAddress, state, zipcode,country, errors,successMsg, errorMsg,
-               responsibilities,startDate,endDate,startTime,endTime,minPrice,maxPrice } = this.state;
+            const { companyName, jobTitle, industry, shortJobDescription, salaryDetails,errors,successMsg, errorMsg,
+               responsibilities,startDate,endDate,startTime,endTime,price } = this.state;
             console.log(successMsg)
       return (
         <div>
@@ -211,7 +206,7 @@ class PostJob extends Component {
               <Col><b style={{fontSize:"larger", color:"blue"}}>Basic Information:</b></Col>
               </Row><br/>
              <Row>
-              <Col><b>Company Name</b></Col>
+              <Col><b>Freelancer Name</b></Col>
               </Row>
               <Row>
               <Col>
@@ -385,31 +380,19 @@ class PostJob extends Component {
                     </Col>
                     </Row> */}
                     <Row>
-              <Col><b style={{fontSize:"larger", color:"blue"}}>Price Range(in $):</b></Col>
+              <Col><b style={{fontSize:"larger", color:"blue"}}>Price(in $):</b></Col>
               </Row><br/>
               <Row>
-              <Col><b>Price From</b></Col>
-              <Col><b>Price To</b></Col>
-              </Row>
-              <Row>
               <Col>
                 <Form.Group className="mb-3">
-                  <Form.Control name="minPrice" type="number" min="0" className="mr-sm-2" onChange={this.handleChange} placeholder="Enter minimum Price Value" value={minPrice} />
-                  {/* <Form.Control.Feedback type="invalid">
-                    { errors.salaryDetails }
-                  </Form.Control.Feedback> */}
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group className="mb-3">
-                  <Form.Control name="maxPrice" type="number" min="0" className="mr-sm-2" onChange={this.handleChange} placeholder="Enter maximum Price Value" value={maxPrice} isInvalid={!!errors.maxPrice}/>
+                  <Form.Control name="price" type="number" min="0" className="mr-sm-2" onChange={this.handleChange} placeholder="Enter Price Value" value={price} isInvalid={!!errors.price}/>
                   <Form.Control.Feedback type="invalid">
-                    { errors.maxPrice }
+                    { errors.price }
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               </Row>
-              <Row>
+              {/* <Row>
               <Col><b style={{fontSize:"larger", color:"blue"}}> Address Details:</b></Col>
               </Row><br/>
             <Row>
@@ -480,7 +463,7 @@ class PostJob extends Component {
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>
-            </Row>
+            </Row> */}
             <Row>
               <Col colSpan="2" style={{marginLeft:"30%"}}>
                 <Button variant="primary" type="submit" onClick={this.handleSubmit}>

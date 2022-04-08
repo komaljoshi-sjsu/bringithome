@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import axios from "axios";
 import backendServer from '../../webConfig';
-import EmployerNavbar from './EmployerNavbar'
+import FreelancerNavbar from './FreelancerNavbar'
 import {useSelector} from 'react-redux';
 
 
@@ -147,7 +147,7 @@ const ReportEmployer = () => {
 
   return (
     <div>        
-       <EmployerNavbar/>
+       <FreelancerNavbar/>
     <div className="App">
       <h1>JOB POSTED IN A YEAR</h1>
       <div>

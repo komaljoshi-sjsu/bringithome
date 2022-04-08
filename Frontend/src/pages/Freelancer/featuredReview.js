@@ -9,7 +9,7 @@ import backendServer from '../../webConfig';
 import '../../style/button-group.css';
 import { FaCheckCircle } from 'react-icons/fa';
 import Pagination from "./../JobSeeker/Pagination";
-import EmployerNavbar from './EmployerNavbar';
+import FreelancerNavbar from './FreelancerNavbar';
 
 
 class Reviews extends Component {
@@ -146,7 +146,7 @@ class Reviews extends Component {
         ));
       return (
         <div>
-           <EmployerNavbar />
+           <FreelancerNavbar />
             <br></br>
             <Container style={{ display: 'flex', justifyContent: 'center' }}>
             

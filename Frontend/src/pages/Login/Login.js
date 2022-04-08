@@ -77,11 +77,11 @@ function Login(props) {
                 alert('woohoo successful');
             } else if(accountType == 'Freelancer')  {
                 if(user.companyId==null) {
-                    redirectValFn(<Redirect to="/employerprofile"/>);
+                    redirectValFn(<Redirect to="/freelancerProfile"/>);
                 }
                 else {
                     setCompId(user.companyId);
-                    redirectValFn(<Redirect to="/employer"/>);
+                    redirectValFn(<Redirect to="/freelancerHome"/>);
                 }
             } else if(accountType=='Admin')  {
                 redirectValFn(<Redirect to="/adminPhotos"/>);

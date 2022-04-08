@@ -3,8 +3,8 @@ import { Route } from 'react-router-dom'
 import Login from './pages/Login/Login.js'
 import Home from './common/Home'
 import Signup from './pages/Signup/Signup.js'
-import Employer from './pages/Employer/Employer'
-import PostJob from './pages/Employer/PostJob'
+import Freelancer from './pages/Freelancer/Freelancer'
+import PostService from './pages/Freelancer/PostService'
 import JobSeekerLandingPage from './pages/JobSeeker/JobSeeker.js'
 import CompanyTabs from './pages/Company/CompanyTabs.js'
 import JoinUs from './pages/Company/JoinUs'
@@ -12,18 +12,18 @@ import Snapshot from './pages/Company/Snapshot'
 import UploadPhotos from './pages/JobSeeker/UploadPhotos.js'
 import CompanyPhotos from './pages/JobSeeker/CompanyPhotos'
 import AdminPhoto from './pages/Admin/AdminPhoto.js'
-import EmployerProfile from './pages/Employer/EmployerProfile'
-import EmployerUpdateProfile from './pages/Employer/EmployerUpdateProfile'
+import FreelancerProfile from './pages/Freelancer/FreelancerProfile'
+import FreelancerUpdateProfile from './pages/Freelancer/FreelancerUpdateProfile'
 import Reviews from './pages/JobSeeker/Reviews'
 import AdminReview from './pages/Admin/AdminReview.js'
 import AddSalaryReview from './pages/Company/AddSalaryReview'
 import Resume from './pages/JobSeeker/Resume.js'
 import FindSalaries from './pages/JobSeeker/FindSalaries'
-import EmployerAnalytics from './pages/Employer/EmployerAnalytics'
+import FreelancerAnalytics from './pages/Freelancer/FreelancerAnalytics'
 import Preferences from './pages/JobSeeker/Preferences.js'
 import CompanyJobs from './pages/Company/Jobs.js'
 import Header from './common/Header'
-import FeaturedReview from './pages/Employer/featuredReview'
+import FeaturedReview from './pages/Freelancer/featuredReview'
 import CompanyReviews from './pages/JobSeeker/companyReviews'
 import AdminCompany from './pages/Admin/AdminCompany'
 import FindSalByTitle from './pages/JobSeeker/FindSalByTitle'
@@ -43,12 +43,12 @@ class Main extends Component {
         <Route path="/snapshot" component={Snapshot} />
         <Route path="/whyJoinUs" component={JoinUs} />
         <Route path="/signup" component={Signup} />
-        <Route path="/postJob" component={PostJob} />
-        <Route path="/employer" component={Employer} />
-        <Route path="/employerprofile" component={EmployerProfile} />
+        <Route path="/postService" component={PostService} />
+        <Route path="/freelancerHome" component={Freelancer} />
+        <Route path="/freelancerProfile" component={FreelancerProfile} />
         <Route
-          path="/employerupdateprofile"
-          component={EmployerUpdateProfile}
+          path="/freelancerUpdateProfile"
+          component={FreelancerUpdateProfile}
         />
         <Route path="/landingPage" component={JobSeekerLandingPage} />
         <Route path="/company" component={CompanyTabs} />
@@ -62,7 +62,7 @@ class Main extends Component {
         <Route path="/addSalaryReview" component={AddSalaryReview} />
         <Route path="/resume" component={Resume} />
         <Route path="/findSalaries" component={FindSalaries} />
-        <Route path="/employerAnalytics" component={EmployerAnalytics} />
+        <Route path="/freelancerAnalytics" component={FreelancerAnalytics} />
         <Route path="/preferences" component={Preferences} />
         <Route path="/allReviews" component={CompanyReviews} />
         <Route path="/adminCompany" component={AdminCompany} />
