@@ -191,7 +191,7 @@ class CustomerLoggedIn extends Component {
                       </a>
                       <a class="dropdown-item ditems">
                         <Link
-                          to="/savedjobs"
+                          to="/myjobs"
                           style={{
                             textDecoration: 'none',
                             color: '#474747',
@@ -200,7 +200,7 @@ class CustomerLoggedIn extends Component {
                           <MdFavorite
                             style={{ width: '40px', height: '25px' }}
                           />
-                          <span className="spandrop">Saved Services</span>
+                          <span className="spandrop">My Services</span>
                         </Link>
                       </a>
                       <a class="dropdown-item ditems">

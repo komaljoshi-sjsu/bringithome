@@ -66,6 +66,9 @@ class Main extends Component {
         <Route path="/preferences" component={Preferences} />
         <Route path="/allReviews" component={CompanyReviews} />
         <Route path="/adminCompany" component={AdminCompany} />
+        <Route path="/myjobs" component={AdminCompany} />
+        <Route path="/savedjobs" component={AdminCompany} />
+        <Route path="/appliedjobs" component={AdminCompany} />
         {/* <Route path="/findSalByTitle/:id" component={FindSalByTitle} /> */}
         <Route path="/findSalByTitle/:jobTitle" component={FindSalByTitle} />
         <Route path="/adminAnalytics" component={AdminAnalytics} />
