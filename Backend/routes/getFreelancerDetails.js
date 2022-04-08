@@ -6,21 +6,23 @@ const Freelancer = require('../models/Freelancer');
 
 router.post('/api/getFreelancerDetails',  (req, res) => {
 //   console.log(req.body)
-  const companyId = req.body.companyId;
+  // const companyId = '6250af3cf71117d20cb7487b';
   try {
-    Freelancer.find({companyId:companyId}).then(result=>{
-        if(result.length>0) {
-            console.log(result);
-            return res.status(200).send(JSON.stringify(result));	
-        }else {
-            console.log('No record found');
-          }
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(400).send("Error while fetching service");
-}
-});
+    Freelancer.findById("6250af3cf71117d20cb7487b").then(result=>{
+            // console.log(result);
+            return res.status(200).json([result]);	
+        }).catch((err) => {
+          console.log('Error occured while querying')
+          return res
+            .status(400)
+            .send('Error occurred while retrieving details')
+        })
+    } catch {
+      ;(err) => {
+        return res.status(400).json({ error: err })
+      }
+    }
+  })
 
 module.exports = router
   
