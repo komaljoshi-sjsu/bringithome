@@ -12,7 +12,6 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { useSelector } from 'react-redux'
 import JobSeekerNavbar from './JobSeekerNavbar'
-import Pagination from './../JobSeeker/Pagination'
 import CustomerLoggedIn from './CustomerLoggedIn'
 
 function JobSeekerLandingPage(props) {

@@ -28,6 +28,9 @@ import CompanyReviews from './pages/JobSeeker/companyReviews'
 import AdminCompany from './pages/Admin/AdminCompany'
 import FindSalByTitle from './pages/JobSeeker/FindSalByTitle'
 import AdminAnalytics from './pages/Admin/AdminAnalytics.js'
+import MyServices from './pages/Customer/MyServices.js'
+import AppliedServices from './pages/Customer/AppliedServices.js'
+import SavedServices from './pages/Customer/SavedServices.js'
 
 
 //Create a Main Component
@@ -66,9 +69,9 @@ class Main extends Component {
         <Route path="/preferences" component={Preferences} />
         <Route path="/allReviews" component={CompanyReviews} />
         <Route path="/adminCompany" component={AdminCompany} />
-        <Route path="/myjobs" component={AdminCompany} />
-        <Route path="/savedjobs" component={AdminCompany} />
-        <Route path="/appliedjobs" component={AdminCompany} />
+        <Route path="/myservices" component={MyServices} />
+        <Route path="/savedservices" component={SavedServices} />
+        <Route path="/appliedservices" component={AppliedServices} />
         {/* <Route path="/findSalByTitle/:id" component={FindSalByTitle} /> */}
         <Route path="/findSalByTitle/:jobTitle" component={FindSalByTitle} />
         <Route path="/adminAnalytics" component={AdminAnalytics} />

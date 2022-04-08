@@ -8,7 +8,7 @@ import {bindActionCreators} from 'redux';
 
 import {companyActionCreator} from '../../reduxutils/actions.js';
 
-function MyJobs(props) {
+function MyServices(props) {
     const dispatch = useDispatch();
     return (
         <div>
@@ -26,7 +26,7 @@ function MyJobs(props) {
                                     <li class="nav-item">
                                         <a class="nav-link active">
                                             <Link
-                                            to="/savedjobs"
+                                            to="/savedservices"
                                             style={{
                                                 textDecoration: 'none',
                                                 color: '#474747',
@@ -39,7 +39,7 @@ function MyJobs(props) {
                                     <li class="nav-item">
                                         <a class="nav-link">
                                             <Link
-                                            to="/appliedjobs"
+                                            to="/appliedservices"
                                             style={{
                                                 textDecoration: 'none',
                                                 color: '#474747',
@@ -59,4 +59,4 @@ function MyJobs(props) {
     )
 }
 
-export default MyJobs;
+export default MyServices;

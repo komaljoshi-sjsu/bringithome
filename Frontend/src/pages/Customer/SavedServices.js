@@ -13,7 +13,7 @@ import { userActionCreator } from '../../reduxutils/actions.js'
 import ErrorMsg from '../Error/ErrorMsg'
 import JobSeekerLoggedInNavbar from './JobSeekerLoggedInNavbar';
 
-function AppliedJobs(props) {
+function SavedServices(props) {
     const dispatch = useDispatch()
     const userid = useSelector((state)=>state.userInfo.id);
     const[errMsg,setErrMsg] = useState('');
@@ -21,11 +21,11 @@ function AppliedJobs(props) {
     const showErrorModal = bindActionCreators(userActionCreator.showErrorModal,dispatch);
     useEffect(()=> {
         console.log('user id is ',userid);
-        axios.get(backendServer+'/api/appliedjobs/'+userid)
+        axios.get(backendServer+'/api/savedjobs/'+userid)
         .then(res => {
-            console.log('applied job results',res);
+            console.log('saved job results',res);
             if(res.data.code == '200') {
-                setJobs(res.data.row);
+                setJobs(res.data.row.savedJobs);
             } else {
                 setErrMsg(res.data.msg);
                 showErrorModal(true);
@@ -37,6 +37,34 @@ function AppliedJobs(props) {
         }); 
     },[]);
     return (
+        // <div>
+        //     <ErrorMsg err={errMsg}></ErrorMsg>
+        //     <JobSeekerNavbar></JobSeekerNavbar><br></br>
+        //     <div>
+        //         <MyJobs></MyJobs>
+        //         {jobs.map(job=>  {
+        //             if(job!=null)
+        //                 job = job[0];
+        //             return (
+        //             <div >
+        //                 <div className="row">
+        //                     <b>{job.roleName}</b>
+        //                 </div>
+        //                 <div className="row">
+        //                     {job.jobType}
+        //                 </div>
+        //                 <div className="row">
+        //                     {job.companyName}
+        //                 </div>
+        //                 <div className="row">
+        //                     {job.location},{job.state} - {job.country}
+        //                 </div>
+        //             </div>)
+        //         })}
+        //     </div>
+        // </div>
+
+
         <div>
             <ErrorMsg err={errMsg}></ErrorMsg>
             <JobSeekerLoggedInNavbar />
@@ -46,22 +74,21 @@ function AppliedJobs(props) {
                 </div>
                 <div style={{marginLeft:'20%',marginRight:'20%'}}>
                         {jobs.map(job=>  {
+                                    if(job!=null)
+                                        job = job[0];
                                     return (
                                     <div className="row border-bottom" style={{padding:'20px 20px 20px 20px'}}>
-                                        {/* <div className="row" style={{float:'right'}}>
-                                            <h5><b>{job.status}</b></h5>
-                                        </div> */}
                                         <div className="row">
-                                            <h5><b>{job.jobTitle} <span style={{float:'right'}}>{job.status}</span></b></h5>
+                                            <h5><b>{job.roleName}</b></h5>
                                         </div>
                                         <div className="row">
                                             {job.companyName}
                                         </div>
                                         <div className="row">
-                                            {job.jobMode}
+                                            {job.jobType}
                                         </div>
                                         <div className="row">
-                                            {job.streetAddress},{job.state}
+                                            {job.location},{job.state}
                                         </div>
                                     </div>)
                         })}
@@ -71,4 +98,4 @@ function AppliedJobs(props) {
     )
 }
 
-export default AppliedJobs;
+export default SavedServices;

@@ -191,7 +191,7 @@ class CustomerLoggedIn extends Component {
                       </a>
                       <a class="dropdown-item ditems">
                         <Link
-                          to="/myjobs"
+                          to="/myservices"
                           style={{
                             textDecoration: 'none',
                             color: '#474747',
