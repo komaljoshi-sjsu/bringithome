@@ -13,6 +13,7 @@ import { connect } from 'react-redux'
 import { useSelector } from 'react-redux'
 import JobSeekerNavbar from './JobSeekerNavbar'
 import Pagination from './../JobSeeker/Pagination'
+import CustomerLoggedIn from './CustomerLoggedIn'
 
 function JobSeekerLandingPage(props) {
   const[currentPage,setCurrentPage]  = useState(1);
@@ -37,6 +38,9 @@ function JobSeekerLandingPage(props) {
   const[pageNumbers,setPageNumbers] = useState([]);
   const[companyName, setCompanyName] = useState('');
   const[companyId, setCompanyId] = useState('');
+
+  const email = useSelector((state)=>state.userInfo.email);
+  const accountType = useSelector((state)=>state.userInfo.accountType);
 
   const handleCardClick   = ()=> {
 
@@ -88,7 +92,11 @@ function JobSeekerLandingPage(props) {
   
   return (
     <div>
-      <JobSeekerNavbar />
+      {email !== '' && accountType === 'Customer' ? (
+          <CustomerLoggedIn />
+        ) : (
+          <JobSeekerNavbar />
+        )}
       <div id="Second" class="row searchNav">
         <div class="row">
           <div class="col-2"></div>
@@ -215,7 +223,7 @@ function JobSeekerLandingPage(props) {
                   class="headinghoverUnderline"
                   style={{ color: '#003399' }}
                 >
-                  <u style={{ color: '#003399' }}>Service feed </u>
+                  <span style={{ color: '#003399' }}>Service feed </span>
                 </h3>
               </div>
               <div class="col-4">
