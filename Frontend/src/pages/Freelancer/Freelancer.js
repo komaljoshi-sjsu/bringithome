@@ -1,6 +1,6 @@
 // Employer Landing Page
 import React, { Component } from 'react'
-import EmployerNavbar from './EmployerNavbar'
+import FreelancerNavbar from './FreelancerNavbar'
 import {Button,Card,ListGroup,ListGroupItem,Modal,Row,Col,Pagination} from 'react-bootstrap';
 import axios from "axios";
 import backendServer from '../../webConfig';
@@ -85,7 +85,7 @@ handleModalCloseProfile(){
   handleSubmit = (e) => {
     e.preventDefault();
     const { history } = this.props;
-    history.push('/postJob');
+    history.push('/postService');
   }
   viewJobSeekerProfile = (id) => {
     const jobSeekerId = {
@@ -229,7 +229,7 @@ handleModalCloseProfile(){
     }else{
       applicantsList = (
         <div>
-          Zero Applicants for this job.
+          No Customer booked this service.
         </div>
       )
     }
@@ -334,7 +334,7 @@ handleModalCloseProfile(){
               return (
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                  
-                  <Card style={{ width: "25rem" }}>
+                  <Card style={{ width: "20rem" }}>
                   <Card.Body>
                   <Card.Title><Button  variant="link" 
                   onClick={() => {
@@ -346,7 +346,7 @@ handleModalCloseProfile(){
                   <ListGroup className="list-group-flush">
                     <ListGroupItem>Category: {service.serviceCategory}</ListGroupItem>
                     <ListGroupItem>Mode: {service.serviceMode}</ListGroupItem>
-                    <ListGroupItem>Price: ${service.maxPrice}</ListGroupItem>
+                    <ListGroupItem>Price: ${service.price}</ListGroupItem>
                     <ListGroupItem>From: {new Date(service.availability.startDate).toDateString()}, {service.availability.startTime} <br/>To: {new Date(service.availability.endDate).toDateString()}, {service.availability.endTime}</ListGroupItem>
                     <ListGroupItem>Total Customers : {service.applicantsNo}</ListGroupItem>
                   </ListGroup> 
@@ -369,7 +369,7 @@ handleModalCloseProfile(){
     }
     return (
       <div >
-        <EmployerNavbar/>
+        <FreelancerNavbar/>
         <div id="Second" class="row searchNav">
           <div class="row">
             <div class="col-2"></div>

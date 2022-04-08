@@ -26,43 +26,15 @@ app.use(
 
 // //Define all the routes
 app.use(require('./routes/loginRoute'))
-// app.use(require('./routes/companyRoute'))
-// app.use(require('./routes/postNewJob'))
 app.use(require('./routes/signupRoute'))
 app.use(require('./routes/customerHome'))
-// app.use(require('./routes/jobs'))
-// app.use(require('./routes/uploadPhotos'))
-// app.use(require('./routes/getAllPhotos'))
-// app.use(require('./routes/getJobSeekerPhotos'))
-// app.use(require('./routes/adminPhotos'))
-// app.use(require('./routes/getEmployerProfile'))
-// app.use(require('./routes/editEmployerDetails'))
-// app.use(require('./routes/addEmployerDetails'))
-// app.use(require('./routes/editCompanyDetails'))
-// app.use(require('./routes/salaryReviewRoute'))
-// app.use(require('./routes/adminReviews'))
-// app.use(require('./routes/companyReviews'))
-// app.use(require('./routes/findSalary'))
-// app.use(require('./routes/addCompanyDetails'))
-// app.use(require("./routes/getCompanyDetails"))
-// app.use(require("./routes/addCompanyIdToEmployer"))
-// app.use(require("./routes/employerAnalytics"))
-// app.use(require("./routes/jobSeekerProfileRoute"))
-// app.use(require("./routes/employerFeaturedReviews"))
-// app.use(require("./routes/getPostedJobs"))
-// app.use(require("./routes/getApplicantsName"))
-// app.use(require("./routes/getJobSeekerProfile"))
-// app.use(require("./routes/allCompanyReviews"))
-// app.use(require("./routes/adminAnalytics"))
-// app.use(require("./routes/updateJobSeekerStatus"))
-// app.use(require("./routes/getAllReviews"))
-// app.use(require("./routes/findSalary/:id"))
-//Define all the routes
-//app.use('/postNewJob', postNewJob)
 
 //Freelancer
 app.use(require("./routes/getPostedService"))
-app.use(require('./routes/postNewService'))
+app.use(require("./routes/postNewService"))
+app.use(require("./routes/getFreelancerDetails"))
+app.use(require("./routes/postFreelancerDetails"))
+
 
 const PORT = process.env.PORT || 5000
 //Server code will be running on port 5000
