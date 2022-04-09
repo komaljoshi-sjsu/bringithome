@@ -10,39 +10,44 @@ router.post("/api/postNewService", (req, res) => {
     const { _id, 
         employeeId,
         companyName,
-        streetAddress,
-        city,
-        state,
-        zipcode,
-        country
+        jobTitle
      } = req.body;
      
     try {
       const service = new Service({
-        companyName: req.body.companyName,
+        freelancer: {
+          freelancerId: req.body.employeeId,
+          name: req.body.companyName,
+        },
         serviceCategory: req.body.industry,
         serviceName: req.body.jobTitle,
         serviceMode: req.body.jobMode,
         serviceDescription: req.body.shortJobDescription,
-        description: req.body.responsibilities,
+        responsibilities: req.body.responsibilities,
+        servicePostedDate :req.body.servicePostedDate,
+        price:req.body.price,
         availability:{
             startDate: req.body.startDate,
             endDate:req.body.endDate,
             startTime:req.body.startTime,
             endTime:req.body.endTime
         },
-        minPrice:req.body.minPrice,
-        maxPrice:req.body.maxPrice,
+
         });
     // console.log(req.body);
 
-    Service.find({companyName:companyName}).then(result=>{
+    Service.find({  $and: [
+      {serviceName: jobTitle},
+      {freelancer: {name: companyName}
+      }]
+    }).then(result=>{
             if(result.length>0) {
                 console.log('Service Record found');
             } else {
                 console.log('New service record added');
                 service.save().then(result=>{
-                    const cid = result._id;
+                  //  console.log(result);
+                  const cid = result._id;
 
                 //Freelancer details update
                 Freelancer.updateOne({employeeId:employeeId}, {
@@ -50,19 +55,12 @@ router.post("/api/postNewService", (req, res) => {
                             availableServices:{
                                 serviceId : cid,
                                 serviceCategory: req.body.industry,
-                                address:{
-                                    streetAddress: streetAddress,
-                                    city: city,
-                                    state: state,
-                                    zipcode: zipcode,
-                                    country: country
-                                },
                             }
                         },
                       })
                         .then((result) => {
                         //   console.log("Freelancer record",result);
-                          console.log("Freelancer address updated");
+                          console.log("Freelancer new available service added");
                         //   return res.status(200).json({ photos: result });
                         })
                         .catch((err) => {

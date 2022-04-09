@@ -6,7 +6,7 @@ import {IoMdHelpCircle, IoMdChatboxes} from 'react-icons/io';
 import {BsFillBellFill, BsPersonFill} from 'react-icons/bs';
 import { Link } from 'react-router-dom'
 
-class EmployerNavbar extends Component {
+class FreelancerNavbar extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -48,7 +48,7 @@ class EmployerNavbar extends Component {
                 <li class="nav-item">
                   
                   <a class="nav-link active" aria-current="page" href="/Employer">
-                  <Link to="/employer"
+                  <Link to="/freelancerHome"
                               style={{
                                 textDecoration: 'none',
                                 color: '#474747',
@@ -73,7 +73,7 @@ class EmployerNavbar extends Component {
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" >
-                  <Link to="/employerAnalytics"
+                  <Link to="/freelancerAnalytics"
                               style={{
                                 textDecoration: 'none',
                                 color: '#474747',
@@ -99,14 +99,6 @@ class EmployerNavbar extends Component {
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#">
-                      <h5 style={{ color: 'black' }}>test</h5>
-                    </a>
-                  </li> 
-                  <li class="nav-item">
-                    <h3 style={{ color: 'black' }}>|</h3>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">
                       <h5 style={{ color: 'black' }}><BsFillBellFill/></h5>
                     </a>
                   </li>
@@ -117,7 +109,7 @@ class EmployerNavbar extends Component {
                   </li>
                   <li class="nav-item">
                     <a class="nav-link">
-                    <Link to="/employerUpdateProfile"
+                    <Link to="/freelancerUpdateProfile"
                               style={{
                                 textDecoration: 'none',
                                 color: '#474747',
@@ -138,4 +130,4 @@ class EmployerNavbar extends Component {
   }
 }
 
-export default EmployerNavbar
+export default FreelancerNavbar

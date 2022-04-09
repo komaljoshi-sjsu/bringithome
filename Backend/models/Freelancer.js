@@ -19,7 +19,22 @@ const flSchema = new Schema({
     dateofbirth: {
         type:String,
     },
-    dp: {
+    // dp: {
+    //     type:String,
+    // },
+    address:{
+        type:String,
+    },
+    city: {
+        type:String,
+    },
+    state :{
+        type:String,
+    },
+    country:{
+        type:String,
+    },
+    zipcode:{
         type:String,
     },
     availableServices: {
