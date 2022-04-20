@@ -56,16 +56,22 @@ class Employer extends Component {
       const compId = {
         companyId:companyId
       }
+      const employerId = this.props.userInfo.id;
+      const freelancerId ={
+        employerId:employerId
+      }
+      // console.log(this.props.userInfo);
+      // console.log(freelancerId);
       // axios.post(`${backendServer}/getPostedJobs`,compId).then((response) => {
-        axios.post(`${backendServer}/api/getPostedService`,compId).then((response) => {
-        console.log(response.data)
+        axios.post(`${backendServer}/api/getPostedService`,freelancerId).then((response) => {
+        // console.log(response.data)
         if(response.status === 200){
           
           this.setState({
             postedJobs: this.state.postedJobs.concat(response.data),
           });
           this.setState({
-            statusmsg: "Jobs Found"
+            statusmsg: "Services Found"
           });
         }
       });
@@ -157,14 +163,14 @@ handleModalCloseProfile(){
     let pgSize = this.state.pageSize;
     let count = 1;
     let num = items.length / pgSize;
-    //console.log(items.length / pgSize);
+    // console.log(items.length / pgSize);
     //console.log(Number.isInteger(items.length / pgSize));
     if (Number.isInteger(num)) {
       count = num;
     } else {
       count = Math.floor(num) + 1;
     }
-  //   console.log("count:", count);
+  // console.log("count:", count);
   // console.log("items.length:", items.length);
   let active = this.state.curPage;
 
@@ -185,7 +191,7 @@ handleModalCloseProfile(){
         for (start; start < end; start++) {
           displayitems.push(items[start]);
         }
-    
+        
     if(liststatus === "Applicants List"){
       applicantsList = (
         <div>
@@ -323,17 +329,15 @@ handleModalCloseProfile(){
       )
 
     }
-    if(statusmsg === "Jobs Found"){
+    if(statusmsg === "Services Found"){
       
       serviceList = (
       <div >
-       
         {displayitems && displayitems.length > 0 ? (
         <div className="card-list">
             {displayitems.map(service=> {
               return (
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                 
                   <Card style={{ width: "20rem" }}>
                   <Card.Body>
                   <Card.Title><Button  variant="link" 
@@ -403,7 +407,6 @@ handleModalCloseProfile(){
         </div>
         <hr />
         <div className="container">  <h5 style={{ marginLeft: '40%',marginBottom:'50px'}}>Available Services</h5></div>
- 
         {serviceList}
         <Pagination 
                     onClick={this.onPage}
