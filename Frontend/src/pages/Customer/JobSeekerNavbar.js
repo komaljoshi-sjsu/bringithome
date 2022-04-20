@@ -114,7 +114,7 @@ class JobSeekerNavbar extends Component {
                       <h5 style={{ color: 'blue' }}>Sign in</h5>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  {/* <li class="nav-item">
                     <h3 style={{ color: 'black' }}>|</h3>
                   </li>
                   <li class="nav-item">
@@ -129,7 +129,7 @@ class JobSeekerNavbar extends Component {
                         <h5>Employers/Post Job</h5>
                       </Link>
                     </a>
-                  </li>
+                  </li> */}
                 </ul>
               </form>
             </div>

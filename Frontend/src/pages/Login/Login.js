@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux'
 import jwt_decode from 'jwt-decode'
 import backendServer from '../../webConfig'
 import { userActionCreator } from '../../reduxutils/actions.js'
-import {companyActionCreator} from '../../reduxutils/actions.js';
+// import {companyActionCreator} from '../../reduxutils/actions.js';
 import logo from '../../images/logo_signin.png'
 import ErrorMsg from '../Error/ErrorMsg'
 
@@ -26,7 +26,7 @@ function Login(props) {
     const setResumeUrl = bindActionCreators(userActionCreator.setResumeUrl,dispatch);
     const setToken = bindActionCreators(userActionCreator.setToken,dispatch);
     const showErrorModal = bindActionCreators(userActionCreator.showErrorModal,dispatch);
-    const setCompId = bindActionCreators(companyActionCreator.setCompId,dispatch);
+    // const setCompId = bindActionCreators(companyActionCreator.setCompId,dispatch);
     //const setCompanyId = bindActionCreators(userActionCreator.setCompanyId,dispatch);
 
   let redirectToSignUp = (e) => {
@@ -66,13 +66,14 @@ function Login(props) {
             if(accountType=='Customer')  {
                 redirectValFn(<Redirect to="/landingPage"/>);
             } else if(accountType == 'Freelancer')  {
-                if(user.companyId==null) {
-                    redirectValFn(<Redirect to="/freelancerProfile"/>);
-                }
-                else {
-                    setCompId(user.companyId);
-                    redirectValFn(<Redirect to="/freelancerHome"/>);
-                }
+              redirectValFn(<Redirect to="/freelancerHome"/>);
+                // if(user.companyId==null) {
+                //     redirectValFn(<Redirect to="/freelancerProfile"/>);
+                // }
+                // else {
+                //     setCompId(user.companyId);
+                //     redirectValFn(<Redirect to="/freelancerHome"/>);
+                // }
             } else if(accountType=='Admin')  {
                 redirectValFn(<Redirect to="/adminPhotos"/>);
             }
