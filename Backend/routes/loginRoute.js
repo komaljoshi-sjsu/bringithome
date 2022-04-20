@@ -39,7 +39,7 @@ router.post("/api/login", (req, res) => {
                     if(!isCorrect) {
                         res.status(400).send("Password incorrect");
                     } else {
-                        res.status(200).send(result[0]._id);
+                        res.status(200).send(result[0]);
                     }
                 } else {
                     res.status(400).send("Username incorrect");
