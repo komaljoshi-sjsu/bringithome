@@ -6,6 +6,7 @@ const Freelancer = require('../models/Freelancer');
 
 router.post("/api/postEmployerDetails", (req, res) => {
     // const companyName = req.body.companyName;
+    console.log(req.body);
     const { 
         _id,
         name,
@@ -17,7 +18,7 @@ router.post("/api/postEmployerDetails", (req, res) => {
      } = req.body;
 
     try {
-    Freelancer.findByIdAndUpdate('6250af3cf71117d20cb7487b', {
+    Freelancer.findByIdAndUpdate(_id, {
         $set: {
             name: name,
             address: address,

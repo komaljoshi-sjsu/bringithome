@@ -5,10 +5,11 @@ const router = express.Router();
 const Freelancer = require('../models/Freelancer');
 
 router.post('/api/getFreelancerDetails',  (req, res) => {
-//   console.log(req.body)
+  // console.log(req.body)
   // const companyId = '6250af3cf71117d20cb7487b';
+  const empid= req.body.empid;
   try {
-    Freelancer.findById("6250af3cf71117d20cb7487b").then(result=>{
+    Freelancer.findById(empid).then(result=>{
             // console.log(result);
             return res.status(200).json([result]);	
         }).catch((err) => {

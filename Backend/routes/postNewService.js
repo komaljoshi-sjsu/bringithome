@@ -30,7 +30,8 @@ router.post("/api/postNewService", (req, res) => {
             startDate: req.body.startDate,
             endDate:req.body.endDate,
             startTime:req.body.startTime,
-            endTime:req.body.endTime
+            endTime:req.body.endTime,
+            timeSlot:req.body.timeSlot
         },
 
         });

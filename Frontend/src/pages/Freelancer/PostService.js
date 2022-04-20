@@ -17,7 +17,7 @@ class PostService extends Component {
     constructor(props) {
       super(props);
       this.state = {
-          companyName: '',
+          // companyName: '',
           industry: '',
           jobTitle: '',
           // streetAddress: '',
@@ -37,6 +37,7 @@ class PostService extends Component {
           startTime:'',
           endTime:'',
           price:0,
+          timeSlot:[],
           errors: {},
           successMsg: '',
           errorMsg: '',
@@ -76,7 +77,7 @@ class PostService extends Component {
             // streetAddress, state, zipcode,country, jobMode, jobType, errors } = this.state;
             const { companyName, jobTitle, industry, shortJobDescription,
               jobMode, errors,startDate,endDate,startTime,endTime,price } = this.state;
-        if (!companyName || companyName === '') errors.companyName = 'Company Name cannot be blank!';
+        // if (!companyName || companyName === '') errors.companyName = 'Company Name cannot be blank!';
         if (!jobTitle || jobTitle === '') errors.jobTitle = 'Service name cannot be blank!';
         if (!industry || industry === '') errors.industry = 'Please select the service category!';
         // if (!city || city === '') errors.city = 'City cannot be blank!';
@@ -106,11 +107,12 @@ class PostService extends Component {
             // To-DO : Get logged in company id
             const companyId = this.props.company.compid;
             const employeeId = this.props.userInfo.id;
+            const companyName =this.props.userInfo.name;
             // const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
             //     streetAddress, state, zipcode,country, jobMode, jobType,responsibilities,
             //     qualifications, loveJobRole,startDate} = this.state;
-            const { companyName, jobTitle, industry, shortJobDescription, salaryDetails, jobMode,responsibilities,
-                  startDate,endDate,startTime,endTime,price} = this.state;
+            const { jobTitle, industry, shortJobDescription, salaryDetails, jobMode,responsibilities,
+                  startDate,endDate,startTime,endTime,price,timeSlot} = this.state;
             const inputData = {
                 companyId,
                 employeeId,
@@ -134,17 +136,26 @@ class PostService extends Component {
                 startTime,
                 endTime,
                 price,
+                timeSlot:intervals(startTime,endTime),
                 servicePostedDate : Date().toLocaleString(),
             };
            console.log("input data",inputData);
           //  const range = moment.range('2018-01-01 00:00', '2018-01-01 05:30');
-           const range = moment.range(startTime,endTime);
-           const hours = Array.from(range.by('hour', { excludeEnd: true }));
-          // hours.length == 5;
-          hours.map(m => m.format('HH:mm'))
-           console.log(hours);
+          function intervals(start, end) {
+            var start = moment(start, 'hh:mm a');
+            var end = moment(end, 'hh:mm a');
+            if(end < start && end != '12:00')
+              end = end.add(1, 'd');
+            var result = [];
+            var current = moment(start);
+            while (current <= end) {
+              result.push(current.format('hh:mm a'));
+              current.add(1, 'hour');
+            }
+            return result;
+          }
 
-            axios
+          axios
             .post(`${backendServer}/api/postNewService`, inputData)
             .then((response) => {
               console.log("Response")
@@ -188,7 +199,9 @@ class PostService extends Component {
         // const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
         //     streetAddress, state, zipcode,country, errors,successMsg, errorMsg,
         //     qualifications, responsibilities, loveJobRole } = this.state;
-            const { companyName, jobTitle, industry, shortJobDescription, salaryDetails,errors,successMsg, errorMsg,
+        const companyName = this.props.userInfo.name;
+        // console.log("company",companyName)
+            const {  jobTitle, industry, shortJobDescription, salaryDetails,errors,successMsg, errorMsg,
                responsibilities,startDate,endDate,startTime,endTime,price } = this.state;
             console.log(successMsg)
       return (
@@ -225,7 +238,7 @@ class PostService extends Component {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Control name="companyName" type="text" placeholder="Enter your Company Name"
-                  className="mr-sm-2" onChange={this.handleChange} value={companyName} isInvalid={!!errors.companyName} />
+                  className="mr-sm-2" value={companyName} isInvalid={!!errors.companyName} disabled/>
                   <Form.Control.Feedback type="invalid">
                     { errors.companyName }
                   </Form.Control.Feedback>
