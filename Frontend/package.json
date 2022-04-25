@@ -25,6 +25,7 @@
     "mdb-react-ui-kit": "^1.3.0",
     "mdbreact": "^5.1.0",
     "mocha": "^9.1.2",
+    "moment": "^2.29.3",
     "moment-range": "^4.0.2",
     "react": "^17.0.1",
     "react-bootstrap": "^2.0.0-rc.0",

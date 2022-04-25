@@ -294,7 +294,7 @@ function JobSeekerLandingPage(props) {
                     id={jobId}
                   >
                     <h5 style={{ marginTop: '4px', color: 'white' }}>
-                      Apply On Company Site
+                      Request Service
                     </h5>
                   </button>
                 </div>

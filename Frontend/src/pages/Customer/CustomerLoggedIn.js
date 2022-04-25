@@ -14,7 +14,7 @@ import {
 import { IoMdPerson, IoMdSettings, IoMdHelpCircle } from 'react-icons/io'
 import { ImProfile } from 'react-icons/im'
 import { MdFavorite, MdReviews, MdEmail, MdPhoto } from 'react-icons/md'
-import logo from '../../images/Indeed_logo.png'
+import logo from '../../images/logo_signin.png'
 import '../../CSS/JobSeekerNavbar.css'
 import { logout } from '../../reduxutils/actioncreators/useraction'
 
@@ -69,8 +69,8 @@ class CustomerLoggedIn extends Component {
                 <img
                   src={logo}
                   alt=""
-                  width="120"
-                  height="30"
+                  width="130"
+                  height="80"
                   class="d-inline-block align-text-top"
                 />
               </Link>
@@ -241,31 +241,7 @@ class CustomerLoggedIn extends Component {
                   <li class="nav-item">
                     <h3 style={{ color: 'black' }}>|</h3>
                   </li>
-                  <li class="nav-item">
-                    <a
-                      class="nav-link"
-                      onClick={() => {
-                        alert('Please login as Employer to post a Job.')
-                      }}
-                    >
-                      {/* <Link
-                        to="/postJob"
-                        style={{
-                          textDecoration: 'none',
-                          color: '#474747',
-                        }}
-                      > */}
-                      <h5
-                        style={{
-                          textDecoration: 'none',
-                          color: '#474747',
-                        }}
-                      >
-                        Employers/Post Job
-                      </h5>
-                      {/* </Link> */}
-                    </a>
-                  </li>
+                  
                 </ul>
               </form>
             </div>

@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Link } from 'react-router-dom'
-import logo from '../../images/logo.png'
+import logo from '../../images/logo_signin.png'
 import '../../CSS/JobSeekerNavbar.css'
 
 class JobSeekerNavbar extends Component {
