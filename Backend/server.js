@@ -28,6 +28,7 @@ app.use(
 app.use(require('./routes/loginRoute'))
 app.use(require('./routes/signupRoute'))
 app.use(require('./routes/customerHome'))
+app.use(require('./routes/myServiceDetails'))
 
 //Freelancer
 app.use(require("./routes/getPostedService"))

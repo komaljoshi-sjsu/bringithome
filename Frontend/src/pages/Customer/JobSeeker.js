@@ -13,6 +13,8 @@ import { connect } from 'react-redux'
 import { useSelector } from 'react-redux'
 import JobSeekerNavbar from './JobSeekerNavbar'
 import CustomerLoggedIn from './CustomerLoggedIn'
+import backendServer from '../../webConfig';
+import ErrorMsg from '../Error/ErrorMsg'
 
 function JobSeekerLandingPage(props) {
   const[currentPage,setCurrentPage]  = useState(1);
@@ -37,9 +39,11 @@ function JobSeekerLandingPage(props) {
   const[pageNumbers,setPageNumbers] = useState([]);
   const[companyName, setCompanyName] = useState('');
   const[companyId, setCompanyId] = useState('');
+  const[errMsg,setErrMsg] = useState('');
 
   const email = useSelector((state)=>state.userInfo.email);
   const accountType = useSelector((state)=>state.userInfo.accountType);
+  const userid = useSelector((state)=>state.userInfo.id);
 
   const handleCardClick   = ()=> {
 
@@ -50,8 +54,22 @@ function JobSeekerLandingPage(props) {
   const handleApply   = ()=> {
     
   }
-  const handleSaveJob  = ()=> {
-    
+  const handleSaveJob  = (serviceId)=> {
+    axios.post(backendServer+'/api/saveService/',{
+      userId:userid,
+      serviceId:serviceId
+    })
+        .then(res => {
+            console.log('saved job results',res);
+            if(res.status == '200') {
+                alert('saved');
+            } else {
+                alert(res.data.msg);
+            }
+        }).catch(err => {
+            alert('Failed to get saved job details. Please check console');
+            console.log(err);
+        }); 
   }
   useEffect(()=> {
     console.log('I am here')
@@ -91,6 +109,7 @@ function JobSeekerLandingPage(props) {
   
   return (
     <div>
+      <ErrorMsg err={errMsg}></ErrorMsg>
       {email !== '' && accountType === 'Customer' ? (
           <CustomerLoggedIn />
         ) : (

@@ -17,15 +17,15 @@ function SavedServices(props) {
     const dispatch = useDispatch()
     const userid = useSelector((state)=>state.userInfo.id);
     const[errMsg,setErrMsg] = useState('');
-    const [jobs,setJobs] = useState([]);
+    const [jobs,setServices] = useState([]);
     const showErrorModal = bindActionCreators(userActionCreator.showErrorModal,dispatch);
     useEffect(()=> {
         console.log('user id is ',userid);
-        axios.get(backendServer+'/api/savedjobs/'+userid)
+        axios.get(backendServer+'/api/savedServices/'+userid)
         .then(res => {
             console.log('saved job results',res);
             if(res.data.code == '200') {
-                setJobs(res.data.row.savedJobs);
+                setServices(res.data);
             } else {
                 setErrMsg(res.data.msg);
                 showErrorModal(true);
@@ -37,34 +37,6 @@ function SavedServices(props) {
         }); 
     },[]);
     return (
-        // <div>
-        //     <ErrorMsg err={errMsg}></ErrorMsg>
-        //     <JobSeekerNavbar></JobSeekerNavbar><br></br>
-        //     <div>
-        //         <MyJobs></MyJobs>
-        //         {jobs.map(job=>  {
-        //             if(job!=null)
-        //                 job = job[0];
-        //             return (
-        //             <div >
-        //                 <div className="row">
-        //                     <b>{job.roleName}</b>
-        //                 </div>
-        //                 <div className="row">
-        //                     {job.jobType}
-        //                 </div>
-        //                 <div className="row">
-        //                     {job.companyName}
-        //                 </div>
-        //                 <div className="row">
-        //                     {job.location},{job.state} - {job.country}
-        //                 </div>
-        //             </div>)
-        //         })}
-        //     </div>
-        // </div>
-
-
         <div>
             <ErrorMsg err={errMsg}></ErrorMsg>
             <CustomerLoggedIn />
@@ -79,16 +51,16 @@ function SavedServices(props) {
                                     return (
                                     <div className="row border-bottom" style={{padding:'20px 20px 20px 20px'}}>
                                         <div className="row">
-                                            <h5><b>{job.roleName}</b></h5>
+                                            <h5><b>{job.serviceName}</b></h5>
                                         </div>
                                         <div className="row">
-                                            {job.companyName}
+                                            {job.serviceMode}
                                         </div>
                                         <div className="row">
-                                            {job.jobType}
+                                            {job.freelancer.name}
                                         </div>
                                         <div className="row">
-                                            {job.location},{job.state}
+                                            {job.serviceMode}
                                         </div>
                                     </div>)
                         })}
