@@ -31,6 +31,7 @@ import MessageParser from "./chatbot/MessageParser.js";
 import ActionProvider from "./chatbot/ActionProvider.js";
 import ProfileUpdate from "./pages/Customer/ProfileUpdate.js";
 import Booking from "./pages/Customer/Booking.js";
+import Messanger from "./pages/Messenger/Messenger.js";
 
 class Main extends Component {
   render() {
@@ -41,8 +42,8 @@ class Main extends Component {
         <Route path="/login" component={Login} />
         <Route path="/home" component={Home} />
         <Route path="/header" component={Header} />
-        <Route path="/snapshot" component={Snapshot} />
-        <Route path="/whyJoinUs" component={JoinUs} />
+        {/* <Route path="/snapshot" component={Snapshot} />
+        <Route path="/whyJoinUs" component={JoinUs} /> */}
         <Route path="/signup" component={Signup} />
         <Route path="/postService" component={PostService} />
         <Route path="/freelancerHome" component={Freelancer} />
@@ -52,11 +53,12 @@ class Main extends Component {
           component={FreelancerUpdateProfile}
         />
         <Route path="/landingPage" component={JobSeekerLandingPage} />
-        <Route path="/company" component={CompanyTabs} />
-        <Route path="/jobs" component={CompanyJobs} />
+        {/* <Route path="/company" component={CompanyTabs} /> */}
+        {/* <Route path="/photos" component={UploadPhotos} /> */}
+        {/* <Route path="/jobs" component={CompanyJobs} /> */}
         <Route path="/reviews" component={Reviews} />
         <Route path="/featuredReviews" component={FeaturedReview} />
-        <Route path="/addSalaryReview" component={AddSalaryReview} />
+        {/* <Route path="/addSalaryReview" component={AddSalaryReview} /> */}
         <Route path="/findSalaries" component={FindSalaries} />
         <Route path="/freelancerAnalytics" component={FreelancerAnalytics} />
         <Route path="/preferences" component={Preferences} />
@@ -75,6 +77,7 @@ class Main extends Component {
             actionProvider={ActionProvider}
           />
         </div>
+        <Route path="/messenger" component={Messenger}/>
       </div>
     );
   }
