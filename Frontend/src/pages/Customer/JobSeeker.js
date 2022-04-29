@@ -15,6 +15,7 @@ import JobSeekerNavbar from './JobSeekerNavbar'
 import CustomerLoggedIn from './CustomerLoggedIn'
 import backendServer from '../../webConfig';
 import ErrorMsg from '../Error/ErrorMsg'
+import Booking from './Booking'
 
 function JobSeekerLandingPage(props) {
   const[currentPage,setCurrentPage]  = useState(1);
@@ -45,8 +46,17 @@ function JobSeekerLandingPage(props) {
   const accountType = useSelector((state)=>state.userInfo.accountType);
   const userid = useSelector((state)=>state.userInfo.id);
 
-  const handleCardClick   = ()=> {
-
+  const handleCardClick   = (e,job)=> {
+    setJobId(job._id);
+    setJobType(job.serviceCategory);
+    setMode(job.serviceMode);
+    setRoleName(job.serviceName);
+    setCity(job.city);
+    setZip(job.zip);
+    setState(job.state);
+    setPrice(job.price);
+    setResponsibilities(job.responsibilities);
+    setTotalReviews(job.setTotalReviews)
   }
   const handleCompanyLink   = ()=> {
     
@@ -107,9 +117,11 @@ function JobSeekerLandingPage(props) {
     });
   },[currentPage])
   
+  const [showBooking,setShowBooking] = useState(false);
   return (
     <div>
       <ErrorMsg err={errMsg}></ErrorMsg>
+      <Booking show={true} price={price} userid={userid} serviceid={jobId} setShowBooking={setShowBooking} show={showBooking}></Booking>
       {email !== '' && accountType === 'Customer' ? (
           <CustomerLoggedIn />
         ) : (
@@ -131,9 +143,10 @@ function JobSeekerLandingPage(props) {
                     <h6 style={{ marginTop: '10px' }}>What</h6>
                   </button>
                   <Autocomplete
+                    disablePortal
                     id="free-solo-demo"
                     freeSolo
-                    sx={{ width: 180, borderBottom: 'none' }}
+                    sx={{ width: 180, borderBottom: 'none',borderWidth: '0 0 0 0' }}
                     value={whatVal}
                     onChange={handleWhatVal.bind(this)}
                     options={whatSearch.map((option) => option)}
@@ -174,7 +187,7 @@ function JobSeekerLandingPage(props) {
                   <Autocomplete
                     id="free-solo-demo"
                     freeSolo
-                    sx={{ width: 180, borderBottom: 'none' }}
+                    //sx={{ width: 180, borderBottom: 'none' }}
                     value={whereVal}
                     onChange={handleWhereVal}
                     options={whereSearch.map((option) => option)}
@@ -267,8 +280,8 @@ function JobSeekerLandingPage(props) {
             {jobs.map((job) => (
               <div
                 class="card cardStyle2"
-                id={job.jobId}
-                onClick={handleCardClick}
+                id={job._id}
+                onClick={(e)=>handleCardClick(e,job)}
               >
                 <div class="card-body">
                   <h4 class="card-title">{job.jobTitle}</h4>
@@ -309,7 +322,7 @@ function JobSeekerLandingPage(props) {
                   <button
                     type="button"
                     class="btn applybtn"
-                    onClick={handleApply.bind(this)}
+                    onClick={()=>setShowBooking(true)}
                     id={jobId}
                   >
                     <h5 style={{ marginTop: '4px', color: 'white' }}>

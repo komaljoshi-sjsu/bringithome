@@ -1,0 +1,14 @@
+.booking-modal {
+    background-image: url(../images/payment.jpg);
+    width: 600px;
+    height: 600px
+}
+.booking-form {
+    text-align: center
+}
+.book-button {
+    background-color: black
+}
+.spacer {
+    margin: 20px 20px 20px 20px;
+}
