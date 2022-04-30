@@ -1,14 +1,26 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const sSchema = new Schema({
-    booked: {
-        type: Object,
+    status: {
+        type: String
     },
-    completed: {
-        type: Object,
+    serviceid: {
+        type: String
     },
-    saved: {
-        type: Object,
+    userid: {
+        type: String
+    },
+    date: {
+        type: String
+    },
+    time: {
+        type: String
+    },
+    address: {
+        type: String
+    },
+    phone: {
+        type: String
     }
 });
 
