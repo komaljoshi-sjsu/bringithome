@@ -1,52 +1,57 @@
 // Job Seeker Landing Page
-import React, { Component, useEffect, useState } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import '../../CSS/JobSeekerLanding.css'
-import TextField from '@mui/material/TextField'
-import { RatingView } from 'react-simple-star-rating'
-import { makeStyles } from '@material-ui/styles'
-import Autocomplete from '@mui/material/Autocomplete'
-import axios from 'axios'
-import { withRouter } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { useSelector } from 'react-redux'
-import JobSeekerNavbar from './JobSeekerNavbar'
-import CustomerLoggedIn from './CustomerLoggedIn'
-import backendServer from '../../webConfig';
-import ErrorMsg from '../Error/ErrorMsg'
-import Booking from './Booking'
-
+import React, { Component, useEffect, useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import "../../CSS/JobSeekerLanding.css";
+import TextField from "@mui/material/TextField";
+import { RatingView } from "react-simple-star-rating";
+import { makeStyles } from "@material-ui/styles";
+import Autocomplete from "@mui/material/Autocomplete";
+import axios from "axios";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { useSelector } from "react-redux";
+import JobSeekerNavbar from "./JobSeekerNavbar";
+import CustomerLoggedIn from "./CustomerLoggedIn";
+import backendServer from "../../webConfig";
+import ErrorMsg from "../Error/ErrorMsg";
+import Booking from "./Booking";
+import config from "../../chatbot/config.js";
+import Chatbot from "react-chatbot-kit";
+import "react-chatbot-kit/build/main.css";
+import MessageParser from "../../chatbot/MessageParser.js";
+import ActionProvider from "../../chatbot/ActionProvider.js";
+//Create a Main Component
 function JobSeekerLandingPage(props) {
-  const[currentPage,setCurrentPage]  = useState(1);
-  const[totalPosts,setTotalPosts]  = useState(0);
-  const[whatVal,handleWhatVal] = useState('');
-  const[whereVal,handleWhereVal] = useState('');
-  const[whatSearch,handleWhatSearch] = useState([]);
-  const[whereSearch,handlewhereSearch] = useState([]);
-  const[jobs,setJobs] = useState([]);
-  const[findJobs, handleFindJobs] =  useState({});
-  const[jobType,setJobType] = useState('');
-  const[jobId,setJobId] = useState('');
-  const[roleName,setRoleName] = useState('');
-  const[city,setCity] = useState('');
-  const[state,setState] = useState('');
-  const[zip,setZip] = useState('');
-  const[price,setPrice] = useState('');
-  const[responsibilities, setResponsibilities] = useState('');
-  const[rating,setRating] = useState(0);
-  const[totalReviews,setTotalReviews] = useState(0);
-  const[mode, setMode] = useState('');
-  const[pageNumbers,setPageNumbers] = useState([]);
-  const[companyName, setCompanyName] = useState('');
-  const[companyId, setCompanyId] = useState('');
-  const[errMsg,setErrMsg] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPosts, setTotalPosts] = useState(0);
+  const [whatVal, handleWhatVal] = useState("");
+  const [whereVal, handleWhereVal] = useState("");
+  const [whatSearch, handleWhatSearch] = useState([]);
+  const [whereSearch, handlewhereSearch] = useState([]);
+  const [jobs, setJobs] = useState([]);
+  const [findJobs, handleFindJobs] = useState({});
+  const [jobType, setJobType] = useState("");
+  const [jobId, setJobId] = useState("");
+  const [roleName, setRoleName] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zip, setZip] = useState("");
+  const [price, setPrice] = useState("");
+  const [responsibilities, setResponsibilities] = useState("");
+  const [rating, setRating] = useState(0);
+  const [totalReviews, setTotalReviews] = useState(0);
+  const [mode, setMode] = useState("");
+  const [pageNumbers, setPageNumbers] = useState([]);
+  const [companyName, setCompanyName] = useState("");
+  const [companyId, setCompanyId] = useState("");
+  const [errMsg, setErrMsg] = useState("");
 
-  const email = useSelector((state)=>state.userInfo.email);
-  const accountType = useSelector((state)=>state.userInfo.accountType);
-  const userid = useSelector((state)=>state.userInfo.id);
+  const email = useSelector((state) => state.userInfo.email);
+  const accountType = useSelector((state) => state.userInfo.accountType);
+  const userid = useSelector((state) => state.userInfo.id);
 
-  const handleCardClick   = (e,job)=> {
+  const handleCardClick = (e, job) => {
     setJobId(job._id);
     setJobType(job.serviceCategory);
     setMode(job.serviceMode);
@@ -56,77 +61,83 @@ function JobSeekerLandingPage(props) {
     setState(job.state);
     setPrice(job.price);
     setResponsibilities(job.responsibilities);
-    setTotalReviews(job.setTotalReviews)
-  }
-  const handleCompanyLink   = ()=> {
-    
-  }
-  const handleApply   = ()=> {
-    
-  }
-  const handleSaveJob  = (serviceId)=> {
-    axios.post(backendServer+'/api/saveService/',{
-      userId:userid,
-      serviceId:serviceId
-    })
-        .then(res => {
-            console.log('saved job results',res);
-            if(res.status == '200') {
-                alert('saved');
-            } else {
-                alert(res.data.msg);
-            }
-        }).catch(err => {
-            alert('Failed to get saved job details. Please check console');
-            console.log(err);
-        }); 
-  }
-  useEffect(()=> {
-    console.log('I am here')
-    axios.get('http://localhost:5000/customer/home/'+currentPage).
-    then(res=> {
-      console.log('Home page data:', res);
-      if(res.status == 200) {
-        let services = res.data.services;
-        setTotalPosts(res.data.totalPosts);
-        setJobs(services);
-        let job;
-        let pageForNow  = Math.ceil(res.data.totalPosts/5);
-        const pageNumber = [];
-        console.log('Page for now:',pageForNow);
-        for(let i=1;i<=pageForNow;i++) {
-          pageNumber.push(i);
+    setTotalReviews(job.setTotalReviews);
+  };
+  const handleCompanyLink = () => {};
+  const handleApply = () => {};
+  const handleSaveJob = (serviceId) => {
+    axios
+      .post(backendServer + "/api/saveService/", {
+        userId: userid,
+        serviceId: serviceId,
+      })
+      .then((res) => {
+        console.log("saved job results", res);
+        if (res.status == "200") {
+          alert("saved");
+        } else {
+          alert(res.data.msg);
         }
-        
-        setPageNumbers(pageNumber);
-        console.log('pagenumber:',pageNumber)
-        if(services.length>0) {
-          job = services[0];
-          setJobId(job._id);
-          setJobType(job.serviceCategory);
-          setMode(job.serviceMode);
-          setRoleName(job.serviceName);
-          setCity(job.city);
-          setZip(job.zip);
-          setState(job.state);
-          setPrice(job.price);
-          setResponsibilities(job.responsibilities);
-          setTotalReviews(job.setTotalReviews)
+      })
+      .catch((err) => {
+        alert("Failed to get saved job details. Please check console");
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    console.log("I am here");
+    axios
+      .get("http://localhost:5000/customer/home/" + currentPage)
+      .then((res) => {
+        console.log("Home page data:", res);
+        if (res.status == 200) {
+          let services = res.data.services;
+          setTotalPosts(res.data.totalPosts);
+          setJobs(services);
+          let job;
+          let pageForNow = Math.ceil(res.data.totalPosts / 5);
+          const pageNumber = [];
+          console.log("Page for now:", pageForNow);
+          for (let i = 1; i <= pageForNow; i++) {
+            pageNumber.push(i);
+          }
+
+          setPageNumbers(pageNumber);
+          console.log("pagenumber:", pageNumber);
+          if (services.length > 0) {
+            job = services[0];
+            setJobId(job._id);
+            setJobType(job.serviceCategory);
+            setMode(job.serviceMode);
+            setRoleName(job.serviceName);
+            setCity(job.city);
+            setZip(job.zip);
+            setState(job.state);
+            setPrice(job.price);
+            setResponsibilities(job.responsibilities);
+            setTotalReviews(job.setTotalReviews);
+          }
         }
-      }
-    });
-  },[currentPage])
-  
-  const [showBooking,setShowBooking] = useState(false);
+      });
+  }, [currentPage]);
+
+  const [showBooking, setShowBooking] = useState(false);
   return (
     <div>
       <ErrorMsg err={errMsg}></ErrorMsg>
-      <Booking show={true} price={price} userid={userid} serviceid={jobId} setShowBooking={setShowBooking} show={showBooking}></Booking>
-      {email !== '' && accountType === 'Customer' ? (
-          <CustomerLoggedIn />
-        ) : (
-          <JobSeekerNavbar />
-        )}
+      <Booking
+        show={true}
+        price={price}
+        userid={userid}
+        serviceid={jobId}
+        setShowBooking={setShowBooking}
+        show={showBooking}
+      ></Booking>
+      {email !== "" && accountType === "Customer" ? (
+        <CustomerLoggedIn />
+      ) : (
+        <JobSeekerNavbar />
+      )}
       <div id="Second" class="row searchNav">
         <div class="row">
           <div class="col-2"></div>
@@ -140,13 +151,17 @@ function JobSeekerLandingPage(props) {
                     id="button-addon1"
                     disabled
                   >
-                    <h6 style={{ marginTop: '10px' }}>What</h6>
+                    <h6 style={{ marginTop: "10px" }}>What</h6>
                   </button>
                   <Autocomplete
                     disablePortal
                     id="free-solo-demo"
                     freeSolo
-                    sx={{ width: 180, borderBottom: 'none',borderWidth: '0 0 0 0' }}
+                    sx={{
+                      width: 180,
+                      borderBottom: "none",
+                      borderWidth: "0 0 0 0",
+                    }}
                     value={whatVal}
                     onChange={handleWhatVal.bind(this)}
                     options={whatSearch.map((option) => option)}
@@ -154,7 +169,7 @@ function JobSeekerLandingPage(props) {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        sx={{ width: 180, borderBottom: 'none' }}
+                        sx={{ width: 180, borderBottom: "none" }}
                         //class="whatSearch2"
                         onChange={handleWhatVal.bind(this)}
                         value={whatVal}
@@ -169,7 +184,7 @@ function JobSeekerLandingPage(props) {
                   >
                     <i
                       class="bi bi-search"
-                      style={{ width: '32px', height: '32px' }}
+                      style={{ width: "32px", height: "32px" }}
                     ></i>
                   </button>
                 </div>
@@ -182,7 +197,7 @@ function JobSeekerLandingPage(props) {
                     id="button-addon1"
                     disabled
                   >
-                    <h6 style={{ marginTop: '10px' }}>Where</h6>
+                    <h6 style={{ marginTop: "10px" }}>Where</h6>
                   </button>
                   <Autocomplete
                     id="free-solo-demo"
@@ -195,7 +210,7 @@ function JobSeekerLandingPage(props) {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        sx={{ width: 180, borderBottom: 'none' }}
+                        sx={{ width: 180, borderBottom: "none" }}
                         //class="whatSearch2"
                         value={whereVal}
                         onChange={handleWhereVal}
@@ -210,7 +225,7 @@ function JobSeekerLandingPage(props) {
                   >
                     <i
                       class="bi bi-geo-alt"
-                      style={{ width: '32px', height: '32px' }}
+                      style={{ width: "32px", height: "32px" }}
                     ></i>
                   </button>
                 </div>
@@ -221,7 +236,7 @@ function JobSeekerLandingPage(props) {
                   class="btn findbtn"
                   onClick={handleFindJobs.bind(this)}
                 >
-                  <h5 style={{ marginTop: '4px', color: 'white' }}>
+                  <h5 style={{ marginTop: "4px", color: "white" }}>
                     Find Services
                   </h5>
                 </button>
@@ -230,12 +245,12 @@ function JobSeekerLandingPage(props) {
           </div>
         </div>
 
-        <div class="row" style={{ marginTop: '10px' }}>
+        <div class="row" style={{ marginTop: "10px" }}>
           <div class="col-4"></div>
           <div class="col-4">
-            <h5 style={{ marginLeft: '120px' }}>
+            <h5 style={{ marginLeft: "120px" }}>
               Service Providers:
-              <span class="hoverUnderline" style={{ color: '#003399' }}>
+              <span class="hoverUnderline" style={{ color: "#003399" }}>
                 Register a service
               </span>
             </h5>
@@ -244,17 +259,14 @@ function JobSeekerLandingPage(props) {
         </div>
       </div>
       <hr />
-      <div id="third" class="row" style={{ marginTop: '10px' }}>
+      <div id="third" class="row" style={{ marginTop: "10px" }}>
         <div class="row">
           <div class="col-4"></div>
           <div class="col-7">
             <div class="row">
               <div class="col-3">
-                <h3
-                  class="headinghoverUnderline"
-                  style={{ color: '#003399' }}
-                >
-                  <span style={{ color: '#003399' }}>Service feed </span>
+                <h3 class="headinghoverUnderline" style={{ color: "#003399" }}>
+                  <span style={{ color: "#003399" }}>Service feed </span>
                 </h3>
               </div>
               <div class="col-4">
@@ -268,11 +280,11 @@ function JobSeekerLandingPage(props) {
       <div
         id="third"
         class="row "
-        style={{ backgroundColor: '#f7f7f7', marginTop: '20px' }}
+        style={{ backgroundColor: "#f7f7f7", marginTop: "20px" }}
       >
         <div class="row">
           <div class="col-2"></div>
-          <div class="col-4" style={{ marginLeft: '0px' }}>
+          <div class="col-4" style={{ marginLeft: "0px" }}>
             {/* <h4 style={{ marginTop: '10px' }}>
               {month} {day}, {year}
             </h4> */}
@@ -281,7 +293,7 @@ function JobSeekerLandingPage(props) {
               <div
                 class="card cardStyle2"
                 id={job._id}
-                onClick={(e)=>handleCardClick(e,job)}
+                onClick={(e) => handleCardClick(e, job)}
               >
                 <div class="card-body">
                   <h4 class="card-title">{job.jobTitle}</h4>
@@ -322,10 +334,10 @@ function JobSeekerLandingPage(props) {
                   <button
                     type="button"
                     class="btn applybtn"
-                    onClick={()=>setShowBooking(true)}
+                    onClick={() => setShowBooking(true)}
                     id={jobId}
                   >
-                    <h5 style={{ marginTop: '4px', color: 'white' }}>
+                    <h5 style={{ marginTop: "4px", color: "white" }}>
                       Request Service
                     </h5>
                   </button>
@@ -337,7 +349,7 @@ function JobSeekerLandingPage(props) {
                     id={companyId}
                     onClick={handleSaveJob.bind(this)}
                   >
-                    <h5 style={{ marginTop: '4px', color: 'white' }}>Save</h5>
+                    <h5 style={{ marginTop: "4px", color: "white" }}>Save</h5>
                   </button>
                 </div>
                 <br />
@@ -362,15 +374,21 @@ function JobSeekerLandingPage(props) {
                 <br />
               </div>
             </div>
+
+            <Chatbot
+              config={config}
+              messageParser={MessageParser}
+              actionProvider={ActionProvider}
+            />
           </div>
           <div class="col-1"></div>
         </div>
       </div>
       <nav>
-        <ul className='pagination'>
-          {pageNumbers.map(number => (
-            <li key={number} className='page-item'>
-              <a onClick={() => setCurrentPage(number)} className='page-link'>
+        <ul className="pagination">
+          {pageNumbers.map((number) => (
+            <li key={number} className="page-item">
+              <a onClick={() => setCurrentPage(number)} className="page-link">
                 {number}
               </a>
             </li>
@@ -378,7 +396,7 @@ function JobSeekerLandingPage(props) {
         </ul>
       </nav>
     </div>
-  )
+  );
 }
 
-export default JobSeekerLandingPage
+export default JobSeekerLandingPage;

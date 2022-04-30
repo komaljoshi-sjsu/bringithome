@@ -16,8 +16,25 @@ class ActionProvider {
   }
 
   helloHandler = () => {
-    const message = this.createChatBotMessage("How may I help you!");
-    this.setChatBotMessage(message);
+    const message = this.createChatBotMessage("How may I help you!", {
+      widget: "chatOptions",
+    });
+    this.setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, message],
+    }));
+  };
+  findServicesHandler = () => {
+    const message = this.createChatBotMessage(
+      "Here's the list of service provider near to your location",
+      {
+        widget: "serviceProviderList",
+      }
+    );
+    this.setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, message],
+    }));
   };
   setChatBotMessage = (message) => {
     this.setState((state) => ({
