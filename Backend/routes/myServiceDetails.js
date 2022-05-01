@@ -5,35 +5,72 @@ const bcrypt = require("bcrypt");
 const Service = require('../models/Service');
 const MyServices = require('../models/MyServices');
 
-router.get("/api/savedServices/:userId", (req, res) => {
-    const userId = req.params.userId;
-    MyServices.find({userId:userId,status:'saved'}).select('serviceId -_id').then(result=> {
-        let serv = result.map(async(sId) => {
-            let services = await Service.find({_id:sId}).then(service=> {
-                return service;
+router.get("/api/appliedServices/:userid", (req, res) => {
+    const userId = req.params.userid;
+    MyServices.find({userid:userId, status:'pending'}).then(async(result)=> {
+        
+        let serviceArr = [];
+        console.log('spplaied serv;',result);
+        for(let i = 0;i<result.length;i++) {
+            let serv = result[i];
+            await Service.find({_id:serv.serviceid}).then(service => {
+                let servc = service[0];
+                
+                let timeAr = serv.time.split(':');
+                let min = timeAr[1];
+                if(timeAr[1].length == 1) {
+                    min = '0'+timeAr[1];
+                }
+                let json = {
+                    serviceName: servc.serviceName,
+                    serviceMode: servc.serviceMode,
+                    freelancer: servc.freelancer,
+                    date: serv.date,
+                    price: servc.price,
+                    time: timeAr[0]+':'+min
+                }
+                console.log('result for applied services',json)
+                serviceArr.push(json);
             })
-            return services;
-        })
-        res.status(200).send(serv);
+        }
+        
+        res.status(200).send(serviceArr);
     }).catch(err=> {
         console.log(err);
-        res.status(400).send('Failed to fetch saved services.');
+        res.status(400).send('Could not get saved services.');
     })
     
 });
-router.get("/api/appliedServices/:userId", (req, res) => {
-    const userId = req.params.userId;
-    MyServices.find({userId:userId,status:'applied'}).select('serviceId -_id').then(result=> {
-        let serv = result.map(async(sId) => {
-            let services = await Service.find({_id:sId}).then(service=> {
-                return service;
-            })
-            return services;
-        })
-        res.status(200).send(serv);
+router.post("/api/cancelService", (req, res) => {
+    const userId = req.body.userid;
+    const serviceId = req.body.serviceid;
+    console.log(`Request canceling userid ${userId} serviceid ${serviceId}`)
+    MyServices.findOneAndRemove({serviceid:serviceId,userid:userId,status:'pending'}).then(result=> {
+        console.log('result for cancelled service',result)
+        res.status(200).send('Success');
     }).catch(err=> {
         console.log(err);
-        res.status(400).send('Failed to fetch saved services.');
+        res.status(400).send('Could not un save the service.');
+    })
+    
+});
+
+router.get("/api/savedServices/:userid", (req, res) => {
+    const userId = req.params.userid;
+    MyServices.find({userid:userId, status:'saved'}).then(async(result)=> {
+        
+        let serviceArr = [];
+        for(let i = 0;i<result.length;i++) {
+            let serv = result[i];
+            await Service.find({_id:serv.serviceid}).then(service => {
+                serviceArr.push(service[0]);
+            })
+        }
+        console.log('result for saved services',serviceArr)
+        res.status(200).send(serviceArr);
+    }).catch(err=> {
+        console.log(err);
+        res.status(400).send('Could not get saved services.');
     })
     
 });
@@ -42,16 +79,25 @@ router.post("/api/saveService", (req, res) => {
     console.log('I am at saveservice api')
     const userId = req.body.userId;
     const serviceId = req.body.serviceId;
-    const key = {
-        status:'saved',
-        serviceId: serviceId
-    }
-    MyServices.update({userId:userId,key,status:'saved'},{upsert:true}).select('serviceId -_id').then(result=> {
-        console.log('result for savedSer',result)
+    MyServices.findOneAndUpdate({serviceid:serviceId,userid:userId, status:'saved'},{serviceid:serviceId,userid:userId, status:'saved'},{upsert:true}).then(result=> {
+        console.log('result for saved service',result)
         res.status(200).send('Success');
     }).catch(err=> {
         console.log(err);
         res.status(400).send('Could not save the service.');
+    })
+    
+});
+
+router.post("/api/unSaveService", (req, res) => {
+    const userId = req.body.userid;
+    const serviceId = req.body.serviceid;
+    MyServices.findOneAndRemove({serviceid:serviceId,userid:userId,status:'saved'}).then(result=> {
+        console.log('result for deleted service',result)
+        res.status(200).send('Success');
+    }).catch(err=> {
+        console.log(err);
+        res.status(400).send('Could not un save the service.');
     })
     
 });
@@ -98,7 +144,6 @@ router.get("/api/getBookedSlots/:serviceId/:userId", (req, res) => {
     
 });
 router.post("/api/bookService", (req, res) => {
-    console.log('I am at book service api')
     const userId = req.body.userid;
     const serviceId = req.body.serviceid;
     const address = req.body.address;
@@ -110,7 +155,7 @@ router.post("/api/bookService", (req, res) => {
         res.status(200).send('Success');
     }).catch(err=> {
         console.log(err);
-        res.status(400).send('Could not save the service.');
+        res.status(400).send('Could not book the service.');
     })
     
 });
