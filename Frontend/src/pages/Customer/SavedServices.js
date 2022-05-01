@@ -38,6 +38,32 @@ function SavedServices(props) {
             console.log(err);
         }); 
     },[]);
+    const unsaveService = (serviceid)=> {
+        axios.post(backendServer+'/api/unSaveService', {
+            userid: userid,
+            serviceid: serviceid
+        })
+        .then(res => {
+            console.log('unsaved job results',res);
+            if(res.status== 200) {
+                //remove service from list
+                let newArr = jobs.filter(job=>{
+                    if(job._id == serviceid) {
+                        return false;
+                    }
+                    return true;
+                })
+                setServices(newArr);
+            } else {
+                setErrMsg(res.data);
+                showErrorModal(true);
+            }
+        }).catch(err => {
+            setErrMsg('Failed to cancel service. Please check console');
+            showErrorModal(true);
+            console.log(err);
+        }); 
+    }
     return (
         <div>
             <ErrorMsg err={errMsg}></ErrorMsg>
@@ -59,6 +85,7 @@ function SavedServices(props) {
                                                 <b>${job.price}</b>
                                             </Card.Text>
                                             <Button variant="primary" className='book-button'>Book Service</Button>
+                                            <Button variant="primary" className='book-button' style={{marginLeft:'10px'}} onClick={()=>unsaveService(job._id)}>Remove</Button>
                                         </Card.Body>
                                 </Card>
                             )
