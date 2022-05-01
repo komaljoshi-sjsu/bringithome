@@ -21,10 +21,12 @@ const ServiceProviderOptions = (props, { actionProvider }) => {
     option.preventDefault();
     if (option.target.innerHTML === "Find a Service") {
       props.actionProvider.findServicesHandler();
-    } else if (option.target.innerHTML === "Chat with Service Provider") {
     } else if (option.target.innerHTML === "Post a review") {
+      props.actionProvider.postReviewHandler();
     } else if (option.target.innerHTML === "Service History") {
+      props.actionProvider.serviceHistoryHandler();
     } else if (option.target.innerHTML === "Upcoming Services") {
+      props.actionProvider.serviceUpcomingHandler();
     }
   };
   return (

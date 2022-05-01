@@ -373,13 +373,14 @@ function JobSeekerLandingPage(props) {
                 <h6>{responsibilities}</h6>
                 <br />
               </div>
+              <div>
+                <Chatbot
+                  config={config}
+                  messageParser={MessageParser}
+                  actionProvider={ActionProvider}
+                />
+              </div>
             </div>
-
-            <Chatbot
-              config={config}
-              messageParser={MessageParser}
-              actionProvider={ActionProvider}
-            />
           </div>
           <div class="col-1"></div>
         </div>

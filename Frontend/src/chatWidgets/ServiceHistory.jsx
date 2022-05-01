@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import axios from "axios";
-const FindServices = (props) => {
+const ServiceHistory = (props) => {
   const { setState } = props;
 
   useEffect(() => {
@@ -10,10 +10,10 @@ const FindServices = (props) => {
       .get("http://localhost:8000/api/appliedServices/cust1@test.com")
       .then((res) => {
         if (res.status === 200) {
-          setState((state) => ({ ...state, serviceProvidersList: res.data }));
+          setState((state) => ({ ...state, options: res.data }));
         }
       });
-  }, props.serviceProvidersList);
+  }, props.serviceHistoryList);
 
   const handleService = () => {
     // redirect Service Detail Page
@@ -22,7 +22,7 @@ const FindServices = (props) => {
     <Stack spacing={1} alignItems="center">
       <Stack direction="row" spacing={1}>
         <div>
-          {props.serviceProvidersList.map((s) => (
+          {props.serviceHistoryList.map((s) => (
             <Chip
               label={s}
               color="primary"
@@ -35,4 +35,4 @@ const FindServices = (props) => {
   );
 };
 
-export default FindServices;
+export default ServiceHistory;
