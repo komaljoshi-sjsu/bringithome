@@ -61,29 +61,31 @@ function JobSeekerLandingPage(props) {
     setState(job.state);
     setPrice(job.price);
     setResponsibilities(job.responsibilities);
-    setTotalReviews(job.setTotalReviews);
-  };
-  const handleCompanyLink = () => {};
-  const handleApply = () => {};
-  const handleSaveJob = (serviceId) => {
-    axios
-      .post(backendServer + "/api/saveService/", {
-        userId: userid,
-        serviceId: serviceId,
-      })
-      .then((res) => {
-        console.log("saved job results", res);
-        if (res.status == "200") {
-          alert("saved");
+    setTotalReviews(job.setTotalReviews)
+  }
+  const handleCompanyLink   = ()=> {
+    
+  }
+  const handleApply   = ()=> {
+    
+  }
+  const handleSaveJob  = (serviceId)=> {
+    axios.post(backendServer+'/api/saveService/',{
+      userId:userid,
+      serviceId:serviceId
+    })
+    .then(res => {
+        console.log('saved job results',res);
+        if(res.status == 200) {
+            alert('saved');
         } else {
-          alert(res.data.msg);
+            alert(res.data);
         }
-      })
-      .catch((err) => {
-        alert("Failed to get saved job details. Please check console");
+    }).catch(err => {
+        alert('Failed to save job details. Please check console');
         console.log(err);
-      });
-  };
+    }); 
+  }
   useEffect(() => {
     console.log("I am here");
     axios
@@ -347,7 +349,7 @@ function JobSeekerLandingPage(props) {
                     type="button"
                     class="btn savebtn"
                     id={companyId}
-                    onClick={handleSaveJob.bind(this)}
+                    onClick={()=>handleSaveJob(jobId)}
                   >
                     <h5 style={{ marginTop: "4px", color: "white" }}>Save</h5>
                   </button>

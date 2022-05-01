@@ -1,5 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {useState, useEffect} from 'react';
+import {Button } from "react-bootstrap";
+import  '../../CSS/Booking.css'
 import {Redirect} from 'react-router';
 import JobSeekerNavbar from './JobSeekerNavbar';
 import axios from 'axios';
@@ -24,7 +26,7 @@ function SavedServices(props) {
         axios.get(backendServer+'/api/savedServices/'+userid)
         .then(res => {
             console.log('saved job results',res);
-            if(res.data.code == '200') {
+            if(res.status== 200) {
                 setServices(res.data);
             } else {
                 setErrMsg(res.data.msg);
@@ -46,23 +48,21 @@ function SavedServices(props) {
                 </div>
                 <div style={{marginLeft:'20%',marginRight:'20%'}}>
                         {jobs.map(job=>  {
-                                    if(job!=null)
-                                        job = job[0];
-                                    return (
-                                    <div className="row border-bottom" style={{padding:'20px 20px 20px 20px'}}>
-                                        <div className="row">
-                                            <h5><b>{job.serviceName}</b></h5>
-                                        </div>
-                                        <div className="row">
-                                            {job.serviceMode}
-                                        </div>
-                                        <div className="row">
-                                            {job.freelancer.name}
-                                        </div>
-                                        <div className="row">
-                                            {job.serviceMode}
-                                        </div>
-                                    </div>)
+                            return(
+                                <Card style={{ width: '18rem' }}>
+                                    {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
+                                        <Card.Body>
+                                            <Card.Title><h3><b>{job.serviceName}</b></h3></Card.Title>
+                                            <Card.Text>
+                                                <h5><b>{job.freelancer.name}</b></h5><br></br>
+                                                <b>{job.serviceMode}</b><br></br>
+                                                <b>{job.price}</b>
+                                            </Card.Text>
+                                            <Button variant="primary" className='book-button'>Book Service</Button>
+                                        </Card.Body>
+                                </Card>
+                            )
+                                    
                         })}
                 </div>
             </div>

@@ -42,7 +42,7 @@ function Booking(props) {
                 alert(res.data);
             }
         }).catch(err=> {
-            alert('Failed to fetch booked slots.');
+            //alert('Failed to fetch booked slots.');
             console.log('Failed to fetch booked slots:',err);
         })
     },[props.show]);
