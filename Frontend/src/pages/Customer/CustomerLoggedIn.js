@@ -177,7 +177,7 @@ class CustomerLoggedIn extends Component {
 
                       <a class="dropdown-item ditems">
                         <Link
-                          to="/resume"
+                          to="/profileupdate"
                           style={{
                             textDecoration: 'none',
                             color: '#474747',
