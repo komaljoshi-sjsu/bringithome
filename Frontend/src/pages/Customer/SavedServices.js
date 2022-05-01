@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {useState, useEffect} from 'react';
-import {Button } from "react-bootstrap";
+import {Button, Row } from "react-bootstrap";
 import  '../../CSS/Booking.css'
 import {Redirect} from 'react-router';
 import JobSeekerNavbar from './JobSeekerNavbar';
@@ -73,24 +73,25 @@ function SavedServices(props) {
                     <MyServices></MyServices>
                 </div>
                 <div style={{marginLeft:'20%',marginRight:'20%'}}>
-                        {jobs.map(job=>  {
-                            return(
-                                <Card style={{ width: '18rem' }}>
-                                    {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
-                                        <Card.Body>
-                                            <Card.Title><h3><b>{job.serviceName}</b></h3></Card.Title>
-                                            <Card.Text>
-                                                <h5><b>{job.freelancer.name}</b></h5><br></br>
-                                                <b>{job.serviceMode}</b><br></br>
-                                                <b>${job.price}</b>
-                                            </Card.Text>
-                                            <Button variant="primary" className='book-button'>Book Service</Button>
-                                            <Button variant="primary" className='book-button' style={{marginLeft:'10px'}} onClick={()=>unsaveService(job._id)}>Remove</Button>
-                                        </Card.Body>
-                                </Card>
-                            )
-                                    
-                        })}
+                    <Row xs={1} md={3} className="g-4">
+                            {jobs.map(job=>  {
+                                return(
+                                    <Card style={{ width: '18rem' , marginRight:'20px' }}>
+                                        {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
+                                            <Card.Body>
+                                                <Card.Title><h3><b>{job.serviceName}</b></h3></Card.Title>
+                                                <Card.Text>
+                                                    <h5><b>{job.freelancer.name}</b></h5><br></br>
+                                                    <b>{job.serviceMode}</b><br></br>
+                                                    <b>${job.price}</b>
+                                                </Card.Text>
+                                                <Button variant="primary" className='book-button'>Book Service</Button>
+                                                <Button variant="primary" className='book-button' style={{marginLeft:'10px'}} onClick={()=>unsaveService(job._id)}>Remove</Button>
+                                            </Card.Body>
+                                    </Card>
+                                )
+                            })}
+                    </Row>
                 </div>
             </div>
         </div>

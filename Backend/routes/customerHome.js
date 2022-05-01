@@ -25,17 +25,20 @@ router.get('/customer/home/:currentPage/:userid', async(req, res) => {
       console.log('Result:',results);
       return res.status(200).send(results);
     }
-    let finalRes = await result.map(async(data)=> {
-      await MyServices.find({serviceid:result._id,status:'saved'}).then(result1=> {
-        console.log('Service results:',result1)
-        if(result.length == 0) {
-          console.log('no saved service present');
-        } else {
-          data.save = true;
-        }
+    let finalRes = await Promise.all(
+      result.map(async(data)=> {
+        console.log('i am at finding service')
+        await MyServices.find({serviceid:result._id,status:'saved'}).then(result1=> {
+          console.log('Service results:',result1)
+          if(result.length == 0) {
+            console.log('no saved service present');
+          } else {
+            data.save = true;
+          }
+        })
+        return data;
       })
-      return data;
-    })
+    )
     console.log('finalres',finalRes)
     let results = {
       services: finalRes,

@@ -54,15 +54,15 @@ function JobSeekerLandingPage(props) {
   const userid = useSelector((state) => state.userInfo.id);
 
   let setReDirect = (price, jobId) => {
-    // let toVal = {
-    //   pathname: '/booking',
-    //   state: {
-    //     price: price,
-    //     userid:userid,
-    //     serviceid:jobId
-    //   }
-    // }
-    // redirectValFn(<Redirect to={toVal} />)
+    let toVal = {
+      pathname: '/booking',
+      state: {
+        price: price,
+        userid:userid,
+        serviceid:jobId
+      }
+    }
+    redirectValFn(<Redirect to={toVal} />)
   }
   const handleCardClick = (e, job) => {
     setJobId(job._id);

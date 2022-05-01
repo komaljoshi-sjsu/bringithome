@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { userActionCreator } from '../../reduxutils/actions.js'
 import ErrorMsg from '../Error/ErrorMsg'
-import {Button } from "react-bootstrap";
+import {Button, Row } from "react-bootstrap";
 import MyServices from './MyServices';
 
 function AppliedServices(props) {
@@ -71,23 +71,28 @@ function AppliedServices(props) {
                     <MyServices></MyServices>
                 </div>
                 <div style={{marginLeft:'20%',marginRight:'20%'}}>
-                        {jobs.map(job=>  {
-                            return(
-                                <Card style={{ width: '18rem' }}>
-                                    {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
-                                        <Card.Body>
-                                            <Card.Title><h3><b>{job.serviceName}</b></h3></Card.Title>
-                                            <Card.Text>
-                                                <h5><b>{job.freelancer.name}</b></h5><br></br>
-                                                <b>{job.serviceMode}</b><br></br>
-                                                <b>${job.price}</b>
-                                            </Card.Text>
-                                            <Button variant="primary" className='book-button' onClick={(e)=>cancelService(job._id)}>Cancel Service</Button>
-                                        </Card.Body>
-                                </Card>
-                            )
-                                    
-                        })}
+                    <Row xs={1} md={3} className="g-4">
+                    {jobs.map(job=>  {
+                        return(
+                            <Card style={{ width: '18rem', marginRight:'20px' }}>
+                                {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
+                                    <Card.Body>
+                                        <Card.Title><h3><b>{job.serviceName}</b></h3></Card.Title>
+                                        <Card.Text>
+                                            <h5><b>{job.freelancer.name}</b></h5><br></br><br></br>
+                                            <b>Date: {job.date}</b><br></br>
+                                            <b>Time: {job.time}</b><br></br>
+                                            <b>{job.serviceMode}</b><br></br>
+                                            <b>${job.price}</b>
+                                        </Card.Text>
+                                        <Button variant="primary" className='book-button' onClick={(e)=>cancelService(job._id)}>Cancel Service</Button>
+                                    </Card.Body>
+                            </Card>
+                        )
+                                
+                    })}
+                    </Row>
+                        
                 </div>
             </div>
         </div>

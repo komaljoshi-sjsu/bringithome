@@ -10,13 +10,30 @@ router.get("/api/appliedServices/:userid", (req, res) => {
     MyServices.find({userid:userId, status:'pending'}).then(async(result)=> {
         
         let serviceArr = [];
+        console.log('spplaied serv;',result);
         for(let i = 0;i<result.length;i++) {
             let serv = result[i];
             await Service.find({_id:serv.serviceid}).then(service => {
-                serviceArr.push(service[0]);
+                let servc = service[0];
+                
+                let timeAr = serv.time.split(':');
+                let min = timeAr[1];
+                if(timeAr[1].length == 1) {
+                    min = '0'+timeAr[1];
+                }
+                let json = {
+                    serviceName: servc.serviceName,
+                    serviceMode: servc.serviceMode,
+                    freelancer: servc.freelancer,
+                    date: serv.date,
+                    price: servc.price,
+                    time: timeAr[0]+':'+min
+                }
+                console.log('result for applied services',json)
+                serviceArr.push(json);
             })
         }
-        console.log('result for applied services',serviceArr)
+        
         res.status(200).send(serviceArr);
     }).catch(err=> {
         console.log(err);
@@ -62,7 +79,7 @@ router.post("/api/saveService", (req, res) => {
     console.log('I am at saveservice api')
     const userId = req.body.userId;
     const serviceId = req.body.serviceId;
-    MyServices.findOneAndUpdate({serviceid:serviceId,userid:userId},{serviceid:serviceId,userid:userId, status:'saved'},{upsert:true}).then(result=> {
+    MyServices.findOneAndUpdate({serviceid:serviceId,userid:userId, status:'saved'},{serviceid:serviceId,userid:userId, status:'saved'},{upsert:true}).then(result=> {
         console.log('result for saved service',result)
         res.status(200).send('Success');
     }).catch(err=> {
