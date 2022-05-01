@@ -5,19 +5,35 @@ const bcrypt = require("bcrypt");
 const Service = require('../models/Service');
 const MyServices = require('../models/MyServices');
 
-router.get("/api/appliedServices/:userId", (req, res) => {
-    const userId = req.params.userId;
-    MyServices.find({userId:userId,status:'applied'}).select('serviceId -_id').then(result=> {
-        let serv = result.map(async(sId) => {
-            let services = await Service.find({_id:sId}).then(service=> {
-                return service;
+router.get("/api/appliedServices/:userid", (req, res) => {
+    const userId = req.params.userid;
+    MyServices.find({userid:userId, status:'pending'}).then(async(result)=> {
+        
+        let serviceArr = [];
+        for(let i = 0;i<result.length;i++) {
+            let serv = result[i];
+            await Service.find({_id:serv.serviceid}).then(service => {
+                serviceArr.push(service[0]);
             })
-            return services;
-        })
-        res.status(200).send(serv);
+        }
+        console.log('result for applied services',serviceArr)
+        res.status(200).send(serviceArr);
     }).catch(err=> {
         console.log(err);
-        res.status(400).send('Failed to fetch saved services.');
+        res.status(400).send('Could not get saved services.');
+    })
+    
+});
+router.post("/api/cancelService", (req, res) => {
+    const userId = req.body.userid;
+    const serviceId = req.body.serviceid;
+    console.log(`Request canceling userid ${userId} serviceid ${serviceId}`)
+    MyServices.findOneAndRemove({serviceid:serviceId,userid:userId,status:'pending'}).then(result=> {
+        console.log('result for cancelled service',result)
+        res.status(200).send('Success');
+    }).catch(err=> {
+        console.log(err);
+        res.status(400).send('Could not un save the service.');
     })
     
 });

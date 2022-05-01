@@ -41,7 +41,7 @@ function SavedServices(props) {
     return (
         <div>
             <ErrorMsg err={errMsg}></ErrorMsg>
-            <CustomerLoggedIn />
+            {/* <CustomerLoggedIn /> */}
             <div class="container-fluid">
                 <div class="row">
                     <MyServices></MyServices>
@@ -56,7 +56,7 @@ function SavedServices(props) {
                                             <Card.Text>
                                                 <h5><b>{job.freelancer.name}</b></h5><br></br>
                                                 <b>{job.serviceMode}</b><br></br>
-                                                <b>{job.price}</b>
+                                                <b>${job.price}</b>
                                             </Card.Text>
                                             <Button variant="primary" className='book-button'>Book Service</Button>
                                         </Card.Body>
