@@ -25,6 +25,7 @@ import MyServices from './pages/Customer/MyServices.js'
 import AppliedServices from './pages/Customer/AppliedServices.js'
 import SavedServices from './pages/Customer/SavedServices.js'
 import ProfileUpdate from './pages/Customer/ProfileUpdate.js'
+import Booking from './pages/Customer/Booking.js'
 
 
 //Create a Main Component
@@ -61,6 +62,8 @@ class Main extends Component {
         <Route path="/savedservices" component={SavedServices} />
         <Route path="/appliedservices" component={AppliedServices} />
         <Route path="/profileupdate" component={ProfileUpdate} />
+        <Route path="/booking" render={(props) => 
+          <Booking {...props}/>}/>
         {/* <Route path="/findSalByTitle/:id" component={FindSalByTitle} /> */}
         <Route path="/findSalByTitle/:jobTitle" component={FindSalByTitle} />
       </div>

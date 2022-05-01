@@ -1,5 +1,6 @@
 // Job Seeker Landing Page
 import React, { Component, useEffect, useState } from "react";
+import { Redirect } from 'react-router';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../../CSS/JobSeekerLanding.css";
@@ -46,11 +47,23 @@ function JobSeekerLandingPage(props) {
   const [companyName, setCompanyName] = useState("");
   const [companyId, setCompanyId] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [redirectVal, redirectValFn] = useState(null)
 
   const email = useSelector((state) => state.userInfo.email);
   const accountType = useSelector((state) => state.userInfo.accountType);
   const userid = useSelector((state) => state.userInfo.id);
 
+  let setReDirect = (price, jobId) => {
+    // let toVal = {
+    //   pathname: '/booking',
+    //   state: {
+    //     price: price,
+    //     userid:userid,
+    //     serviceid:jobId
+    //   }
+    // }
+    // redirectValFn(<Redirect to={toVal} />)
+  }
   const handleCardClick = (e, job) => {
     setJobId(job._id);
     setJobType(job.serviceCategory);
@@ -89,7 +102,7 @@ function JobSeekerLandingPage(props) {
   useEffect(() => {
     console.log("I am here");
     axios
-      .get("http://localhost:5000/customer/home/" + currentPage)
+      .get("http://localhost:5000/customer/home/" + currentPage+"/"+userid)
       .then((res) => {
         console.log("Home page data:", res);
         if (res.status == 200) {
@@ -127,14 +140,7 @@ function JobSeekerLandingPage(props) {
   return (
     <div>
       <ErrorMsg err={errMsg}></ErrorMsg>
-      <Booking
-        show={true}
-        price={price}
-        userid={userid}
-        serviceid={jobId}
-        setShowBooking={setShowBooking}
-        show={showBooking}
-      ></Booking>
+      {redirectVal}
       {email !== "" && accountType === "Customer" ? (
         <CustomerLoggedIn />
       ) : (
@@ -336,7 +342,7 @@ function JobSeekerLandingPage(props) {
                   <button
                     type="button"
                     class="btn applybtn"
-                    onClick={() => setShowBooking(true)}
+                    onClick={() => setReDirect(price,jobId)}
                     id={jobId}
                   >
                     <h5 style={{ marginTop: "4px", color: "white" }}>
@@ -377,11 +383,11 @@ function JobSeekerLandingPage(props) {
               </div>
             </div>
 
-            <Chatbot
+            {/* <Chatbot
               config={config}
               messageParser={MessageParser}
               actionProvider={ActionProvider}
-            />
+            /> */}
           </div>
           <div class="col-1"></div>
         </div>

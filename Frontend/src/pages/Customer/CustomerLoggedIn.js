@@ -45,9 +45,9 @@ class CustomerLoggedIn extends Component {
     }
   }
 
-  logoutAction = (e) => {
+  logoutAction = async(e) => {
     e.preventDefault()
-    this.props.logout(true)
+    await this.props.logout(true)
     // const {history} = this.props;
     // history.push('/landingPage');
     window.location.href = '/landingPage'

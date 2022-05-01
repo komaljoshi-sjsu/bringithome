@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import CustomerLoggedIn from "./CustomerLoggedIn";
 function Booking(props) {
     const[bookedDates, setbookedDates] = useState([]);
     const[bookedTimeSlots, setbookedTimeSlots] = useState([]);
@@ -45,7 +46,7 @@ function Booking(props) {
             //alert('Failed to fetch booked slots.');
             console.log('Failed to fetch booked slots:',err);
         })
-    },[props.show]);
+    },[]);
     
     const bookService = (e)=> {
         e.preventDefault()
@@ -71,11 +72,9 @@ function Booking(props) {
         })
     }
     return (
-        <Modal show={props.show} onHide={()=>props.setShowBooking(false)} className='booking-modal'>
-            <Modal.Header>
-                <Modal.Title><b>Payments</b></Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <div className="container-fullwidth booking-modal" >
+            <CustomerLoggedIn></CustomerLoggedIn>
+            <div>
                 <DatePicker calendarIcon= "Calendar" placeholder="Service Date" showTimeSelect timeIntervals={60} selected={selectedDate} onChange={(date) => setSelectedDate(date)}  excludeTimes={bookedTimeSlots} maxDate={endDate} minDate = {startDate} dateFormat="MM/dd/yyyy  EE hh:mm a" maxTime={endTime} minTime = {startTime}/>
                 {/* <DatePicker placeholder="Service Time" showTimeSelect showTimeSelectOnly timeIntervals={60} timeFormat="HH:mm" selected={selectedTime} onChange={(time) => setSelectedTime(time)} excludeTimes={bookedTimeSlots} maxTime={endTime} minTime = {startTime}/> */}
                 <Form onSubmit={bookService} className="booking-form">
@@ -87,8 +86,26 @@ function Booking(props) {
                     </Form.Group>
                     <Button bsStyle="primary" bsSize="large" block type="submit" className="spacer" className='book-button'>Pay ${props.price}</Button>
                 </Form>
-            </Modal.Body>
-        </Modal>
+            </div>
+        </div>
+        // <Modal show={props.show} onHide={()=>props.setShowBooking(false)} className='booking-modal'>
+        //     <Modal.Header>
+        //         <Modal.Title><b>Payments</b></Modal.Title>
+        //     </Modal.Header>
+        //     <Modal.Body>
+        //         <DatePicker calendarIcon= "Calendar" placeholder="Service Date" showTimeSelect timeIntervals={60} selected={selectedDate} onChange={(date) => setSelectedDate(date)}  excludeTimes={bookedTimeSlots} maxDate={endDate} minDate = {startDate} dateFormat="MM/dd/yyyy  EE hh:mm a" maxTime={endTime} minTime = {startTime}/>
+        //         {/* <DatePicker placeholder="Service Time" showTimeSelect showTimeSelectOnly timeIntervals={60} timeFormat="HH:mm" selected={selectedTime} onChange={(time) => setSelectedTime(time)} excludeTimes={bookedTimeSlots} maxTime={endTime} minTime = {startTime}/> */}
+        //         <Form onSubmit={bookService} className="booking-form">
+        //             <Form.Group className="mb-3 spacer">
+        //                 <Form.Control type="text" placeholder="Address" name="address" maxLength="60" required></Form.Control>
+        //             </Form.Group>
+        //             <Form.Group className="mb-3 spacer">
+        //                 <Form.Control type="text" name = "phone" placeholder="Contact Number" pattern="[0-9]{10}" title="Please enter a 10 digit phone number"></Form.Control>                    
+        //             </Form.Group>
+        //             <Button bsStyle="primary" bsSize="large" block type="submit" className="spacer" className='book-button'>Pay ${props.price}</Button>
+        //         </Form>
+        //     </Modal.Body>
+        // </Modal>
     )
 }
 export default Booking;
