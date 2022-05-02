@@ -25,6 +25,7 @@ router.post("/api/postNewService", (req, res) => {
         serviceDescription: req.body.shortJobDescription,
         responsibilities: req.body.responsibilities,
         servicePostedDate :req.body.servicePostedDate,
+        servicePostedMonth :req.body.servicePostedMonth,
         price:req.body.price,
         availability:{
             startDate: req.body.startDate,

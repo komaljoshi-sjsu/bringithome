@@ -138,6 +138,7 @@ class PostService extends Component {
                 price,
                 timeSlot:intervals(startTime,endTime),
                 servicePostedDate : Date().toLocaleString(),
+                servicePostedMonth : new Date().toLocaleString('en-US', { month: 'short' })
             };
            console.log("input data",inputData);
           //  const range = moment.range('2018-01-01 00:00', '2018-01-01 05:30');

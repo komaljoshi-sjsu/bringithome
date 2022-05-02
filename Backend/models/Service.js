@@ -32,6 +32,9 @@ const sSchema = new Schema({
     },
     servicePostedDate :{
         type:String
+    },
+    servicePostedMonth :{
+        type:String
     }
 });
 

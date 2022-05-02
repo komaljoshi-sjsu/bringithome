@@ -6,13 +6,15 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import backendServer from '../webConfig';
+
 const SelectedService = (props) => {
   const { setState } = props;
   const [service, setService] = "";
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/getBookedSlots/1/cust1@test.com")
+      .get(`${backendServer}/api/getBookedSlots/1/cust1@test.com`)
       .then((res) => {
         if (res.status === 200) {
           setService(res.data);

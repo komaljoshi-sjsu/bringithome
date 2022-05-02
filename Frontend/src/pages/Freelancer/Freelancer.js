@@ -48,6 +48,7 @@ class Employer extends Component {
                  console.log(response)
              })
       alert("Booking status has been updated");
+      window.location.href = '/freelancerHome';
   }
   componentDidMount() {
       //console.log("here")
