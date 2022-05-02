@@ -9,7 +9,6 @@ import JobSeekerLandingPage from "./pages/Customer/JobSeeker.js";
 import CompanyTabs from "./pages/Company/CompanyTabs.js";
 import JoinUs from "./pages/Company/JoinUs";
 import Snapshot from "./pages/Company/Snapshot";
-import UploadPhotos from "./pages/Customer/UploadPhotos.js";
 import FreelancerProfile from "./pages/Freelancer/FreelancerProfile";
 import FreelancerUpdateProfile from "./pages/Freelancer/FreelancerUpdateProfile";
 import Reviews from "./pages/Customer/Reviews";
@@ -30,6 +29,8 @@ import Chatbot from "react-chatbot-kit";
 import "react-chatbot-kit/build/main.css";
 import MessageParser from "./chatbot/MessageParser.js";
 import ActionProvider from "./chatbot/ActionProvider.js";
+import ProfileUpdate from "./pages/Customer/ProfileUpdate.js";
+import Booking from "./pages/Customer/Booking.js";
 
 class Main extends Component {
   render() {
@@ -52,7 +53,6 @@ class Main extends Component {
         />
         <Route path="/landingPage" component={JobSeekerLandingPage} />
         <Route path="/company" component={CompanyTabs} />
-        <Route path="/photos" component={UploadPhotos} />
         <Route path="/jobs" component={CompanyJobs} />
         <Route path="/reviews" component={Reviews} />
         <Route path="/featuredReviews" component={FeaturedReview} />
@@ -64,6 +64,8 @@ class Main extends Component {
         <Route path="/myservices" component={MyServices} />
         <Route path="/savedservices" component={SavedServices} />
         <Route path="/appliedservices" component={AppliedServices} />
+        <Route path="/profileupdate" component={ProfileUpdate} />
+        <Route path="/booking" render={(props) => <Booking {...props} />} />
         {/* <Route path="/findSalByTitle/:id" component={FindSalByTitle} /> */}
         <Route path="/findSalByTitle/:jobTitle" component={FindSalByTitle} />
         <div className="appChatbotContainer_3u5t">

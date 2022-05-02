@@ -45,9 +45,9 @@ class CustomerLoggedIn extends Component {
     }
   }
 
-  logoutAction = (e) => {
+  logoutAction = async(e) => {
     e.preventDefault()
-    this.props.logout(true)
+    await this.props.logout(true)
     // const {history} = this.props;
     // history.push('/landingPage');
     window.location.href = '/landingPage'
@@ -177,7 +177,7 @@ class CustomerLoggedIn extends Component {
 
                       <a class="dropdown-item ditems">
                         <Link
-                          to="/resume"
+                          to="/profileupdate"
                           style={{
                             textDecoration: 'none',
                             color: '#474747',

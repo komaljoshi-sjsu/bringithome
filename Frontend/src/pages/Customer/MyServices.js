@@ -7,12 +7,17 @@ import {useSelector, useDispatch} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
 import {companyActionCreator} from '../../reduxutils/actions.js';
+import { Tabs, Tab } from 'react-bootstrap';
+import SavedServices from './SavedServices.js';
+import AppliedServices from './AppliedServices.js';
+import CustomerLoggedIn from './CustomerLoggedIn.js';
 
 function MyServices(props) {
     const dispatch = useDispatch();
     return (
-        <div>
-            <div className="container-fullwidth" style={{marginLeft:'20%',marginRight:'20%'}}>
+        <div className="container-fullwidth" >
+            <CustomerLoggedIn></CustomerLoggedIn>
+            <div className="container-fullwidth" style={{marginLeft:'20%',marginRight:'20%', marginTop:'40px'}}>
                 <div className="row">
                     <h2><b>My Jobs</b></h2>
                 </div><br></br><br></br>
