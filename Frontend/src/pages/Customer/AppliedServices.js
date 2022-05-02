@@ -79,6 +79,7 @@ function AppliedServices(props) {
                                     <Card.Body>
                                         <Card.Title><h3><b>{job.serviceName}</b></h3></Card.Title>
                                         <Card.Text>
+                                            <h4><b>Booking Id: {job.bookingid}</b></h4>
                                             <h5><b>{job.freelancer.name}</b></h5><br></br><br></br>
                                             <b>Date: {job.date}</b><br></br>
                                             <b>Time: {job.time}</b><br></br>

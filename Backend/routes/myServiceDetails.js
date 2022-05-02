@@ -27,7 +27,8 @@ router.get("/api/appliedServices/:userid", (req, res) => {
                     freelancer: servc.freelancer,
                     date: serv.date,
                     price: servc.price,
-                    time: timeAr[0]+':'+min
+                    time: timeAr[0]+':'+min,
+                    bookingid: serv._id
                 }
                 console.log('result for applied services',json)
                 serviceArr.push(json);
