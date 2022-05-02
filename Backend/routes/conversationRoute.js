@@ -16,11 +16,13 @@ router.post("/api/saveConversation", async (req, res) => {
     }
 });
 
-router.get("/api/getConversationById/:companyId", async (req, res) => {
+router.get("/api/getConversationById/:userId", async (req, res) => {
+  // console.log(req.params.userId);
     try {
       const conversation = await Conversation.find({
-        members: { $in: [Number(req.params.userId)] },
+        members: { $in: (req.params.userId) },
       });
+      // console.log("conversation",conversation);
       res.status(200).json(conversation);
     } catch (err) {
         res.status(500).send("Error occurred while retrieving conversations");
@@ -29,9 +31,8 @@ router.get("/api/getConversationById/:companyId", async (req, res) => {
 
   router.get("/api/getJobSeekerById/:jobSeekerId", async (req, res) => {
     try {
-      const customer = await Customer.find({
-        id : req.params.jobSeekerId,
-      });
+
+      const customer = await Customer.findById(req.params.jobSeekerId);
       res.status(200).json(customer);
     } catch (err) {
         res.status(500).send("Error occurred while retrieving conversations");
@@ -52,10 +53,8 @@ router.get("/api/getConversationById/:companyId", async (req, res) => {
   
   router.get("/api/getEmployerById/:employerId", async (req, res) => {
     try {
-      const freelancer = await Freelancer.find({
-        id : req.params.employerId,
-      });
-      console.log("getfreelancer",freelancer);
+      const freelancer = await Freelancer.findById(req.params.employerId);
+      // console.log("getfreelancer",freelancer);
       res.status(200).json(freelancer);
     } catch (err) {
         res.status(500).send("Error occurred while retrieving conversations");

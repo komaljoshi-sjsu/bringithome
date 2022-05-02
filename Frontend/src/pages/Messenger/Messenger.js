@@ -42,7 +42,7 @@ const Messenger = (props) => {
         const convResponse = await axios.get(
           backendServer+"/api/getConversationById/" + userId
         );
-        let removeArr = [];      
+       let removeArr = [];      
         // eslint-disable-next-line array-callback-return
         convResponse.data.map((item) => {
           removeArr.push(item.members[1]);
