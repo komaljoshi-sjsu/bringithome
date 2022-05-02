@@ -16,7 +16,7 @@ router.post("/api/addNewMessage", async (req, res) => {
 
 router.get("/api/getMessages/:conversationId", async (req, res) => {
     try {
-      console.log("getMessage",req.params.conversationId);
+      // console.log("getMessage",req.params.conversationId);
       const messages = await Message.find({
         conversationId: req.params.conversationId,
       });
