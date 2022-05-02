@@ -1,6 +1,6 @@
 // Job Seeker Landing Page
 import React, { Component, useEffect, useState } from "react";
-import { Redirect } from 'react-router';
+import { Redirect } from "react-router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../../CSS/JobSeekerLanding.css";
@@ -47,7 +47,7 @@ function JobSeekerLandingPage(props) {
   const [companyName, setCompanyName] = useState("");
   const [companyId, setCompanyId] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const [redirectVal, redirectValFn] = useState(null)
+  const [redirectVal, redirectValFn] = useState(null);
 
   const email = useSelector((state) => state.userInfo.email);
   const accountType = useSelector((state) => state.userInfo.accountType);
@@ -55,15 +55,15 @@ function JobSeekerLandingPage(props) {
 
   let setReDirect = (price, jobId) => {
     let toVal = {
-      pathname: '/booking',
+      pathname: "/booking",
       state: {
         price: price,
-        userid:userid,
-        serviceid:jobId
-      }
-    }
-    redirectValFn(<Redirect to={toVal} />)
-  }
+        userid: userid,
+        serviceid: jobId,
+      },
+    };
+    redirectValFn(<Redirect to={toVal} />);
+  };
   const handleCardClick = (e, job) => {
     setJobId(job._id);
     setJobType(job.serviceCategory);
@@ -74,35 +74,33 @@ function JobSeekerLandingPage(props) {
     setState(job.state);
     setPrice(job.price);
     setResponsibilities(job.responsibilities);
-    setTotalReviews(job.setTotalReviews)
-  }
-  const handleCompanyLink   = ()=> {
-    
-  }
-  const handleApply   = ()=> {
-    
-  }
-  const handleSaveJob  = (serviceId)=> {
-    axios.post(backendServer+'/api/saveService/',{
-      userId:userid,
-      serviceId:serviceId
-    })
-    .then(res => {
-        console.log('saved job results',res);
-        if(res.status == 200) {
-            alert('saved');
+    setTotalReviews(job.setTotalReviews);
+  };
+  const handleCompanyLink = () => {};
+  const handleApply = () => {};
+  const handleSaveJob = (serviceId) => {
+    axios
+      .post(backendServer + "/api/saveService/", {
+        userId: userid,
+        serviceId: serviceId,
+      })
+      .then((res) => {
+        console.log("saved job results", res);
+        if (res.status == 200) {
+          alert("saved");
         } else {
-            alert(res.data);
+          alert(res.data);
         }
-    }).catch(err => {
-        alert('Failed to save job details. Please check console');
+      })
+      .catch((err) => {
+        alert("Failed to save job details. Please check console");
         console.log(err);
-    }); 
-  }
+      });
+  };
   useEffect(() => {
     console.log("I am here");
     axios
-      .get("http://localhost:5000/customer/home/" + currentPage+"/"+userid)
+      .get("http://localhost:5000/customer/home/" + currentPage + "/" + userid)
       .then((res) => {
         console.log("Home page data:", res);
         if (res.status == 200) {
@@ -342,7 +340,7 @@ function JobSeekerLandingPage(props) {
                   <button
                     type="button"
                     class="btn applybtn"
-                    onClick={() => setReDirect(price,jobId)}
+                    onClick={() => setReDirect(price, jobId)}
                     id={jobId}
                   >
                     <h5 style={{ marginTop: "4px", color: "white" }}>
@@ -355,7 +353,7 @@ function JobSeekerLandingPage(props) {
                     type="button"
                     class="btn savebtn"
                     id={companyId}
-                    onClick={()=>handleSaveJob(jobId)}
+                    onClick={() => handleSaveJob(jobId)}
                   >
                     <h5 style={{ marginTop: "4px", color: "white" }}>Save</h5>
                   </button>
@@ -381,27 +379,26 @@ function JobSeekerLandingPage(props) {
                 <h6>{responsibilities}</h6>
                 <br />
               </div>
-              <div>
-            {/* <Chatbot
-              config={config}
-              messageParser={MessageParser}
-              actionProvider={ActionProvider}
-            /> */}
+
+              <div class="col-1"></div>
+            </div>
           </div>
-          <div class="col-1"></div>
+          <nav>
+            <ul className="pagination">
+              {pageNumbers.map((number) => (
+                <li key={number} className="page-item">
+                  <a
+                    onClick={() => setCurrentPage(number)}
+                    className="page-link"
+                  >
+                    {number}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       </div>
-      <nav>
-        <ul className="pagination">
-          {pageNumbers.map((number) => (
-            <li key={number} className="page-item">
-              <a onClick={() => setCurrentPage(number)} className="page-link">
-                {number}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
     </div>
   );
 }

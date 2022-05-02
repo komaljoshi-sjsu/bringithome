@@ -28,7 +28,17 @@
 .App-link {
   color: #61dafb;
 }
-
+.appChatbotContainer_3u5t{
+  border-radius: 5px;
+    bottom: 40px;
+    box-shadow: 5px 5px 13px rgb(91 81 81 / 40%);
+    display: flex;
+    justify-content: center;
+    margin: 40px 0;
+    position: fixed;
+    right: 40px;
+    z-index: 6;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

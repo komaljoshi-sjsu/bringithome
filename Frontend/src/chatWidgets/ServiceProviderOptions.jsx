@@ -3,23 +3,15 @@ import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 const ServiceProviderOptions = (props, { actionProvider }) => {
   //const [imageUrl, setImageUrl] = useState("");
-  const data = [
-    "Find a Service",
-    "Chat with Service Provider",
-    "Post a review",
-    "Service History",
-    "Upcoming Services",
-  ];
 
   const { setState } = props;
 
-  useEffect(() => {
-    setState((state) => ({ ...state, options: data }));
-  });
+  //setState((state) => ({ ...state, options: data }));
 
   const handleOption = (option) => {
     option.preventDefault();
     if (option.target.innerHTML === "Find a Service") {
+      props.actionProvider.createClientMessage("Find a Service");
       props.actionProvider.findServicesHandler();
     } else if (option.target.innerHTML === "Post a review") {
       props.actionProvider.postReviewHandler();
@@ -28,6 +20,7 @@ const ServiceProviderOptions = (props, { actionProvider }) => {
     } else if (option.target.innerHTML === "Upcoming Services") {
       props.actionProvider.serviceUpcomingHandler();
     }
+    return option.target.innerHTML;
   };
   return (
     <Stack spacing={1} alignItems="center">

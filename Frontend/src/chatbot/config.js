@@ -7,7 +7,7 @@ import SelectedService from "../chatWidgets/SelectedService";
 import PostAReviewForService from "../chatWidgets/PostAreviewForService";
 import AddReviewForService from "../chatWidgets/AddreviewForService";
 const config = {
-  initialMessages: [createChatBotMessage(`Hello world`)],
+  initialMessages: [createChatBotMessage(`Hello there!`)],
   botName: "Liz",
   widgets: [
     {
@@ -47,7 +47,13 @@ const config = {
     },
   ],
   state: {
-    options: [],
+    options: [
+      "Find a Service",
+      "Chat with Service Provider",
+      "Post a review",
+      "Service History",
+      "Upcoming Services",
+    ],
     serviceProvidersList: [],
     serviceHistoryList: [],
     serviceUpcomingList: [],
