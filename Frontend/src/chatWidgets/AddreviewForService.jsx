@@ -7,13 +7,15 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
+import backendServer from '../webConfig';
+
 const AddreviewForService = (props) => {
   const { setState } = props;
   const { setService } = props.serviceDetail;
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/getBookedSlots/1/cust1@test.com")
+      .get(`${backendServer}/api/getBookedSlots/1/cust1@test.com`)
       .then((res) => {
         if (res.status === 200) {
           setService(res.data);

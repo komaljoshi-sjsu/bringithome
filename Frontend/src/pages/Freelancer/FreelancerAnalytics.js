@@ -43,16 +43,16 @@ const ReportEmployer = () => {
         }
       })
       .then(res => {
-        // console.log(res);
+        console.log(res);
         for (const dataObj of res.data) {
-          jobCnt.push(parseInt(dataObj.countJobId));
-          jobTitle.push(dataObj.jobTitle);
+          jobCnt.push(parseInt(dataObj.numberofbookings));
+          jobTitle.push(dataObj._id);
         }
         setChartOneData({
           labels: jobTitle,
           datasets: [
             {
-              label: "job posted",
+              label: "services posted",
               data: jobCnt,
               backgroundColor: ["Orange"],
               borderWidth: 4,
@@ -71,9 +71,6 @@ const ReportEmployer = () => {
     let appRejectedCnt = [];
     let appAcceptedCnt = [];
     let compName =[];
-    // let compAppliedName = [];
-    // let compRejectedName = [];
-    // let compAcceptedName = [];
    await axios
       .get(`${backendServer}/applicantsDetail`, {
         params: {
@@ -81,20 +78,20 @@ const ReportEmployer = () => {
         }
       })
       .then(res => {
-        // console.log(res);
+        console.log(res);
         for (const dataObj of res.data) {
-          if(dataObj.status.toLowerCase() === "submitted" || dataObj.status.toLowerCase() === "applied"){
-            appApppliedCnt.push(parseInt(dataObj.countAppId));
+          if(dataObj._id.toLowerCase() === "pending"){
+            appApppliedCnt.push(parseInt(dataObj.count));
             console.log(appApppliedCnt);
             // compAppliedName.push(dataObj.companyName);
           }
-          else if(dataObj.status.toLowerCase() === "rejected"){
-            appRejectedCnt.push(parseInt(dataObj.countAppId));
+          else if(dataObj._id.toLowerCase() === "cancelled"){
+            appRejectedCnt.push(parseInt(dataObj.count));
             console.log(appRejectedCnt);
             // compRejectedName.push(dataObj.companyName);
           }
-          else if(dataObj.status.toLowerCase() === "hired"){
-            appAcceptedCnt.push(parseInt(dataObj.countAppId));
+          else if(dataObj._id.toLowerCase() === "booked"){
+            appAcceptedCnt.push(parseInt(dataObj.count));
             console.log(appAcceptedCnt);
             // compAcceptedName.push(dataObj.companyName);
           }
@@ -103,29 +100,29 @@ const ReportEmployer = () => {
             appRejectedCnt.push(0);
             appAcceptedCnt.push(0);
           }
-         if(!compName.includes(dataObj.companyName)){
-          compName.push(dataObj.companyName);
+         if(!compName.includes(dataObj._id)){
+          compName.push(dataObj._id);
          } 
         }
         setChartTwoData({
           labels: compName,
           datasets: [
             {
-              label: "applicants applied",
+              label: "customers applied",
               data: appApppliedCnt,
               backgroundColor: ["Blue"],
               borderWidth: 4,
               barThickness:70
             },
             {
-              label: "applicants accepted",
+              label: "booking accepted",
               data: appAcceptedCnt,
               backgroundColor: ["Cyan"],
               borderWidth: 4,
               barThickness:70
             },
             {
-              label: "applicants rejected",
+              label: "booking cancelled",
               data: appRejectedCnt,
               backgroundColor: ["rgb(255, 99, 132)"],
               borderWidth: 4,
@@ -149,13 +146,13 @@ const ReportEmployer = () => {
     <div>        
        <FreelancerNavbar/>
     <div className="App">
-      <h1>SERVICES POSTED IN A YEAR</h1>
+      <h1>SERVICES POSTED MONTHLY</h1>
       <div>
         <Bar
           data={chartOneData}
           options={{
             responsive: true,
-            title: { text: "POSTED JOBS", display: true },
+            title: { text: "POSTED SERVICES", display: true },
             scales: {
               yAxes: [
                 {
@@ -182,13 +179,13 @@ const ReportEmployer = () => {
       </div>
       <br />
       <br />
-      <h1>CUSTOMERS DETAILS</h1>
+      <h1>CUSTOMER BOOKING STATUS</h1>
       <div>
         <Bar
           data={chartTwoData}
           options={{
             responsive: true,
-            title: { text: "POSTED JOBS", display: true },
+            title: { text: "BOOKING STATUS", display: true },
             scales: {
               yAxes: [
                 {
