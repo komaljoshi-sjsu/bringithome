@@ -38,7 +38,7 @@ const config = {
     {
       widgetName: "serviceReview",
       widgetFunc: (props) => <PostAReviewForService {...props} />,
-      mapStateToProps: ["serviceReview"],
+      mapStateToProps: ["serviceReview", "serviceDetail"],
     },
     {
       widgetName: "addReview",
@@ -57,8 +57,8 @@ const config = {
     serviceProvidersList: [],
     serviceHistoryList: [],
     serviceUpcomingList: [],
-    serviceDetail: "",
-    serviceReview: "",
+    serviceDetail: [],
+    serviceReview: [],
     addReview: "",
   },
 };

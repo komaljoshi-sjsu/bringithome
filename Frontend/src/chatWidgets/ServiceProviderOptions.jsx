@@ -10,6 +10,13 @@ const ServiceProviderOptions = (props, { actionProvider }) => {
 
   const handleOption = (option) => {
     option.preventDefault();
+    const message = props.actionProvider.createClientMessage(
+      option.target.innerHTML
+    );
+    setState((prev) => ({
+      ...prev,
+      messages: [...prev.messages, message],
+    }));
     if (option.target.innerHTML === "Find a Service") {
       props.actionProvider.createClientMessage("Find a Service");
       props.actionProvider.findServicesHandler();
@@ -20,7 +27,6 @@ const ServiceProviderOptions = (props, { actionProvider }) => {
     } else if (option.target.innerHTML === "Upcoming Services") {
       props.actionProvider.serviceUpcomingHandler();
     }
-    return option.target.innerHTML;
   };
   return (
     <Stack spacing={1} alignItems="center">
