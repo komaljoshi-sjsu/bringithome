@@ -5,21 +5,31 @@ import axios from "axios";
 const PostAreviewForService = (props) => {
   const { setState } = props;
   useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
+    let user = JSON.parse(userInfo).id;
     axios
-      .get("http://localhost:8000/api/appliedServices/cust1@test.com")
+      .get(`http://localhost:8000/api/appliedServices/${user}`)
       .then((res) => {
         if (res.status === 200) {
-          setState((state) => ({ ...state, serviceHistoryList: res.data }));
+          if (res.data.length > 0) {
+            setState((state) => ({ ...state, serviceReview: res.data }));
+          } else {
+            const message = props.actionProvider.createChatBotMessage(
+              "No  past services found"
+            );
+            setState((prev) => ({
+              ...prev,
+              messages: [...prev.messages, message],
+            }));
+          }
         }
       });
-  }, props.serviceHistoryList);
+  }, props.serviceReview);
 
   const handleService = (option) => {
     setState((state) => ({
       ...state,
-      serviceDetail: props.serviceHistoryList.filter(
-        (o) => o.name === option.taret.name
-      ),
+      serviceDetail: option,
     }));
     props.actionProvider.addReviewHandler();
   };
@@ -27,11 +37,11 @@ const PostAreviewForService = (props) => {
     <Stack spacing={1} alignItems="center">
       <Stack direction="row" spacing={1}>
         <div>
-          {props.serviceHistoryList.map((s) => (
+          {props.serviceReview.map((s) => (
             <Chip
-              label={s}
+              label={s.serviceName}
               color="primary"
-              onClick={(option) => handleService(option)}
+              onClick={() => handleService(s)}
             />
           ))}
         </div>

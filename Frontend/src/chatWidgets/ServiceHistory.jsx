@@ -6,8 +6,10 @@ const ServiceHistory = (props) => {
   const { setState } = props;
 
   useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
+    let user = JSON.parse(userInfo).id;
     axios
-      .get("http://localhost:8000/api/appliedServices/cust1@test.com")
+      .get(`http://localhost:8000/api/appliedServices/${user}`)
       .then((res) => {
         if (res.status === 200) {
           setState((state) => ({ ...state, serviceHistoryList: res.data }));
@@ -15,8 +17,10 @@ const ServiceHistory = (props) => {
       });
   }, props.serviceHistoryList);
 
-  const handleService = () => {
-    // redirect Service Detail Page
+  const handleService = (service) => {
+    setState((state) => ({ ...state, serviceDetail: service }));
+
+    props.actionProvider.serviceDetailHandler();
   };
   return (
     <Stack spacing={1} alignItems="center">
@@ -24,9 +28,9 @@ const ServiceHistory = (props) => {
         <div>
           {props.serviceHistoryList.map((s) => (
             <Chip
-              label={s}
+              label={s.serviceName}
               color="primary"
-              onClick={(option) => handleService(option)}
+              onClick={() => handleService(s)}
             />
           ))}
         </div>

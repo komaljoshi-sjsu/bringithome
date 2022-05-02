@@ -6,14 +6,16 @@ const ServiceUpcomingHistory = (props) => {
   const { setState } = props;
 
   useEffect(() => {
+    let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
+    let user = JSON.parse(userInfo).id;
     axios
-      .get("http://localhost:8000/api/appliedServices/cust1@test.com")
+      .get(`http://localhost:8000/api/appliedServices/${user}`)
       .then((res) => {
         if (res.status === 200) {
           setState((state) => ({ ...state, serviceUpcomingList: res.data }));
         }
       });
-  }, props.serviceUpcomingList);
+  }, setState.serviceUpcomingList);
 
   const handleService = () => {
     props.actionProvider.serviceDetailHandler();
@@ -24,7 +26,7 @@ const ServiceUpcomingHistory = (props) => {
         <div>
           {props.serviceUpcomingList.map((s) => (
             <Chip
-              label={s}
+              label={s.serviceName}
               color="primary"
               onClick={(option) => handleService(option)}
             />

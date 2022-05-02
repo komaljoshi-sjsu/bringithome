@@ -12,13 +12,22 @@ const AddreviewForService = (props) => {
   const { setService } = props.serviceDetail;
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/getBookedSlots/1/cust1@test.com")
-      .then((res) => {
-        if (res.status === 200) {
-          setService(res.data);
-        }
-      });
+    let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
+    let user = JSON.parse(userInfo).id;
+    const userId = user;
+    const serviceId = props.serviceDetail.serviceId;
+    const data = { userid: userId, serviceid: serviceId };
+    axios.post(`http://localhost:8000/api/cancelService/`, data).then((res) => {
+      if (res.status === 200) {
+        const message = props.actionProvider.createChatBotMessage(
+          `Your service for ${props.serviceDetail.serviceName} cancelled successfully`
+        );
+        setState((prev) => ({
+          ...prev,
+          messages: [...prev.messages, message],
+        }));
+      }
+    });
   }, props.serviceReview);
 
   const handleCancel = () => {
