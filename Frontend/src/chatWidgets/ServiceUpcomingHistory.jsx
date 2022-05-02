@@ -10,7 +10,7 @@ const ServiceUpcomingHistory = (props) => {
       .get("http://localhost:8000/api/appliedServices/cust1@test.com")
       .then((res) => {
         if (res.status === 200) {
-          setState((state) => ({ ...state, options: res.data }));
+          setState((state) => ({ ...state, serviceUpcomingList: res.data }));
         }
       });
   }, props.serviceUpcomingList);

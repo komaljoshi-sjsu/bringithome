@@ -16,7 +16,7 @@ class ActionProvider {
   }
 
   helloHandler = () => {
-    const message = this.createChatBotMessage("How may I help you!", {
+    const message = this.createChatBotMessage("How may I help you?", {
       widget: "chatOptions",
     });
     this.setState((prev) => ({
