@@ -149,7 +149,7 @@ const ReportEmployer = () => {
     <div>        
        <FreelancerNavbar/>
     <div className="App">
-      <h1>JOB POSTED IN A YEAR</h1>
+      <h1>SERVICES POSTED IN A YEAR</h1>
       <div>
         <Bar
           data={chartOneData}
@@ -182,7 +182,7 @@ const ReportEmployer = () => {
       </div>
       <br />
       <br />
-      <h1>APPLICATIONS DETAILS</h1>
+      <h1>CUSTOMERS DETAILS</h1>
       <div>
         <Bar
           data={chartTwoData}

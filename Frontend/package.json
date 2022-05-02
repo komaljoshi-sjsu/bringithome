@@ -57,6 +57,7 @@
     "redux-thunk": "^2.3.0",
     "simple-react-lightbox": "^3.6.9-0",
     "styled-components": "^5.2.3",
+    "timeago.js": "^4.0.2",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
