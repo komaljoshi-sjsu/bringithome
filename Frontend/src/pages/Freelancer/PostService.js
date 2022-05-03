@@ -10,7 +10,7 @@ import backendServer from '../../webConfig';
 import { connect } from "react-redux";
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
- 
+import FreelancerNavbar from './FreelancerNavbar'
 const moment = extendMoment(Moment);
 
 class PostService extends Component {
@@ -20,11 +20,11 @@ class PostService extends Component {
           // companyName: '',
           industry: '',
           jobTitle: '',
-          // streetAddress: '',
-          // city: '',
-          // state: '',
-          // zipcode: '',
-          // country: '',
+          streetAddress: '',
+          city: '',
+          state: '',
+          zipcode: '',
+          country: '',
           jobMode: 'In-person',
           // jobType: 'Part-time',
           // salaryDetails: '',
@@ -43,12 +43,30 @@ class PostService extends Component {
           errorMsg: '',
       };
     }
-    handleChangeCountry = (val) => {
-        this.setState({ country: val });
-        this.setState({
-            errors: {},
+
+    componentDidMount() {
+      const empid = {
+          empid: this.props.userInfo.id
+      };
+      console.log(empid) 
+      const { history } = this.props;
+      axios.post(`${backendServer}/api/getFreelancerDetails`,empid).then((response) => {
+          console.log("Freelancer Details",response.data[0]);
+          console.log(JSON.stringify(response.data).includes(JSON.stringify('email')));
+          if(!JSON.stringify(response.data).includes(JSON.stringify('city'))){
+            alert("Please update the profile details before posting a service.");
+            history.push('/freelancerUpdateProfile');
+          }else{
+          this.setState({
+            streetAddress:response.data[0].address,
+            city:response.data[0].city,
+            state:response.data[0].state,
+            country: response.data[0].country,
+            zipcode:response.data[0].zipcode
           });
-      }
+        }
+      });
+  }
 
       handleChangeIndustry = (e) => {
         this.setState({
@@ -72,6 +90,8 @@ class PostService extends Component {
         const { history } = this.props;
 		    history.push("/freelancerHome");
       }
+
+
       findFormErrors = () => {
         // const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
             // streetAddress, state, zipcode,country, jobMode, jobType, errors } = this.state;
@@ -96,6 +116,7 @@ class PostService extends Component {
         if (!price || price === 0) errors.price='Please select  Price for the service!';
         return errors;
       }
+
     handleSubmit = (e) => {
         e.preventDefault();
         const newErrors = this.findFormErrors();
@@ -106,16 +127,13 @@ class PostService extends Component {
         } else {
             // To-DO : Get logged in company id
             const companyId = this.props.company.compid;
-            const employeeId = this.props.userInfo.id;
+            const empid = this.props.userInfo.id;
             const companyName =this.props.userInfo.name;
-            // const { companyName, jobTitle, industry, city, shortJobDescription, salaryDetails,
-            //     streetAddress, state, zipcode,country, jobMode, jobType,responsibilities,
-            //     qualifications, loveJobRole,startDate} = this.state;
-            const { jobTitle, industry, shortJobDescription, salaryDetails, jobMode,responsibilities,
+            const { jobTitle, industry, shortJobDescription, salaryDetails, jobMode,responsibilities,streetAddress, state, zipcode,country,city, 
                   startDate,endDate,startTime,endTime,price,timeSlot} = this.state;
             const inputData = {
                 companyId,
-                employeeId,
+                empid,
                 companyName,
                 jobTitle,
                 industry,
@@ -123,11 +141,11 @@ class PostService extends Component {
                 shortJobDescription,
                 jobMode,
                 // jobType,
-                // city,
-                // streetAddress,
-                // state,
-                // zipcode,
-                // country,
+                city,
+                streetAddress,
+                state,
+                zipcode,
+                country,
                 responsibilities,
                 // qualifications, 
                 // loveJobRole,
@@ -170,11 +188,11 @@ class PostService extends Component {
                   industry: '',
                   salaryDetails: '',
                   shortJobDescription: '',
-                  // city: '',
-                  // streetAddress: '',
-                  // state: '',
-                  // zipcode: '',
-                  // country: '',
+                  city: '',
+                  streetAddress: '',
+                  state: '',
+                  zipcode: '',
+                  country: '',
                   responsibilities:'',
                   // qualifications:'',
                   // loveJobRole:''
@@ -207,20 +225,20 @@ class PostService extends Component {
             console.log(successMsg)
       return (
         <div>
-            <br/>
+            <FreelancerNavbar/>
             <Container style={{ display: 'flex', justifyContent: 'center'}}>
             <Card style={{ width: '50rem', margin: '0.8em'}}>
             <Card.Title>
                <Row><Col style={{marginLeft:"10%",marginTop:"10px"}}>   
-               <img
+               {/* <img
                 src={logo}
                 alt=""
                 width="120"
                 height="50"
                 class="d-inline-block align-text-top"
-              /> 
-              <p style={{marginLeft:"250px",marginTop:"-50px",fontSize:"larger",color:"blue"}}>Post A Service</p><br/>
-              <p style={{marginLeft:"170px",marginTop:"-40px"}}>Enter the available service details</p></Col></Row>
+              />  */}
+              <p style={{marginLeft:"250px",marginTop:"20px",fontSize:"larger",color:"blue"}}>Post A Service</p><br/>
+              <p style={{marginLeft:"170px",marginTop:"-30px"}}>Enter the available service details</p></Col></Row>
             </Card.Title>
             <Card.Body>   
             <div data-testid="msgDiv">
@@ -492,13 +510,13 @@ class PostService extends Component {
               </Col>
             </Row> */}
             <Row>
-              <Col colSpan="2" style={{marginLeft:"30%"}}>
+              <Col colSpan="2" style={{marginLeft:"40%"}}>
                 <Button variant="primary" type="submit" onClick={this.handleSubmit}>
                   Post Service
                 </Button>
-                <Button variant="primary" type="submit" onClick={this.handleDashBoard} style={{marginLeft:"50px"}}>
+                {/* <Button variant="primary" type="submit" onClick={this.handleDashBoard} style={{marginLeft:"50px"}}>
                   DashBoard
-                </Button>
+                </Button> */}
               </Col>
               </Row>
               {/* <br/>
