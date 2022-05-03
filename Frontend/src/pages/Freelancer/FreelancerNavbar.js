@@ -108,7 +108,7 @@ class FreelancerNavbar extends Component {
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="/messenger">
                       <h5 style={{ color: 'black' }}><IoMdChatboxes/></h5>
                     </a>
                   </li>  

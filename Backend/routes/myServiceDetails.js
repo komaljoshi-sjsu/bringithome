@@ -27,7 +27,8 @@ router.get("/api/appliedServices/:userid", (req, res) => {
                     freelancer: servc.freelancer,
                     date: serv.date,
                     price: servc.price,
-                    time: timeAr[0]+':'+min
+                    time: timeAr[0]+':'+min,
+                    bookingid: serv._id
                 }
                 console.log('result for applied services',json)
                 serviceArr.push(json);
@@ -150,6 +151,10 @@ router.post("/api/bookService", (req, res) => {
     const phone = req.body.phone;
     const dateSlot = req.body.date;
     const timeSlot = req.body.time;
+    if(serviceId == null || serviceId.length == 0) 
+       return res.status(400).send('Could not book the service as your service id  empty.');
+    if(userId == null || userId.length == 0)
+        return  res.status(400).send('Could not book the service as your user id  empty.');
     MyServices.findOneAndUpdate({serviceid:serviceId,userid:userId,date:dateSlot,time:timeSlot},{serviceid:serviceId,userid:userId,date:dateSlot,time:timeSlot, address: address, phone: phone, status:'pending'},{upsert:true}).then(result=> {
         console.log('result for booked service',result)
         res.status(200).send('Success');

@@ -1,31 +1,57 @@
 //loading all the restaurants for the customer
 const express = require("express");
 const router = express.Router();
-const connection = require("../config/mysql_connection");
-var mysql = require("mysql");
-router.post('/getApplicantsName', function(req,res){ 
-  console.log(req.body)
-   const jobId = req.body.jobId;
-   const compid = req.body.compid;
-   let get_job = "SELECT name,j.id,status,a.jobId FROM JobSeeker j "+
-   "JOIN AppliedJobs a on a.id = j.id "+ 
-    "AND a.jobId = "+mysql.escape(jobId)+" AND a.companyId = "+mysql.escape(compid) ;
-    //console.log(get_job)
- 
-    let job_query = connection.query(get_job, (error, result) => {
+const MyServices = require('../models/MyServices');
+const Customer = require('../models/Customer');
+const Service = require('../models/Service');
 
-        if (error) {
-            console.log(error.message)
-           res.status(400).send("Server Error. Please Try Again! ");
-        }  
-            else{
-            //console.log(result)
-            res.status(200).send(JSON.stringify(result));	
-            }
-        });
-   
+
+router.post("/getApplicantsName", (req, res) => {
+    const serviceId = req.body.serviceId;
+    
+    MyServices.find({serviceid:serviceId,status:'pending'}).then(async(result)=> {
+        
+        let applicantList = [];
+        for(let i = 0;i<result.length;i++) {
+            let serv = result[i];
+            let custname;
+
+           await Customer.find({_id:serv.userid}).then((cust)=>{
+                custname = cust[0].name;
+                serv = { serv, custname : custname}
+            })
+
+            await Service.find({_id:serv.serv.serviceid}).then(service => {
+                let servc = service[0];
+                let timeAr = serv.serv.time.split(':');
+                let min = timeAr[1];
+                if(timeAr[1].length == 1) {
+                    min = '0'+timeAr[1];
+                }
+                let json = {
+                    myServId : serv.serv._id,
+                    serviceId: serv.serv.serviceid,
+                    servicename : servc.serviceName,
+                    user: serv.serv.userid,
+                    name : serv.custname,
+                    status: serv.serv.status,
+                    // time: serv.serv.time,
+                    time: timeAr[0]+':'+min,
+                    date : serv.serv.date
+                }
+                applicantList.push(json);
+            })
+        }
+        
+        res.status(200).send(applicantList);
+    }).catch(err=> {
+        console.log(err);
+        res.status(400).send('Could not get customer details for the service.');
+    })
     
 });
+
+
 module.exports = router;
 
 

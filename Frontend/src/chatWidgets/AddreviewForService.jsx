@@ -7,6 +7,8 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
+import backendServer from '../webConfig';
+
 const AddreviewForService = (props) => {
   const { setState } = props;
   //const { setService } = props.serviceDetail;

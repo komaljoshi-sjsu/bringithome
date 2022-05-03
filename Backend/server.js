@@ -36,6 +36,12 @@ app.use(require("./routes/postNewService"))
 app.use(require("./routes/getFreelancerDetails"))
 app.use(require("./routes/postFreelancerDetails"))
 app.use(require("./routes/editFreelancerDetails"))
+app.use(require("./routes/getApplicantsName"))
+app.use(require("./routes/updateJobSeekerStatus"))
+app.use(require("./routes/employerAnalytics"))
+
+app.use(require("./routes/messageRoute"))
+app.use(require("./routes/conversationRoute"))
 
 const PORT = process.env.PORT || 5000
 //Server code will be running on port 5000

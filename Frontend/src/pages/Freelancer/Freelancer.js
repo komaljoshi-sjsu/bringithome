@@ -31,24 +31,24 @@ class Employer extends Component {
     }
     //this.getCurrentDate()
   }
-  updatestatusfn = (id,status,jobId) =>{
+  updatestatusfn = (myServId,status) =>{
    
     const statuschange = {
-      id:id,
+      id:myServId,
       status:status,
-      jobId:jobId
     }
     //console.log(ordertypedata)
    this.updateJobSeekerStatus(statuschange);
     
   }
   updateJobSeekerStatus = (statuschange)=>{
-    console.log(statuschange)
+    console.log("BOOKING STATUS Changes", statuschange)
      axios.post(`${backendServer}/updateJobSeekerStatus`, statuschange)
              .then(response => {
                  console.log(response)
              })
-             
+      alert("Booking status has been updated");
+      window.location.href = '/freelancerHome';
   }
   componentDidMount() {
       //console.log("here")
@@ -122,13 +122,12 @@ handleModalCloseProfile(){
     });
   };
   viewUsersList = (val) => {
-   const JobId = {
-     compid : this.props.company.compid,
-     jobId : val
+   const serviceId = {
+     serviceId : val
    }
-    axios.post(`${backendServer}/getApplicantsName`,JobId).then((response) => {
+    axios.post(`${backendServer}/getApplicantsName`,serviceId).then((response) => {
       if(response.status === 200){
-        console.log(response.data)
+        console.log("customers list for booking",response.data)
         if(response.data.length >=1) {
           this.setState({liststatus : "Applicants List"})
         }else{
@@ -145,10 +144,18 @@ handleModalCloseProfile(){
     })
   }
   handleChange = (e, jobseekerid) => {
-    console.log(jobseekerid)
+    console.log("id",jobseekerid)
     const { applicantsName } = this.state;
-    const index = applicantsName.findIndex((applicant) => applicant.id === jobseekerid);
+    let index ;
+    for(let i= 0; i<applicantsName.length;i++){
+      console.log(applicantsName[i]);
+      if(applicantsName[i].myServId === jobseekerid){
+        index = i;
+        break;
+      }
+    }
     const orders = [...applicantsName];
+    console.log(e.target.value);
     orders[index].status = e.target.value;
     this.setState({ applicantsName: orders });
   }
@@ -203,32 +210,34 @@ handleModalCloseProfile(){
               onClick={() => {
                 this.viewJobSeekerProfile(applicant.id);
               }}
-               
-               variant="Link">{applicant.name}</Button>
-              
+              style = {{width:"150px"}} variant="Link">{applicant.name}</Button>
               </Col>
               <Col>
-              <Button variant="link">Resume</Button>
+              <Button variant="Link">{applicant.servicename}</Button>
               </Col>
               <Col>
-             <select name="status" value={applicant.status} onChange={(e) => { this.handleChange(e,applicant.id)}}  >
-              	<option value="Submitted">Submitted</option> 
-              	<option value="Reviewed" >Reviewed</option>
-              	<option value="Initial screening"  >Initial screening</option>
-              	<option value="Interviewing" >Interviewing</option>
-                <option value="Rejected" >Rejected</option>
-                <option value="Hired" >Hired</option>
+              <Button variant="Link">{applicant.date}</Button>
+              </Col>
+              <Col>
+              <Button variant="Link">{applicant.time}</Button>
+              </Col>
+              <Col>
+             <select name="status" value={applicant.status} onChange={(e) => { this.handleChange(e,applicant.myServId)}}  >
+              	<option value="Booked">Accepted</option> 
+                <option value="Cancelled" >Cancelled</option>
             	</select>
-              &nbsp;
+              </Col>
+              <Col>
               <Button className="statusbtn"
                 type="submit" 
                 onClick={() => {
-                this.updatestatusfn(applicant.id,applicant.status,applicant.jobId);
+                this.updatestatusfn(applicant.myServId,applicant.status);
                 }}>
                 Change
               </Button>
               </Col>
-            </Row></div>
+            </Row>
+            </div>
           )}
         </div>
       )
@@ -342,7 +351,7 @@ handleModalCloseProfile(){
                   <Card.Body>
                   <Card.Title><Button  variant="link" 
                   onClick={() => {
-                    this.viewUsersList(service.jobId);
+                    this.viewUsersList(service._id);
                   }}>
                     <h5>{service.serviceName}</h5>
                     </Button>
@@ -418,7 +427,7 @@ handleModalCloseProfile(){
           aria-labelledby="contained-modal-title-vcenter"
           centered
            show={this.state.show} onHide={()=>this.handleModalClose()}>
-             <Modal.Header closeButton><h4>Services List </h4>
+             <Modal.Header closeButton><h4>Customer Booking List </h4>
              
              </Modal.Header>
              
