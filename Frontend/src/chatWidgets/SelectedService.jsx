@@ -8,15 +8,16 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 import { Redirect } from "react-router";
-const SelectedService = (props) => {
-  const { setState } = props;
-  const [redirectVal, redirectValFn] = useState(null);
+// const SelectedService = (props) => {
+//   const { setState } = props;
+//   const [redirectVal, redirectValFn] = useState(null);
 
 import backendServer from '../webConfig';
 
 const SelectedService = (props) => {
   const { setState } = props;
   const [service, setService] = "";
+  const [redirectVal, redirectValFn] = useState(null);
   useEffect(() => {
     axios
       .get(`${backendServer}/api/getBookedSlots/1/cust1@test.com`)

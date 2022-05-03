@@ -166,7 +166,7 @@ const Messenger = (props) => {
                     <div ref={scrollRef}>
                       <Message
                         message={msg}
-                        own={Number(msg.sender) === userId}
+                        own={(msg.sender) === userId}
                       />
                      </div>
                   ))}
