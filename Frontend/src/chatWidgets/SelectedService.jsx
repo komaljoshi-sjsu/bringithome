@@ -20,7 +20,7 @@ const SelectedService = (props) => {
     axios.post(`http://localhost:8000/api/cancelService/`, data).then((res) => {
       if (res.status === 200) {
         const message = props.actionProvider.createChatBotMessage(
-          `Service ${props.serviceDetail.serviceName} cancelled successfully`
+          `Your service for ${props.serviceDetail.serviceName} cancelled successfully`
         );
         setState((prev) => ({
           ...prev,
@@ -30,8 +30,8 @@ const SelectedService = (props) => {
     });
   };
 
-  let handleChat = () => {
-    //return redirectValFn(<Redirect to="/messenger" />);
+  const handleChat = () => {
+    return redirectValFn(<Redirect to="/messenger" />);
   };
   return (
     <>
@@ -50,7 +50,7 @@ const SelectedService = (props) => {
           <Button size="small" onClick={() => handleCancel()}>
             Cancel
           </Button>
-          <Button size="small" onClick={handleChat()}>
+          <Button size="small" onClick={() => handleChat()}>
             Chat
           </Button>
         </CardActions>

@@ -9,9 +9,9 @@ import Typography from "@mui/material/Typography";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 const AddreviewForService = (props) => {
   const { setState } = props;
-  const { setService } = props.serviceDetail;
+  //const { setService } = props.serviceDetail;
 
-  useEffect(() => {
+  /* useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
     let user = JSON.parse(userInfo).id;
     const userId = user;
@@ -28,7 +28,7 @@ const AddreviewForService = (props) => {
         }));
       }
     });
-  }, props.serviceReview);
+  }, props.serviceReview);*/
 
   const handleCancel = () => {
     props.actionProvider.helloHandler();
@@ -42,10 +42,10 @@ const AddreviewForService = (props) => {
         <CardMedia component="img" height="140" image="" alt="green iguana" />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {props.service.name}
+            {props.serviceDetail.serviceName}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {props.service.description}
+            {props.serviceDetail.time}
           </Typography>
           <TextareaAutosize
             aria-label="minimum height"

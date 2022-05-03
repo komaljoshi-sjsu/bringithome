@@ -43,7 +43,7 @@ const config = {
     {
       widgetName: "addReview",
       widgetFunc: (props) => <AddReviewForService {...props} />,
-      mapStateToProps: ["addReview"],
+      mapStateToProps: ["addReview", "serviceDetail"],
     },
   ],
   state: {
