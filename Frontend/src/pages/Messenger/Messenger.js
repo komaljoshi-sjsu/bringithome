@@ -27,17 +27,26 @@ const Messenger = (props) => {
   const [isFreelancer, setIsFreelancer] = useState(false); // add boolean flag
   const scrollRef = useRef();
   const token = useSelector((state) => state.userInfo.token);
+  const [isCustomer, setIsCustomer] = useState(false); // add boolean flag
   
   //past conv
   useEffect(() => {
     setIsFreelancer("Freelancer" === role ? true : false);
+    setIsCustomer("Customer" === role ? true : false);
 
     const getConversations = async () => {
       try {
         // axios.defaults.headers.common['authorization'] = token;
-        const res = await axios.get(backendServer+"/api/getAllJobSeekers");
-        console.log("response",res);
-        console.log("get conversatn",userId);
+        let res;
+        if("Freelancer" === role ){
+          res = await axios.get(backendServer+"/api/getAllJobSeekers");
+          console.log("response",res);
+          console.log("get cust conversatn",userId);
+        }else if("Customer" === role ){
+          res = await axios.get(backendServer+"/api/getAllFreelancer");
+          console.log("response",res);
+          console.log("get conversatn",userId);
+        }
 
         const convResponse = await axios.get(
           backendServer+"/api/getConversationById/" + userId
@@ -139,6 +148,16 @@ const Messenger = (props) => {
                 isSearchable={true}
                 isClearable={true}
                 placeholder="Search for Customers"
+                onChange={setNewConversation}
+                value=""
+              />
+            )}
+             {isCustomer && (
+              <Select
+                options={Customers}
+                isSearchable={true}
+                isClearable={true}
+                placeholder="Search for Freelancer"
                 onChange={setNewConversation}
                 value=""
               />

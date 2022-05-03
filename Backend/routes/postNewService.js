@@ -8,7 +8,7 @@ const Service =require('../models/Service');
 router.post("/api/postNewService", (req, res) => {
     // const companyName = req.body.companyName;
     const { _id, 
-        employeeId,
+        empid,
         companyName,
         jobTitle
      } = req.body;
@@ -16,7 +16,7 @@ router.post("/api/postNewService", (req, res) => {
     try {
       const service = new Service({
         freelancer: {
-          freelancerId: req.body.employeeId,
+          freelancerId: req.body.empid,
           name: req.body.companyName,
         },
         serviceCategory: req.body.industry,
@@ -27,6 +27,11 @@ router.post("/api/postNewService", (req, res) => {
         servicePostedDate :req.body.servicePostedDate,
         servicePostedMonth :req.body.servicePostedMonth,
         price:req.body.price,
+        streetAddress: req.body.streetAddress,
+        city: req.body.city,
+        state:req.body.state,
+        zipcode: req.body.zipcode,
+        country: req.body.country,
         availability:{
             startDate: req.body.startDate,
             endDate:req.body.endDate,
@@ -52,7 +57,7 @@ router.post("/api/postNewService", (req, res) => {
                   const cid = result._id;
 
                 //Freelancer details update
-                Freelancer.updateOne({employeeId:employeeId}, {
+                Freelancer.updateOne({_id:empid}, {
                     $push: {
                             availableServices:{
                                 serviceId : cid,
