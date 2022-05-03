@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Message = require('../models/Message');
 const Customer = require('../models/Customer');
+const MyServices = require('../models/MyServices');
 
 router.post("/api/addNewMessage", async (req, res) => {
 
@@ -26,27 +27,23 @@ router.get("/api/getMessages/:conversationId", async (req, res) => {
     }
 });
 
-// router.get("/api/getAllJobSeekers", async (req, res) => {
-//   const query = "select name as label, id as value from JobSeeker";
-//   conn.query(query, async function (err, rows) {
-//     if (err) {
-//       console.log("Error occurred while retreiving job seekers");
-//       res
-//         .status(400)
-//         .send("Error occurred while retreiving job seekers");
-//     }
-//     console.log("Query executed: ", rows);
-//     res.status(200).send(rows);
-//   });
-// });
-
 router.get("/api/getAllJobSeekers", async (req, res) => {
   try {
-    let final=[];
-    Customer.find({}).then((result)=>{
-      result.forEach(element=>{
-      final.push({label:element.name,value:element._id});
-      })
+    MyServices.find({$or : [{status:"pending"} ,{status: "Booked"}]}).then(async (result)=>{
+      let final=[];
+      for(let i = 0;i<result.length;i++) {
+        let serv = result[i];
+        await Customer.find({_id:serv.userid}).then((cust)=>{
+          let servc = cust[0];
+          let json = {
+            label: servc.name,
+            value: servc._id
+          }
+          if(!JSON.stringify(final).includes(JSON.stringify(json))) {
+            final.push(json); 
+          }
+        })
+      }
       // console.log("customer",final);
       res.status(200).json(final);
     });
@@ -54,5 +51,6 @@ router.get("/api/getAllJobSeekers", async (req, res) => {
       res.status(500).send("Error occurred while retreiving customers");
   }
 });
+
 
 module.exports = router;
