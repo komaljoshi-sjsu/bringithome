@@ -159,7 +159,7 @@ function JobSeekerLandingPage(props) {
                     id="button-addon1"
                     disabled
                   >
-                    <h6 style={{ marginTop: "10px" }}>What</h6>
+                    <h6 style={{ marginTop: "10px" }}>{t('What')}</h6>
                   </button>
                   <Autocomplete
                     disablePortal
@@ -205,7 +205,7 @@ function JobSeekerLandingPage(props) {
                     id="button-addon1"
                     disabled
                   >
-                    <h6 style={{ marginTop: "10px" }}>Where</h6>
+                    <h6 style={{ marginTop: "10px" }}>{t('Where')}</h6>
                   </button>
                   <Autocomplete
                     id="free-solo-demo"
@@ -357,20 +357,20 @@ function JobSeekerLandingPage(props) {
                 <br />
                 <hr />
                 <br />
-                <h5 class="card-title">Service details</h5>
+                <h5 class="card-title">{t('Service details')}</h5>
                 <br />
-                <h6>Service Type:</h6>
+                <h6>{t('Service Type')}:</h6>
                 <h6>{jobType}</h6> <br />
-                <h6>Price:</h6>
+                <h6>{t('Price')}:</h6>
                 <h6>${price}</h6>
                 <br />
                 <hr />
-                <h5 class="card-title">Full Service Description</h5>
+                <h5 class="card-title">{t('Full Service Description')}</h5>
                 <br />
                 <br />
-                <h6>Service Description:</h6>
+                <h6>{t('Service Description')}:</h6>
                 <br />
-                <h6>What you will get:</h6>
+                <h6>{t('What you will get')}:</h6>
                 <h6>{responsibilities}</h6>
                 <br />
               </div>

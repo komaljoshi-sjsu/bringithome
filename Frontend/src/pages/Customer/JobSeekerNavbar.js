@@ -93,22 +93,10 @@ class JobSeekerNavbar extends Component {
                   class="navbar-nav me-auto mb-2 mb-lg-0"
                   style={{ marginTop: '15px' }}
                 >
-                  <li class="nav-item">
-                    <a class="nav-link">
-                      <Link
-                        to="/resume"
-                        style={{
-                          textDecoration: 'none',
-                          color: '#474747',
-                        }}
-                      >
-                        <h5>Upload your Resume</h5>
-                      </Link>
-                    </a>
-                  </li>
+                  
                   <li class="nav-item">
                     <a class="nav-link" href="/login">
-                      <h5 style={{ color: 'blue' }}>{this.state.t('Sign in')}</h5>
+                      <h5 style={{ color: 'blue' }}>{this.state.t('Sign In')}</h5>
                     </a>
                   </li>
                   <li class="nav-item">
