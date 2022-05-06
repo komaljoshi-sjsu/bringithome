@@ -61,6 +61,7 @@ router.get("/api/appliedServices/:userid", (req, res) => {
                     min = '0'+timeAr[1];
                 }
                 let json = {
+                    _id: servc._id,
                     serviceName: servc.serviceName,
                     serviceMode: servc.serviceMode,
                     freelancer: servc.freelancer,
