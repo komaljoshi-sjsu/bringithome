@@ -54,6 +54,19 @@ function MyServices(props) {
                                             </Link>
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link">
+                                            <Link
+                                            to="/completedservices"
+                                            style={{
+                                                textDecoration: 'none',
+                                                color: '#474747',
+                                            }}
+                                            >
+                                            <h5>Completed</h5>
+                                            </Link>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>

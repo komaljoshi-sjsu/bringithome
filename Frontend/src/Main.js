@@ -32,6 +32,7 @@ import ActionProvider from "./chatbot/ActionProvider.js";
 import ProfileUpdate from "./pages/Customer/ProfileUpdate.js";
 import Booking from "./pages/Customer/Booking.js";
 import Messenger from "./pages/Messenger/Messenger.js";
+import CompletedServices from "./pages/Customer/CompletedServices.js";
 
 class Main extends Component {
   render() {
@@ -66,6 +67,7 @@ class Main extends Component {
         <Route path="/myservices" component={MyServices} />
         <Route path="/savedservices" component={SavedServices} />
         <Route path="/appliedservices" component={AppliedServices} />
+        <Route path="/completedservices" component={CompletedServices} />
         <Route path="/profileupdate" component={ProfileUpdate} />
         <Route path="/booking" render={(props) => <Booking {...props} />} />
         {/* <Route path="/findSalByTitle/:id" component={FindSalByTitle} /> */}

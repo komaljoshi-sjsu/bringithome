@@ -136,7 +136,7 @@ function JobSeekerLandingPage(props) {
 
   const [showBooking, setShowBooking] = useState(false);
   return (
-    <div>
+    <div className='container-full'>
       <ErrorMsg err={errMsg}></ErrorMsg>
       {redirectVal}
       {email !== "" && accountType === "Customer" ? (

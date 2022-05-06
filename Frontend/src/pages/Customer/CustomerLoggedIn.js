@@ -125,48 +125,13 @@ class CustomerLoggedIn extends Component {
                   class="navbar-nav me-auto mb-2 mb-lg-0"
                   style={{ marginTop: '15px' }}
                 >
-                  <li class="nav-item">
-                    <a class="nav-link">
-                      <Link
-                        to="/messenger"
-                        style={{
-                          textDecoration: 'none',
-                          color: '#474747',
-                        }}
-                      >
-                        <h5
-                          style={{
-                            color: 'black',
-                            marginLeft: '5px',
-                            marginRight: '5px',
-                          }}
-                        >
-                          <BsFillChatLeftTextFill />
-                        </h5>
-                      </Link>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link">
-                      <h5
-                        style={{
-                          color: 'black',
-                          marginLeft: '5px',
-                          marginRight: '5px',
-                        }}
-                      >
-                        <BsFillBellFill />
-                      </h5>
-                    </a>
-                  </li>
-
                   <li class="nav-item dropdown">
                     <a class="nav-link" data-bs-toggle="dropdown">
                       <h5
                         style={{
                           color: 'black',
                           marginLeft: '5px',
-                          marginRight: '5px',
+                          marginRight: '30px',
                         }}
                       >
                         <IoMdPerson />
@@ -191,7 +156,7 @@ class CustomerLoggedIn extends Component {
                       </a>
                       <a class="dropdown-item ditems">
                         <Link
-                          to="/myservices"
+                          to="/savedservices"
                           style={{
                             textDecoration: 'none',
                             color: '#474747',
@@ -237,9 +202,29 @@ class CustomerLoggedIn extends Component {
                       </a>
                     </div>
                   </li>
-
                   <li class="nav-item">
-                    <h3 style={{ color: 'black' }}>|</h3>
+                    <a class="nav-link">
+                      <Link
+                        to="/messenger"
+                        style={{
+                          textDecoration: 'none',
+                          color: '#474747',
+                        }}
+                      >
+                        <h5
+                          style={{
+                            color: 'black',
+                            marginLeft: '5px',
+                            marginRight: '5px',
+                          }}
+                        >
+                          <BsFillChatLeftTextFill />
+                        </h5>
+                      </Link>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <h3 style={{ color: 'black', marginLeft:'30px' }}>|</h3>
                   </li>
                   
                 </ul>
