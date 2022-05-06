@@ -22,6 +22,7 @@ router.get("/api/completedservices/:userid", (req, res) => {
                     min = '0'+timeAr[1];
                 }
                 let json = {
+                    _id: serv.serviceid,
                     serviceName: servc.serviceName,
                     serviceMode: servc.serviceMode,
                     freelancer: servc.freelancer,

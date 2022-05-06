@@ -12,12 +12,15 @@ import { userActionCreator } from '../../reduxutils/actions.js'
 import ErrorMsg from '../Error/ErrorMsg'
 import {Button, Row } from "react-bootstrap";
 import MyServices from './MyServices';
+import ReviewModal from './ReviewModal';
 
 function CompletedServices(props) {
     const dispatch = useDispatch()
     const userid = useSelector((state)=>state.userInfo.id);
     const[errMsg,setErrMsg] = useState('');
     const [jobs,setServices] = useState([]);
+    const [serviceid,setServiceId] = useState('');
+    const[hide, hideModal] = useState(true);
     const showErrorModal = bindActionCreators(userActionCreator.showErrorModal,dispatch);
     useEffect(()=> {
         axios.get(backendServer+'/api/completedServices/'+userid)
@@ -36,36 +39,15 @@ function CompletedServices(props) {
         }); 
     },[]);
 
-    const cancelService = (serviceid)=> {
-        axios.post(backendServer+'/api/cancelService', {
-            userid: userid,
-            serviceid: serviceid
-        })
-        .then(res => {
-            console.log('applied job results',res);
-            if(res.status== 200) {
-                //remove service from list
-                let newArr = jobs.filter(job=>{
-                    if(job._id == serviceid) {
-                        return false;
-                    }
-                    return true;
-                })
-                setServices(newArr);
-            } else {
-                setErrMsg(res.data);
-                showErrorModal(true);
-            }
-        }).catch(err => {
-            setErrMsg('Failed to cancel service. Please check console');
-            showErrorModal(true);
-            console.log(err);
-        }); 
-    }
+   const setReview = (e,serviceid) => {
+       setServiceId(serviceid);
+       hideModal(false);
+   }
     return (
         <div>
             <ErrorMsg err={errMsg}></ErrorMsg>
             {/* <CustomerLoggedIn /> */}
+            <ReviewModal show={!hide} hideModal={hideModal} serviceid={serviceid}></ReviewModal>
             <div class="container-fluid">
                 <div class="row">
                     <MyServices></MyServices>
@@ -79,14 +61,14 @@ function CompletedServices(props) {
                                     <Card.Body>
                                         <Card.Title><h3><b>{job.serviceName}</b></h3></Card.Title>
                                         <Card.Text>
-                                            <h4><b>Booking Id: {job.bookingid}</b></h4>
+                                            <h4><b>Booking Id: {job.bookingid} - {job.status}</b></h4>
                                             <h5><b>{job.freelancer.name}</b></h5><br></br><br></br>
                                             <b>Date: {job.date}</b><br></br>
                                             <b>Time: {job.time}</b><br></br>
                                             <b>{job.serviceMode}</b><br></br>
                                             <b>${job.price}</b>
                                         </Card.Text>
-                                        {/* <Button variant="primary" className='book-button' onClick={(e)=>cancelService(job._id)}>Cancel Service</Button> */}
+                                        <Button variant="primary" className='book-button' onClick={(e)=>setReview(e,job._id)}>Review Service</Button>
                                     </Card.Body>
                             </Card>
                         )
