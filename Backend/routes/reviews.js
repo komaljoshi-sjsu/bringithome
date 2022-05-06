@@ -23,14 +23,35 @@ router.get("/api/allReviews/:currentPage", async (req, res) => {
     const currentPage = req.params.currentPage;
     const skip = postsPerPage*(currentPage-1);
     const totalPosts = await Review.count();
-    Review.find().skip(skip).limit(postsPerPage).populate('service').then(async(result)=> {
-        console.log('applied serv;',result);
+    Review.aggregate([{$group:{_id:'$service', data:{$push:"$$ROOT"}, rating:{$sum:"$rating"}}}]).then(async(result)=> {
+        console.log('total reviews;',result);
+        
         let reviews = {
             reviews: result,
             totalReviews: totalPosts
         }
-        res.status(200).send(reviews);
-    }).catch(err=> {
+        if(result!=null && result.length>0) {
+            let servid = result[0]._id+'';
+            await Service.find({_id:servid}).then(r=> {
+                let serv = r[0];
+                reviews.serviceName = serv.serviceName;
+                reviews.serviceCategory = serv.serviceCategory;
+                reviews.freelancer = serv.freelancer;
+            }).catch(er=> {
+                console.log('Failed to fetch service details for review:',er)
+            })
+        }
+        res.status(200).send(reviews); 
+    })
+    // Review.find().skip(skip).limit(postsPerPage).populate('service').then(async(result)=> {
+    //     console.log('applied serv;',result);
+    //     let reviews = {
+    //         reviews: result,
+    //         totalReviews: totalPosts
+    //     }
+    //     res.status(200).send(reviews);
+    // })
+    .catch(err=> {
         console.log(err);
         res.status(400).send('Could not get reviews.');
     })
