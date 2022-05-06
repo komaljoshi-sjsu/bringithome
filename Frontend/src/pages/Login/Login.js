@@ -12,8 +12,10 @@ import { userActionCreator } from '../../reduxutils/actions.js'
 // import {companyActionCreator} from '../../reduxutils/actions.js';
 import logo from '../../images/logo_signin.png'
 import ErrorMsg from '../Error/ErrorMsg'
+import { useTranslation } from 'react-i18next';
 
 function Login(props) {
+    const { t } = useTranslation();
     const [redirectVal, redirectValFn] = useState(null)
     const dispatch = useDispatch()
     const[errMsg,setErrMsg] = useState('');
@@ -112,17 +114,16 @@ function Login(props) {
       >
         <div className="row">
           <p>
-            <b>Sign In</b>
+            <b>{t('Sign In')}</b>
           </p>
         </div>
         <br></br>
         <div className="row">
           <p>
             <small>
-              By signing in to your account, you agree to Indeed's{' '}
-              <u style={{ color: 'blue' }}>Terms of Service </u>and consent to
-              our <u style={{ color: 'blue' }}>Cookie Policy </u>and{' '}
-              <u style={{ color: 'blue' }}>Privacy Policy</u>.
+              {t('Sign In Text 1')}{' '}
+              <u style={{ color: 'blue' }}>{t('Terms of Service')} </u>{t('Sign In Text 2')} <u style={{ color: 'blue' }}>{t('Sign In Text 3')} </u>{t('and')}{' '}
+              <u style={{ color: 'blue' }}>{t('Sign In Text 4')}</u>.
             </small>
           </p>
         </div>
@@ -131,7 +132,7 @@ function Login(props) {
           <Form onSubmit={signIn}>
             <Form.Group className="mb-3">
               <Form.Label>
-                <b>Email Address</b>
+                <b>{t('Email Address')}</b>
               </Form.Label>
               <Form.Control
                 type="email"
@@ -143,11 +144,11 @@ function Login(props) {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>
-                <b>Password</b>
+                <b>{t('Password')}</b>
               </Form.Label>
               <Form.Control
                 type="password"
-                placeholder="Password"
+                placeholder={t('Password')}
                 name="password"
                 maxLength="8"
                 required
@@ -156,13 +157,13 @@ function Login(props) {
             <Form.Group className="mb-3">
               <Form.Check
                 type="radio"
-                label="Freelancer"
+                label={t('Freelancer')}
                 name="accountType"
                 value="Freelancer"
               />
               <Form.Check
                 type="radio"
-                label="Customer"
+                label={t('Customer')}
                 name="accountType"
                 value="Customer"
               />
@@ -175,14 +176,14 @@ function Login(props) {
               style={{ width: '100%' }}
               type="submit"
             >
-              Sign In
+              {t('Sign In')}
             </Button>
           </Form>
         </div>
         <div className="row" style={{ color: 'grey', textAlign: 'center' }}>
-          <p>---------------or---------------</p>
+          <p>---------------{t('or')}---------------</p>
           <p style={{ color: 'navy' }} onClick={redirectToSignUp}>
-            New to Bring It Home? Create an account
+            {t('Sign In Text 5')}
           </p>
         </div>
       </div>

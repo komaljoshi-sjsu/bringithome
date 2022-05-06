@@ -22,8 +22,10 @@ import Chatbot from "react-chatbot-kit";
 import "react-chatbot-kit/build/main.css";
 import MessageParser from "../../chatbot/MessageParser.js";
 import ActionProvider from "../../chatbot/ActionProvider.js";
+import { useTranslation } from "react-i18next";
 //Create a Main Component
 function JobSeekerLandingPage(props) {
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [whatVal, handleWhatVal] = useState("");
@@ -140,7 +142,7 @@ function JobSeekerLandingPage(props) {
       <ErrorMsg err={errMsg}></ErrorMsg>
       {redirectVal}
       {email !== "" && accountType === "Customer" ? (
-        <CustomerLoggedIn />
+        <CustomerLoggedIn t={t}/>
       ) : (
         <JobSeekerNavbar />
       )}
@@ -243,7 +245,7 @@ function JobSeekerLandingPage(props) {
                   onClick={handleFindJobs.bind(this)}
                 >
                   <h5 style={{ marginTop: "4px", color: "white" }}>
-                    Find Services
+                    {t('Find Services')}
                   </h5>
                 </button>
               </div>
@@ -265,11 +267,11 @@ function JobSeekerLandingPage(props) {
             <div class="row">
               <div class="col-3">
                 <h3 class="headinghoverUnderline" style={{ color: "#003399" }}>
-                  <span style={{ color: "#003399" }}>Service feed </span>
+                  <span style={{ color: "#003399" }}>{t('Service Feed')} </span>
                 </h3>
               </div>
               <div class="col-4">
-                <h3 class="headinghoverUnderline">Recent Searches</h3>
+                <h3 class="headinghoverUnderline">{t('Recent Searches')}</h3>
               </div>
             </div>
           </div>
@@ -287,7 +289,7 @@ function JobSeekerLandingPage(props) {
             {/* <h4 style={{ marginTop: '10px' }}>
               {month} {day}, {year}
             </h4> */}
-            Services based on your searches
+            {t('Services based on your searches')}
             {jobs.map((job) => (
               <div
                 class="card cardStyle2"
@@ -337,7 +339,7 @@ function JobSeekerLandingPage(props) {
                     id={jobId}
                   >
                     <h5 style={{ marginTop: "4px", color: "white" }}>
-                      Request Service
+                      {t('Request Service')}
                     </h5>
                   </button>
                 </div>
@@ -348,7 +350,7 @@ function JobSeekerLandingPage(props) {
                     id={companyId}
                     onClick={() => handleSaveJob(jobId)}
                   >
-                    <h5 style={{ marginTop: "4px", color: "white" }}>Save</h5>
+                    <h5 style={{ marginTop: "4px", color: "white" }}>{t('Save')}</h5>
                   </button>
                 </div>
                 <br />

@@ -24,9 +24,10 @@ class CustomerLoggedIn extends Component {
     this.state = {
       showMenu: true,
       userEmail: '',
+      t: this.props.t
     }
   }
-
+  
   componentDidMount() {
     let collection = document.getElementsByClassName('nav-link')
     for (let i = 0; i < collection.length; i++) {
@@ -90,7 +91,7 @@ class CustomerLoggedIn extends Component {
                         color: '#474747',
                       }}
                     >
-                      <h5>Find Services</h5>
+                      <h5>{this.state.t('Find Services')}</h5>
                     </Link>
                   </a>
                 </li>
@@ -103,7 +104,7 @@ class CustomerLoggedIn extends Component {
                         color: '#474747',
                       }}
                     >
-                      <h5>Freelancer Reviews</h5>
+                      <h5>{this.state.t('Freelancer Reviews')}</h5>
                     </Link>
                   </a>
                 </li>
