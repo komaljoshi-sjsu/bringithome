@@ -9,13 +9,16 @@ const sSchema = new Schema({
     },
     service: { 
         type: Schema.Types.ObjectId, 
-        ref: 'services',
+        ref: 'Services',
         required: [true,'No service id found']
     },
     postedOn: {
         type: String
     }, 
     review: {
+        type: String
+    },
+    title: {
         type: String
     }
 });

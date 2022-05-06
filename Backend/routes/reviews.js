@@ -6,6 +6,18 @@ const mongoose = require('mongoose');
 const Service = require('../models/Service');
 const Review = require('../models/Review');
 
+router.get("/api/getReviews/:userid", (req, res) => {
+    const userId = req.params.userid;
+    Review.find({userid:userId}).populate({path:'service'}).then(async(result)=> {
+        res.status(200).send(result);
+    }).catch(err=> {
+        console.log(err);
+        res.status(400).send('Could not get reviews.');
+    })
+    
+});
+
+
 router.get("/api/allReviews/:currentPage", async (req, res) => {
     const postsPerPage = 18;
     const currentPage = req.params.currentPage;
