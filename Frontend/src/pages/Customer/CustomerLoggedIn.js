@@ -17,6 +17,8 @@ import { MdFavorite, MdReviews, MdEmail, MdPhoto } from 'react-icons/md'
 import logo from '../../images/logo_signin.png'
 import '../../CSS/JobSeekerNavbar.css'
 import { logout } from '../../reduxutils/actioncreators/useraction'
+import { withTranslation } from 'react-i18next';
+import { compose } from 'redux'
 
 class CustomerLoggedIn extends Component {
   constructor(props) {
@@ -248,7 +250,7 @@ const mapStateToProps = (state) => ({
   userInfo: state.userInfo,
 })
 
-export default connect(
+export default compose(withTranslation(),connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withRouter(CustomerLoggedIn))
+)) (withRouter(CustomerLoggedIn))

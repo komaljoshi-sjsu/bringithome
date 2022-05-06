@@ -142,7 +142,7 @@ function JobSeekerLandingPage(props) {
       <ErrorMsg err={errMsg}></ErrorMsg>
       {redirectVal}
       {email !== "" && accountType === "Customer" ? (
-        <CustomerLoggedIn t={t}/>
+        <CustomerLoggedIn />
       ) : (
         <JobSeekerNavbar />
       )}
