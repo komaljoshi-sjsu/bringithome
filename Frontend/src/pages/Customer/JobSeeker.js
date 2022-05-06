@@ -253,14 +253,7 @@ function JobSeekerLandingPage(props) {
 
         <div class="row" style={{ marginTop: "10px" }}>
           <div class="col-4"></div>
-          <div class="col-4">
-            <h5 style={{ marginLeft: "120px" }}>
-              Service Providers:
-              <span class="hoverUnderline" style={{ color: "#003399" }}>
-                Register a service
-              </span>
-            </h5>
-          </div>
+          
           <div class="col-4"></div>
         </div>
       </div>
@@ -302,15 +295,15 @@ function JobSeekerLandingPage(props) {
                 onClick={(e) => handleCardClick(e, job)}
               >
                 <div class="card-body">
-                  <h4 class="card-title">{job.jobTitle}</h4>
-                  <h6 class="card-title">{job.companyName}</h6>
-                  <h6 class="card-title">
+                  <h4 class="card-title">{job.serviceCategory} - {job.serviceName}</h4>
+                  <h6 class="card-title">{job.freelancer.name}</h6>
+                  {/* <h6 class="card-title">
                     {job.city}, {job.state}, {job.zip}
-                  </h6>
-                  <h6 class="card-title">$ {job.salaryDetails}</h6>
+                  </h6> */}
+                  <h6 class="card-title">$ {job.price}</h6>
                   <br />
                   <br />
-                  <p class="card-text">{job.shortJobDescription}</p>
+                  <p><small class="card-text">Posted On: {job.servicePostedDate}</small></p>
                 </div>
               </div>
             ))}
