@@ -24,8 +24,10 @@ import Chatbot from "react-chatbot-kit";
 import "react-chatbot-kit/build/main.css";
 import MessageParser from "../../chatbot/MessageParser.js";
 import ActionProvider from "../../chatbot/ActionProvider.js";
+import { useTranslation } from "react-i18next";
 //Create a Main Component
 function JobSeekerLandingPage(props) {
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [whatVal, handleWhatVal] = useState("");
@@ -176,7 +178,7 @@ function JobSeekerLandingPage(props) {
   };
   const [showBooking, setShowBooking] = useState(false);
   return (
-    <div>
+    <div className="container-full">
       <ErrorMsg err={errMsg}></ErrorMsg>
       {redirectVal}
       {email !== "" && accountType === "Customer" ? (
@@ -317,7 +319,7 @@ function JobSeekerLandingPage(props) {
                   onClick={handleFindJobs.bind(this)}
                 >
                   <h5 style={{ marginTop: "4px", color: "white" }}>
-                    Find Services
+                    {t("Find Services")}
                   </h5>
                 </button>
               </div>
@@ -327,14 +329,7 @@ function JobSeekerLandingPage(props) {
 
         <div class="row" style={{ marginTop: "10px" }}>
           <div class="col-4"></div>
-          <div class="col-4">
-            <h5 style={{ marginLeft: "120px" }}>
-              Service Providers:
-              <span class="hoverUnderline" style={{ color: "#003399" }}>
-                Register a service
-              </span>
-            </h5>
-          </div>
+
           <div class="col-4"></div>
         </div>
       </div>
@@ -346,11 +341,11 @@ function JobSeekerLandingPage(props) {
             <div class="row">
               <div class="col-3">
                 <h3 class="headinghoverUnderline" style={{ color: "#003399" }}>
-                  <span style={{ color: "#003399" }}>Service feed </span>
+                  <span style={{ color: "#003399" }}>{t("Service Feed")} </span>
                 </h3>
               </div>
               <div class="col-4">
-                <h3 class="headinghoverUnderline">Recent Searches</h3>
+                <h3 class="headinghoverUnderline">{t("Recent Searches")}</h3>
               </div>
             </div>
           </div>
@@ -368,7 +363,7 @@ function JobSeekerLandingPage(props) {
             {/* <h4 style={{ marginTop: '10px' }}>
               {month} {day}, {year}
             </h4> */}
-            Services based on your searches
+            {t("Services based on your searches")}
             {jobs.map((job) => (
               <div
                 class="card cardStyle2"
@@ -376,15 +371,21 @@ function JobSeekerLandingPage(props) {
                 onClick={(e) => handleCardClick(e, job)}
               >
                 <div class="card-body">
-                  <h4 class="card-title">{job.jobTitle}</h4>
-                  <h6 class="card-title">{job.companyName}</h6>
-                  <h6 class="card-title">
+                  <h4 class="card-title">
+                    {job.serviceCategory} - {job.serviceName}
+                  </h4>
+                  <h6 class="card-title">{job.freelancer.name}</h6>
+                  {/* <h6 class="card-title">
                     {job.city}, {job.state}, {job.zip}
-                  </h6>
-                  <h6 class="card-title">$ {job.salaryDetails}</h6>
+                  </h6> */}
+                  <h6 class="card-title">$ {job.price}</h6>
                   <br />
                   <br />
-                  <p class="card-text">{job.shortJobDescription}</p>
+                  <p>
+                    <small class="card-text">
+                      Posted On: {job.servicePostedDate}
+                    </small>
+                  </p>
                 </div>
               </div>
             ))}
@@ -418,7 +419,7 @@ function JobSeekerLandingPage(props) {
                     id={jobId}
                   >
                     <h5 style={{ marginTop: "4px", color: "white" }}>
-                      Request Service
+                      {t("Request Service")}
                     </h5>
                   </button>
                 </div>
@@ -429,27 +430,29 @@ function JobSeekerLandingPage(props) {
                     id={companyId}
                     onClick={() => handleSaveJob(jobId)}
                   >
-                    <h5 style={{ marginTop: "4px", color: "white" }}>Save</h5>
+                    <h5 style={{ marginTop: "4px", color: "white" }}>
+                      {t("Save")}
+                    </h5>
                   </button>
                 </div>
                 <br />
                 <br />
                 <hr />
                 <br />
-                <h5 class="card-title">Service details</h5>
+                <h5 class="card-title">{t("Service details")}</h5>
                 <br />
-                <h6>Service Type:</h6>
+                <h6>{t("Service Type")}:</h6>
                 <h6>{jobType}</h6> <br />
-                <h6>Price:</h6>
+                <h6>{t("Price")}:</h6>
                 <h6>${price}</h6>
                 <br />
                 <hr />
-                <h5 class="card-title">Full Service Description</h5>
+                <h5 class="card-title">{t("Full Service Description")}</h5>
                 <br />
                 <br />
-                <h6>Service Description:</h6>
+                <h6>{t("Service Description")}:</h6>
                 <br />
-                <h6>What you will get:</h6>
+                <h6>{t("What you will get")}:</h6>
                 <h6>{responsibilities}</h6>
                 <br />
               </div>

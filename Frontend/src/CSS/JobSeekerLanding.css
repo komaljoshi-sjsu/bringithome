@@ -64,7 +64,7 @@
 .findbtn
 {
     height: 50px;
-    width: 150px;
+    width: 180px;
     padding: auto;
     border-radius: 10px;
     background-color: #003399;
@@ -86,7 +86,7 @@
 .savebtn
 {
     height: 50px;
-    width: 80px;
+    width: 100px;
     margin-left: 30px;
     padding: auto;
     border-radius: 10px;

@@ -48,7 +48,8 @@ class Employer extends Component {
                  console.log(response)
              })
       alert("Booking status has been updated");
-      window.location.href = '/freelancerHome';
+      this.handleModalClose();
+      // window.location.href = '/freelancerHome';
   }
   componentDidMount() {
       //console.log("here")
@@ -223,7 +224,8 @@ handleModalCloseProfile(){
               </Col>
               <Col>
              <select name="status" value={applicant.status} onChange={(e) => { this.handleChange(e,applicant.myServId)}}  >
-              	<option value="Booked">Accepted</option> 
+                <option>Choose Status</option>
+                <option value="Booked">Accepted</option> 
                 <option value="Cancelled" >Cancelled</option>
             	</select>
               </Col>

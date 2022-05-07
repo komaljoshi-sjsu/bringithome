@@ -4,12 +4,21 @@ import React, { Component } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Link } from 'react-router-dom'
 import logo from '../../images/logo_signin.png'
+import esp from '../../images/esp.png'
+import eng from '../../images/eng.png'
 import '../../CSS/JobSeekerNavbar.css'
+// import { changeLanguage } from 'i18next'
+import { withTranslation } from 'react-i18next';
+import i18n from '../../i18n/config'
+
 
 class JobSeekerNavbar extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      t: this.props.t,
+      i18n: this.props.i18n
+    }
   }
 
   componentDidMount() {
@@ -60,7 +69,7 @@ class JobSeekerNavbar extends Component {
                         color: '#474747',
                       }}
                     >
-                      <h5>Find Jobs</h5>
+                      <h5>{this.state.t('Find Services')}</h5>
                     </Link>
                   </a>
                 </li>
@@ -73,46 +82,28 @@ class JobSeekerNavbar extends Component {
                         color: '#474747',
                       }}
                     >
-                      <h5>Company Reviews</h5>
+                      <h5>{this.state.t('Freelancer Reviews')}</h5>
                     </Link>
                   </a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link">
-                    <Link
-                      to="/findSalaries"
-                      style={{
-                        textDecoration: 'none',
-                        color: '#474747',
-                      }}
-                    >
-                      <h5>Find Salaries</h5>
-                    </Link>
-                  </a>
-                </li>
+                
               </ul>
               <form class="d-flex">
                 <ul
                   class="navbar-nav me-auto mb-2 mb-lg-0"
                   style={{ marginTop: '15px' }}
                 >
+                  
                   <li class="nav-item">
-                    <a class="nav-link">
-                      <Link
-                        to="/resume"
-                        style={{
-                          textDecoration: 'none',
-                          color: '#474747',
-                        }}
-                      >
-                        <h5>Upload your Resume</h5>
-                      </Link>
+                    <a class="nav-link" href="/login">
+                      <h5 style={{ color: 'blue' }}>{this.state.t('Sign In')}</h5>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/login">
-                      <h5 style={{ color: 'blue' }}>Sign in</h5>
-                    </a>
+                    <img src={eng} height="25px" width="25px" onClick={()=>this.state.i18n.changeLanguage('en')}/>
+                  </li>
+                  <li class="nav-item">
+                    <img src={esp} height="25px" width="25px" onClick={()=>this.state.i18n.changeLanguage('es')} style={{marginLeft:'10px'}}/>
                   </li>
                   {/* <li class="nav-item">
                     <h3 style={{ color: 'black' }}>|</h3>
@@ -140,4 +131,4 @@ class JobSeekerNavbar extends Component {
   }
 }
 
-export default JobSeekerNavbar
+export default withTranslation()(JobSeekerNavbar)

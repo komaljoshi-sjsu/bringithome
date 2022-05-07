@@ -17,6 +17,8 @@ import { MdFavorite, MdReviews, MdEmail, MdPhoto } from 'react-icons/md'
 import logo from '../../images/logo_signin.png'
 import '../../CSS/JobSeekerNavbar.css'
 import { logout } from '../../reduxutils/actioncreators/useraction'
+import { withTranslation } from 'react-i18next';
+import { compose } from 'redux'
 
 class CustomerLoggedIn extends Component {
   constructor(props) {
@@ -24,9 +26,10 @@ class CustomerLoggedIn extends Component {
     this.state = {
       showMenu: true,
       userEmail: '',
+      t: this.props.t
     }
   }
-
+  
   componentDidMount() {
     let collection = document.getElementsByClassName('nav-link')
     for (let i = 0; i < collection.length; i++) {
@@ -90,7 +93,7 @@ class CustomerLoggedIn extends Component {
                         color: '#474747',
                       }}
                     >
-                      <h5>Find Services</h5>
+                      <h5>{this.state.t('Find Services')}</h5>
                     </Link>
                   </a>
                 </li>
@@ -103,7 +106,7 @@ class CustomerLoggedIn extends Component {
                         color: '#474747',
                       }}
                     >
-                      <h5>Freelancer Reviews</h5>
+                      <h5>{this.state.t('Freelancer Reviews')}</h5>
                     </Link>
                   </a>
                 </li>
@@ -125,48 +128,13 @@ class CustomerLoggedIn extends Component {
                   class="navbar-nav me-auto mb-2 mb-lg-0"
                   style={{ marginTop: '15px' }}
                 >
-                  <li class="nav-item">
-                    <a class="nav-link">
-                      <Link
-                        to="/messenger"
-                        style={{
-                          textDecoration: 'none',
-                          color: '#474747',
-                        }}
-                      >
-                        <h5
-                          style={{
-                            color: 'black',
-                            marginLeft: '5px',
-                            marginRight: '5px',
-                          }}
-                        >
-                          <BsFillChatLeftTextFill />
-                        </h5>
-                      </Link>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link">
-                      <h5
-                        style={{
-                          color: 'black',
-                          marginLeft: '5px',
-                          marginRight: '5px',
-                        }}
-                      >
-                        <BsFillBellFill />
-                      </h5>
-                    </a>
-                  </li>
-
                   <li class="nav-item dropdown">
                     <a class="nav-link" data-bs-toggle="dropdown">
                       <h5
                         style={{
                           color: 'black',
                           marginLeft: '5px',
-                          marginRight: '5px',
+                          marginRight: '30px',
                         }}
                       >
                         <IoMdPerson />
@@ -191,7 +159,7 @@ class CustomerLoggedIn extends Component {
                       </a>
                       <a class="dropdown-item ditems">
                         <Link
-                          to="/myservices"
+                          to="/savedservices"
                           style={{
                             textDecoration: 'none',
                             color: '#474747',
@@ -237,9 +205,29 @@ class CustomerLoggedIn extends Component {
                       </a>
                     </div>
                   </li>
-
                   <li class="nav-item">
-                    <h3 style={{ color: 'black' }}>|</h3>
+                    <a class="nav-link">
+                      <Link
+                        to="/messenger"
+                        style={{
+                          textDecoration: 'none',
+                          color: '#474747',
+                        }}
+                      >
+                        <h5
+                          style={{
+                            color: 'black',
+                            marginLeft: '5px',
+                            marginRight: '5px',
+                          }}
+                        >
+                          <BsFillChatLeftTextFill />
+                        </h5>
+                      </Link>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <h3 style={{ color: 'black', marginLeft:'30px' }}>|</h3>
                   </li>
                   
                 </ul>
@@ -262,7 +250,7 @@ const mapStateToProps = (state) => ({
   userInfo: state.userInfo,
 })
 
-export default connect(
+export default compose(withTranslation(),connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withRouter(CustomerLoggedIn))
+)) (withRouter(CustomerLoggedIn))

@@ -5,7 +5,47 @@ const bcrypt = require("bcrypt");
 const Services = require("../models/Service");
 const MyServices = require("../models/MyServices");
 
+router.get("/api/completedservices/:userid", (req, res) => {
+    const userId = req.params.userid;
+    MyServices.find({$and:[{userid:userId}], $or:[{status:'Booked'},{status:'cancelled'}]}).then(async(result)=> {
+        
+        let serviceArr = [];
+        console.log('applied serv;',result);
+        for(let i = 0;i<result.length;i++) {
+            let serv = result[i];
+            await Service.find({_id:serv.serviceid}).then(service => {
+                let servc = service[0];
+                
+                let timeAr = serv.time.split(':');
+                let min = timeAr[1];
+                if(timeAr[1].length == 1) {
+                    min = '0'+timeAr[1];
+                }
+                let json = {
+                    _id: serv.serviceid,
+                    serviceName: servc.serviceName,
+                    serviceMode: servc.serviceMode,
+                    freelancer: servc.freelancer,
+                    date: serv.date,
+                    price: servc.price,
+                    time: timeAr[0]+':'+min,
+                    bookingid: serv._id
+                }
+                console.log('result for applied services',json)
+                serviceArr.push(json);
+            })
+        }
+        
+        res.status(200).send(serviceArr);
+    }).catch(err=> {
+        console.log(err);
+        res.status(400).send('Could not get saved services.');
+    })
+    
+});
+
 router.get("/api/appliedServices/:userid", (req, res) => {
+<<<<<<< HEAD
   const userId = req.params.userid;
   MyServices.find({ userid: userId, status: "pending" })
     .then(async (result) => {
@@ -36,6 +76,42 @@ router.get("/api/appliedServices/:userid", (req, res) => {
       }
 
       res.status(200).send(serviceArr);
+=======
+    const userId = req.params.userid;
+    MyServices.find({userid:userId, status:'pending'}).then(async(result)=> {
+        
+        let serviceArr = [];
+        console.log('spplaied serv;',result);
+        for(let i = 0;i<result.length;i++) {
+            let serv = result[i];
+            await Service.find({_id:serv.serviceid}).then(service => {
+                let servc = service[0];
+                
+                let timeAr = serv.time.split(':');
+                let min = timeAr[1];
+                if(timeAr[1].length == 1) {
+                    min = '0'+timeAr[1];
+                }
+                let json = {
+                    _id: servc._id,
+                    serviceName: servc.serviceName,
+                    serviceMode: servc.serviceMode,
+                    freelancer: servc.freelancer,
+                    date: serv.date,
+                    price: servc.price,
+                    time: timeAr[0]+':'+min,
+                    bookingid: serv._id
+                }
+                console.log('result for applied services',json)
+                serviceArr.push(json);
+            })
+        }
+        
+        res.status(200).send(serviceArr);
+    }).catch(err=> {
+        console.log(err);
+        res.status(400).send('Could not get saved services.');
+>>>>>>> a88e763ebaaf6a947f752c50317af7ff564de0b2
     })
     .catch((err) => {
       console.log(err);
@@ -43,17 +119,15 @@ router.get("/api/appliedServices/:userid", (req, res) => {
     });
 });
 router.post("/api/cancelService", (req, res) => {
-  const userId = req.body.userid;
-  const serviceId = req.body.serviceid;
-  console.log(`Request canceling userid ${userId} serviceid ${serviceId}`);
-  MyServices.findOneAndRemove({
-    serviceid: serviceId,
-    userid: userId,
-    status: "pending",
-  })
-    .then((result) => {
-      console.log("result for cancelled service", result);
-      res.status(200).send("Success");
+    const userId = req.body.userid;
+    const serviceId = req.body.serviceid;
+    console.log(`Request canceling userid ${userId} serviceid ${serviceId}`)
+    MyServices.findOneAndUpdate({serviceid:serviceId,userid:userId, status:'pending'},{status:'cancelled'}).then(result=> {
+        console.log('result for cancelled service',result)
+        res.status(200).send('Success');
+    }).catch(err=> {
+        console.log(err);
+        res.status(400).send('Could not cancel the service.');
     })
     .catch((err) => {
       console.log(err);
@@ -214,6 +288,7 @@ router.post("/api/unSaveService", (req, res) => {
 });
 
 router.get("/api/getBookedSlots/:serviceId/:userId", (req, res) => {
+<<<<<<< HEAD
   const userId = req.params.userId;
   const serviceId = req.params.serviceId;
   console.log(`service id is ${serviceId} and user id is ${userId}`);
@@ -237,6 +312,20 @@ router.get("/api/getBookedSlots/:serviceId/:userId", (req, res) => {
       const dateTimeArr = result.map((ele) => {
         let modifiedDate = ele.date.replace(/[/]/g, "-");
         let date = new Date(modifiedDate);
+=======
+    const userId = req.params.userId;
+    const serviceId = req.params.serviceId;
+    console.log(`service id is ${serviceId} and user id is ${userId}`)
+    MyServices.find({$and:[{serviceid:serviceId},{userid:userId}], $or:[{status:'Booked'},{status:'pending'}]}).select('date time -_id').then(result=> {
+        const dateArr = result.map(ele=> {
+            let modifiedDate = (ele.date).replace(/[/]/g,'-');
+            return modifiedDate;
+        })
+        const timeArr = result.map(ele=> {
+            let tim = ele.time.split(':');
+            let hour = parseInt(tim[0]);
+            let min = parseInt(tim[1]);
+>>>>>>> a88e763ebaaf6a947f752c50317af7ff564de0b2
 
         let tim = ele.time.split(":");
         let hour = parseInt(tim[0]);

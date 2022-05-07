@@ -7,6 +7,7 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import {store,persistor} from './reduxutils/store';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './i18n/config';
 
 ReactDOM.render(
   <React.StrictMode>

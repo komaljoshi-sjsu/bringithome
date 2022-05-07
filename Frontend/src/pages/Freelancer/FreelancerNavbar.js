@@ -41,7 +41,14 @@ class FreelancerNavbar extends Component {
       <div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
           <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand">
+            <Link
+                to="/freelancerHome"
+                style={{
+                  textDecoration: 'none',
+                  color: '#474747',
+                }}
+              >
               <img
                 src={logo}
                 alt=""
@@ -49,6 +56,7 @@ class FreelancerNavbar extends Component {
                 height="50"
                 class="d-inline-block align-text-top"
               />
+              </Link>
             </a>
 
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">

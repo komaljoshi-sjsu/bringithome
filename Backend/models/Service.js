@@ -26,6 +26,21 @@ const sSchema = new Schema({
         type:String,
         required:true
     },
+    city: {
+        type:String,
+    },
+    streetAddress: {
+        type:String,
+    },
+    state: {
+        type:String,
+    },
+    zipcode: {
+        type:String,
+    },
+    country: {
+        type:String,
+    },
     availability: {
         type:Object,
         required:true
