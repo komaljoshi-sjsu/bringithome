@@ -45,7 +45,7 @@ router.get("/api/getAllJobSeekers", async (req, res) => {
           }
         })
       }
-      // console.log("customer",final);
+      console.log("All customer for conversation",final);
       res.status(200).json(final);
     });
   } catch (err) {
@@ -56,12 +56,13 @@ router.get("/api/getAllJobSeekers", async (req, res) => {
 
 router.get("/api/getAllFreelancer", async (req, res) => {
   try {
-    MyServices.find({$or : [{status:"pending"} ,{status: "Booked"}]}).then(async (result)=>{
+    MyServices.find({$or : [{status:"pending"} ,{status: "Booked"}]}).populate({path:'serviceid'}).then(async (result)=>{
       let final=[];
       for(let i = 0;i<result.length;i++) {
         let serv = result[i];
-        // await Freelancer.find({_id:serv.freelancerid}).then((cust)=>{
-        await Customer.find({_id:serv.userid}).then((cust)=>{
+        // console.log("Get Freelancer",serv);
+        await Freelancer.find({_id:serv.serviceid.freelancer.freelancerId}).then((cust)=>{
+        // await Customer.find({_id:serv.userid}).then((cust)=>{
           let servc = cust[0];
           let json = {
             label: servc.name,
@@ -72,7 +73,7 @@ router.get("/api/getAllFreelancer", async (req, res) => {
           }
         })
       }
-      // console.log("customer",final);
+      console.log("All freelancer for conversation",final);
       res.status(200).json(final);
     });
   } catch (err) {
