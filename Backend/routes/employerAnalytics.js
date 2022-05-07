@@ -14,8 +14,9 @@ router.get('/jobPosted', async (req, res) => {
      { $match: {  "freelancer.freelancerId":employerId} },
       { $group: {
             _id:  "$servicePostedMonth", 
-            numberofbookings: {$sum: 1} ,
-        }}
+            postedServices: {$sum: 1} ,
+        }},
+        { $sort : { borough : 1, _id: 1 } }
     ],
     function( err, data ) {
       if ( err )
@@ -33,14 +34,18 @@ router.get('/jobPosted', async (req, res) => {
 router.get('/applicantsDetail', async (req, res) => {
     try {
     let employerId=req.query.employerId;
-    let serArr=[];
-  // Service.find({ "freelancer.freelancerId":employerId}).then(async (results)=>{
-  //   results.forEach(element =>{
-  //     serArr.push(element._id);
-  // })
-  // console.log(serArr);
-  await MyServices.aggregate([
-        // { $match: { serviceid : "$serArr" } },
+    var serArr=[];
+
+    await MyServices.aggregate([
+      {
+        $lookup: {
+            from: "Service",
+            localField: "freelancer.freelancerId",
+            foreignField: employerId,
+            as: "id"
+        }
+      },
+        { $match: {$or : [{status:"pending"} ,{status: "Booked"},{status:"Cancelled"}]} },
         {$group: {
             _id: "$status", 
             count: {$sum: 1} ,
@@ -49,7 +54,7 @@ router.get('/applicantsDetail', async (req, res) => {
     function( err, data ) {
       if ( err )
         throw err;
-    // console.log( JSON.stringify( data, undefined, 2 ) );
+    console.log( "Customer booking Status", JSON.stringify( data, undefined, 2 ) );
     res.status(200).send(JSON.stringify( data, undefined, 2 ));
     }
     );
@@ -59,5 +64,4 @@ router.get('/applicantsDetail', async (req, res) => {
     return res.status(400).send("Error while fetching service");
 }
 });
-
 module.exports = router

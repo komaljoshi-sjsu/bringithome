@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Bar } from "react-chartjs-2";
+import { Line, Bar } from "react-chartjs-2";
 import axios from "axios";
 import backendServer from '../../webConfig';
 import FreelancerNavbar from './FreelancerNavbar'
@@ -35,7 +35,7 @@ const ReportEmployer = () => {
   const barChartOne = async () => {
     let jobCnt = [];
     let jobTitle = [];
-    console.log("FE employerid: ", employerId);
+    // console.log("FE employerid: ", employerId);
    await axios
       .get(`${backendServer}/jobPosted`,{
         params: {
@@ -43,18 +43,19 @@ const ReportEmployer = () => {
         }
       })
       .then(res => {
-        console.log(res);
+        // console.log(res);
         for (const dataObj of res.data) {
-          jobCnt.push(parseInt(dataObj.numberofbookings));
+          jobCnt.push(parseInt(dataObj.postedServices));
           jobTitle.push(dataObj._id);
         }
         setChartOneData({
           labels: jobTitle,
           datasets: [
             {
-              label: "services posted",
+              label: "services posted count",
               data: jobCnt,
               backgroundColor: ["Orange"],
+              borderColor: ["Orange"],
               borderWidth: 4,
               barThickness:70
             }]
@@ -67,75 +68,115 @@ const ReportEmployer = () => {
   };
 
   const barChartTwo = async () => {
-    let appApppliedCnt = [];
-    let appRejectedCnt = [];
-    let appAcceptedCnt = [];
-    let compName =[];
+    let statusCnt = [];
+    let status = [];
+    // console.log("FE employerid: ", employerId);
    await axios
-      .get(`${backendServer}/applicantsDetail`, {
+      .get(`${backendServer}/applicantsDetail`,{
         params: {
           employerId : employerId
         }
       })
       .then(res => {
-        console.log(res);
+        console.log("Two",res);
         for (const dataObj of res.data) {
+          statusCnt.push(parseInt(dataObj.count));
           if(dataObj._id.toLowerCase() === "pending"){
-            appApppliedCnt.push(parseInt(dataObj.count));
-            console.log(appApppliedCnt);
-            // compAppliedName.push(dataObj.companyName);
+            status.push("Applied");
+          }else if(dataObj._id.toLowerCase() === "booked"){
+            status.push("Accepted");
+          }else if(dataObj._id.toLowerCase() === "cancelled"){
+            status.push("Cancelled");
           }
-          else if(dataObj._id.toLowerCase() === "cancelled"){
-            appRejectedCnt.push(parseInt(dataObj.count));
-            console.log(appRejectedCnt);
-            // compRejectedName.push(dataObj.companyName);
-          }
-          else if(dataObj._id.toLowerCase() === "booked"){
-            appAcceptedCnt.push(parseInt(dataObj.count));
-            console.log(appAcceptedCnt);
-            // compAcceptedName.push(dataObj.companyName);
-          }
-          else {
-            appApppliedCnt.push(0);
-            appRejectedCnt.push(0);
-            appAcceptedCnt.push(0);
-          }
-         if(!compName.includes(dataObj._id)){
-          compName.push(dataObj._id);
-         } 
         }
         setChartTwoData({
-          labels: compName,
+          labels: status,
           datasets: [
             {
-              label: "customers applied",
-              data: appApppliedCnt,
-              backgroundColor: ["Blue"],
+              label: "count per ",
+              data: statusCnt,
+              backgroundColor: ["skyblue"],
+              borderColor: ["Blue"],
               borderWidth: 4,
               barThickness:70
-            },
-            {
-              label: "booking accepted",
-              data: appAcceptedCnt,
-              backgroundColor: ["Cyan"],
-              borderWidth: 4,
-              barThickness:70
-            },
-            {
-              label: "booking cancelled",
-              data: appRejectedCnt,
-              backgroundColor: ["rgb(255, 99, 132)"],
-              borderWidth: 4,
-              barThickness:70
-            }
-          ]
+            }]
         });
       })
       .catch(err => {
         console.log(err);
       });
-    // console.log(jobCnt, empName);
+    // console.log(statusCnt, empName);
   };
+
+  // const barChartTwo = async () => {
+  //   let appApppliedCnt = [];
+  //   let appRejectedCnt = [];
+  //   let appAcceptedCnt = [];
+  //   let compName =[];
+  //  await axios
+  //     .get(`${backendServer}/applicantsDetail`, {
+  //       params: {
+  //         employerId : employerId
+  //       }
+  //     })
+  //     .then(res => {
+  //       // console.log("chart",res);
+  //       compName.push("Applied");
+  //       compName.push("Accepted");
+  //       compName.push("Cancelled");
+        
+  //       for (const dataObj of res.data) {
+  //         if(dataObj._id.toLowerCase() === "pending"){
+  //           appApppliedCnt.push(parseInt(dataObj.count));
+  //         }
+  //         else if(dataObj._id.toLowerCase() === "booked"){
+  //           appAcceptedCnt.push(parseInt(dataObj.count));
+  //         }
+  //         else if(dataObj._id.toLowerCase() === "cancelled"){
+  //           appRejectedCnt.push(parseInt(dataObj.count));
+  //         }else {
+  //           appApppliedCnt.push(0);
+  //           appRejectedCnt.push(0);
+  //           appAcceptedCnt.push(0);
+  //         }
+  //       }
+  //       // console.log("count",appApppliedCnt);
+  //       // console.log("count2",appAcceptedCnt);
+  //       // console.log("count3",appRejectedCnt);
+  //       // console.log(compName)
+
+  //      setChartTwoData({
+  //         labels: compName,
+  //         datasets: [
+  //           {
+  //             label: "customers applied",
+  //             data: appApppliedCnt,
+  //             backgroundColor: ["Blue"],
+  //             borderWidth: 4,
+  //             barThickness:70
+  //           },
+  //           {
+  //             label: "booking accepted",
+  //             data: appAcceptedCnt,
+  //             backgroundColor: ["Cyan"],
+  //             borderWidth: 4,
+  //             barThickness:70
+  //           },
+  //           {
+  //             label: "booking cancelled",
+  //             data: appRejectedCnt,
+  //             backgroundColor: ["rgb(255, 99, 132)"],
+  //             borderWidth: 4,
+  //             barThickness:70
+  //           }
+  //         ]
+  //       });
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  //   console.log("data",chartTwoData);
+  // };
 
   useEffect(() => {
     barChartOne();
@@ -148,7 +189,7 @@ const ReportEmployer = () => {
     <div className="App">
       <h1>SERVICES POSTED MONTHLY</h1>
       <div>
-        <Bar
+        <Line
           data={chartOneData}
           options={{
             responsive: true,
