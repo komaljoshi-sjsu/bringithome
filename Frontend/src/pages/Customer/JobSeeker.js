@@ -8,6 +8,8 @@ import TextField from "@mui/material/TextField";
 import { RatingView } from "react-simple-star-rating";
 import { makeStyles } from "@material-ui/styles";
 import Autocomplete from "@mui/material/Autocomplete";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -30,6 +32,7 @@ function JobSeekerLandingPage(props) {
   const [whereVal, handleWhereVal] = useState("");
   const [whatSearch, handleWhatSearch] = useState([]);
   const [whereSearch, handlewhereSearch] = useState([]);
+  const [whatWhereSearch, setWhatWhereSearch] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [findJobs, handleFindJobs] = useState({});
   const [jobType, setJobType] = useState("");
@@ -38,6 +41,13 @@ function JobSeekerLandingPage(props) {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [zip, setZip] = useState("");
+  const [openWhat, setOpenWhat] = React.useState(false);
+  const [openWhere, setOpenWhere] = React.useState(false);
+
+  const [whatOptions, setWhatOptions] = React.useState([]);
+  const [whereOptions, setWhereOptions] = React.useState([]);
+  const loadingWhat = openWhat;
+  const loadingWhere = openWhere;
   const [price, setPrice] = useState("");
   const [responsibilities, setResponsibilities] = useState("");
   const [rating, setRating] = useState(0);
@@ -64,6 +74,7 @@ function JobSeekerLandingPage(props) {
     };
     redirectValFn(<Redirect to={toVal} />);
   };
+
   const handleCardClick = (e, job) => {
     setJobId(job._id);
     setJobType(job.serviceCategory);
@@ -99,8 +110,10 @@ function JobSeekerLandingPage(props) {
   };
   useEffect(() => {
     console.log("I am here");
+    setWhatOptions([]);
+    setWhereOptions([]);
     axios
-      .get("http://localhost:5000/customer/home/" + currentPage + "/" + userid)
+      .get("http://localhost:8000/customer/home/" + currentPage + "/" + userid)
       .then((res) => {
         console.log("Home page data:", res);
         if (res.status == 200) {
@@ -134,6 +147,33 @@ function JobSeekerLandingPage(props) {
       });
   }, [currentPage]);
 
+  const getWhatServices = (what) => {
+    handleWhatVal(what);
+    const data = { where: `${whereVal}`, what: what };
+    axios
+      .post("http://localhost:8000/api/allServicesByWhat/", data)
+      .then((res) => {
+        console.log("Home page data:", res);
+        if (res.status == 200) {
+          let services = res.data;
+          setWhatOptions(services);
+        }
+      });
+  };
+
+  const getWhereServices = (where) => {
+    handleWhereVal(where);
+    const data = { where: where, what: `${whatVal}` };
+    axios
+      .post("http://localhost:8000/api/allServicesByWhere/", data)
+      .then((res) => {
+        console.log("Home page data:", res);
+        if (res.status == 200) {
+          let services = res.data;
+          setWhereOptions(services);
+        }
+      });
+  };
   const [showBooking, setShowBooking] = useState(false);
   return (
     <div>
@@ -151,34 +191,47 @@ function JobSeekerLandingPage(props) {
             <div class="row">
               <div class="col-4">
                 <div class="input-group mb-3">
-                  <button
-                    class="btn noLeftborder"
-                    type="button"
-                    id="button-addon1"
-                    disabled
-                  >
-                    <h6 style={{ marginTop: "10px" }}>What</h6>
-                  </button>
                   <Autocomplete
-                    disablePortal
-                    id="free-solo-demo"
-                    freeSolo
-                    sx={{
-                      width: 180,
-                      borderBottom: "none",
-                      borderWidth: "0 0 0 0",
+                    id="asynchronous-demo"
+                    style={{ width: 300 }}
+                    open={openWhat}
+                    onOpen={() => {
+                      setOpenWhat(true);
                     }}
-                    value={whatVal}
-                    onChange={handleWhatVal.bind(this)}
-                    options={whatSearch.map((option) => option)}
-                    getOptionLabel={(option) => option}
+                    onClose={() => {
+                      setOpenWhat(false);
+                    }}
+                    getOptionSelected={(option, value) =>
+                      option.serviceName === value.serviceName
+                    }
+                    getOptionLabel={(option) => option.serviceName}
+                    options={whatOptions}
+                    loading={loadingWhat}
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        sx={{ width: 180, borderBottom: "none" }}
-                        //class="whatSearch2"
-                        onChange={handleWhatVal.bind(this)}
-                        value={whatVal}
+                        label="What"
+                        variant="outlined"
+                        onChange={(ev) => {
+                          // dont fire API if the user delete or not entered anything
+                          if (
+                            ev.target.value !== "" ||
+                            ev.target.value !== null
+                          ) {
+                            getWhatServices(ev.target.value);
+                          }
+                        }}
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <React.Fragment>
+                              {loadingWhat ? (
+                                <CircularProgress color="inherit" size={20} />
+                              ) : null}
+                              {params.InputProps.endAdornment}
+                            </React.Fragment>
+                          ),
+                        }}
                       />
                     )}
                   />
@@ -197,29 +250,47 @@ function JobSeekerLandingPage(props) {
               </div>
               <div class="col-4">
                 <div class="input-group mb-3">
-                  <button
-                    class="btn noLeftborder"
-                    type="button"
-                    id="button-addon1"
-                    disabled
-                  >
-                    <h6 style={{ marginTop: "10px" }}>Where</h6>
-                  </button>
                   <Autocomplete
-                    id="free-solo-demo"
-                    freeSolo
-                    //sx={{ width: 180, borderBottom: 'none' }}
-                    value={whereVal}
-                    onChange={handleWhereVal}
-                    options={whereSearch.map((option) => option)}
-                    getOptionLabel={(option) => option}
+                    id="asynchronous-demo"
+                    style={{ width: 300 }}
+                    open={openWhere}
+                    onOpen={() => {
+                      setOpenWhere(true);
+                    }}
+                    onClose={() => {
+                      setOpenWhere(false);
+                    }}
+                    getOptionSelected={(option, value) =>
+                      option.serviceName === value.serviceName
+                    }
+                    getOptionLabel={(option) => option.serviceName}
+                    options={whereOptions}
+                    loading={loadingWhere}
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        sx={{ width: 180, borderBottom: "none" }}
-                        //class="whatSearch2"
-                        value={whereVal}
-                        onChange={handleWhereVal}
+                        label="Where"
+                        variant="outlined"
+                        onChange={(ev) => {
+                          // dont fire API if the user delete or not entered anything
+                          if (
+                            ev.target.value !== "" ||
+                            ev.target.value !== null
+                          ) {
+                            getWhereServices(ev.target.value);
+                          }
+                        }}
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <React.Fragment>
+                              {loadingWhere ? (
+                                <CircularProgress color="inherit" size={20} />
+                              ) : null}
+                              {params.InputProps.endAdornment}
+                            </React.Fragment>
+                          ),
+                        }}
                       />
                     )}
                   />
@@ -230,11 +301,14 @@ function JobSeekerLandingPage(props) {
                     disabled
                   >
                     <i
-                      class="bi bi-geo-alt"
+                      class="bi bi-search"
                       style={{ width: "32px", height: "32px" }}
                     ></i>
                   </button>
                 </div>
+              </div>
+              <div class="col-4">
+                <div class="input-group mb-3"></div>
               </div>
               <div class="col-1">
                 <button

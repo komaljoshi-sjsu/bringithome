@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import axios from "axios";
-import backendServer from '../webConfig';
+import backendServer from "../webConfig";
 
 const ServiceUpcomingHistory = (props) => {
   const { setState } = props;
@@ -10,14 +10,12 @@ const ServiceUpcomingHistory = (props) => {
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
     let user = JSON.parse(userInfo).id;
-    axios
-      .get(`http://localhost:8000/api/appliedServices/${user}`)
-      .then((res) => {
-        if (res.status === 200) {
-          setState((state) => ({ ...state, serviceUpcomingList: res.data }));
-        }
-      });
-  }, setState.serviceUpcomingList);
+    axios.get(`http://localhost:8000/api/allServices/${user}`).then((res) => {
+      if (res.status === 200) {
+        setState((state) => ({ ...state, serviceUpcomingList: res.data }));
+      }
+    });
+  }, props.serviceUpcomingList);
 
   const handleService = () => {
     props.actionProvider.serviceDetailHandler();
@@ -28,7 +26,7 @@ const ServiceUpcomingHistory = (props) => {
         <div>
           {props.serviceUpcomingList.map((s) => (
             <Chip
-              label={s.serviceName}
+              label={s.serviceid.serviceName}
               color="primary"
               onClick={(option) => handleService(option)}
             />

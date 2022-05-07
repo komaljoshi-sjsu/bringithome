@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import axios from "axios";
-import backendServer from '../webConfig';
+import backendServer from "../webConfig";
 
 const ServiceHistory = (props) => {
   const { setState } = props;
@@ -10,13 +10,11 @@ const ServiceHistory = (props) => {
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
     let user = JSON.parse(userInfo).id;
-    axios
-      .get(`http://localhost:8000/api/appliedServices/${user}`)
-      .then((res) => {
-        if (res.status === 200) {
-          setState((state) => ({ ...state, serviceHistoryList: res.data }));
-        }
-      });
+    axios.get(`http://localhost:8000/api/allServices/${user}`).then((res) => {
+      if (res.status === 200) {
+        setState((state) => ({ ...state, serviceHistoryList: res.data }));
+      }
+    });
   }, props.serviceHistoryList);
 
   const handleService = (service) => {
@@ -28,13 +26,15 @@ const ServiceHistory = (props) => {
     <Stack spacing={1} alignItems="center">
       <Stack direction="row" spacing={1}>
         <div>
-          {props.serviceHistoryList.map((s) => (
-            <Chip
-              label={s.serviceName}
-              color="primary"
-              onClick={() => handleService(s)}
-            />
-          ))}
+          {props.serviceHistoryList
+            .filter((s) => s.status === "completed")
+            .map((s) => (
+              <Chip
+                label={s.serviceName}
+                color="primary"
+                onClick={() => handleService(s)}
+              />
+            ))}
         </div>
       </Stack>
     </Stack>
