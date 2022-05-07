@@ -14,13 +14,14 @@ const SelectedService = (props) => {
   const [service, setService] = "";
   const [redirectVal, redirectValFn] = useState(null);
   useEffect(() => {
-    axios
-      .get(`${backendServer}/api/getBookedSlots/1/cust1@test.com`)
-      .then((res) => {
-        if (res.status === 200) {
-          setService(res.data);
-        }
-      });
+    let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
+    let user = JSON.parse(userInfo).id;
+
+    axios.get(`${backendServer}/api/getBookedSlots/1/${user}`).then((res) => {
+      if (res.status === 200) {
+        setService(res.data);
+      }
+    });
   }, props.serviceDetail);
 
   const handleCancel = () => {
@@ -38,6 +39,7 @@ const SelectedService = (props) => {
           ...prev,
           messages: [...prev.messages, message],
         }));
+        props.actionProvider.helloHandler();
       }
     });
   };

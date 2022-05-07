@@ -20,6 +20,7 @@ import backendServer from "../../webConfig";
 import ErrorMsg from "../Error/ErrorMsg";
 import Booking from "./Booking";
 import config from "../../chatbot/config.js";
+//import { getConfig } from "../../chatbot/getConfig.js";
 import Chatbot from "react-chatbot-kit";
 import "react-chatbot-kit/build/main.css";
 import MessageParser from "../../chatbot/MessageParser.js";
@@ -60,7 +61,7 @@ function JobSeekerLandingPage(props) {
   const [companyId, setCompanyId] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [redirectVal, redirectValFn] = useState(null);
-
+  const [show, toggleShow] = useState(false);
   const email = useSelector((state) => state.userInfo.email);
   const accountType = useSelector((state) => state.userInfo.accountType);
   const userid = useSelector((state) => state.userInfo.id);
@@ -147,8 +148,20 @@ function JobSeekerLandingPage(props) {
           }
         }
       });
-  }, [currentPage]);
+    /*const handleOutsideClick = (e) => {
+        // simple implementation, should be made more robust.
+        if (!e.currentTarget.classList.includes("react-chatbot-kit")) {
+          toggleShow(false);
+        }
+      };
 
+      window.addEventListener("click", handleOutsideClick);
+
+      return () => {
+        window.removeEventListener("click", handleOutsideClick);
+      };*/
+  }, [currentPage]);
+  const onClick = () => toggleShow(false);
   const getWhatServices = (what) => {
     handleWhatVal(what);
     const data = { where: `${whereVal}`, what: what };
@@ -191,7 +204,7 @@ function JobSeekerLandingPage(props) {
           <div class="col-2"></div>
           <div class="col-9">
             <div class="row">
-              <div class="col-4">
+              <div class="col-3">
                 <div class="input-group mb-3">
                   <Autocomplete
                     id="asynchronous-demo"
@@ -237,20 +250,9 @@ function JobSeekerLandingPage(props) {
                       />
                     )}
                   />
-                  <button
-                    class="btn noRightborder"
-                    type="button"
-                    id="button-addon1"
-                    disabled
-                  >
-                    <i
-                      class="bi bi-search"
-                      style={{ width: "32px", height: "32px" }}
-                    ></i>
-                  </button>
                 </div>
               </div>
-              <div class="col-4">
+              <div class="col-3">
                 <div class="input-group mb-3">
                   <Autocomplete
                     id="asynchronous-demo"
@@ -296,20 +298,9 @@ function JobSeekerLandingPage(props) {
                       />
                     )}
                   />
-                  <button
-                    class="btn noRightborder"
-                    type="button"
-                    id="button-addon1"
-                    disabled
-                  >
-                    <i
-                      class="bi bi-search"
-                      style={{ width: "32px", height: "32px" }}
-                    ></i>
-                  </button>
                 </div>
               </div>
-              <div class="col-4">
+              <div class="col-3">
                 <div class="input-group mb-3"></div>
               </div>
               <div class="col-1">
@@ -475,6 +466,13 @@ function JobSeekerLandingPage(props) {
             </ul>
           </nav>
         </div>
+      </div>
+      <div className="appChatbotContainer_3u5t">
+        <Chatbot
+          config={config}
+          messageParser={MessageParser}
+          actionProvider={ActionProvider}
+        />
       </div>
     </div>
   );

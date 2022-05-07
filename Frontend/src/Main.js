@@ -74,14 +74,8 @@ class Main extends Component {
         <Route path="/booking" render={(props) => <Booking {...props} />} />
         {/* <Route path="/findSalByTitle/:id" component={FindSalByTitle} /> */}
         <Route path="/findSalByTitle/:jobTitle" component={FindSalByTitle} />
-        <div className="appChatbotContainer_3u5t">
-          <Chatbot
-            config={config}
-            messageParser={MessageParser}
-            actionProvider={ActionProvider}
-          />
-        </div>
-        <Route path="/messenger" component={Messenger}/>
+
+        <Route path="/messenger" component={Messenger} />
       </div>
     );
   }
