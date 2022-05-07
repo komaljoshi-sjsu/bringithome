@@ -6,13 +6,8 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-
+import backendServer from "../webConfig";
 import { Redirect } from "react-router";
-// const SelectedService = (props) => {
-//   const { setState } = props;
-//   const [redirectVal, redirectValFn] = useState(null);
-
-import backendServer from '../webConfig';
 
 const SelectedService = (props) => {
   const { setState } = props;
@@ -28,7 +23,6 @@ const SelectedService = (props) => {
       });
   }, props.serviceDetail);
 
-
   const handleCancel = () => {
     let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
     let user = JSON.parse(userInfo).id;
@@ -38,7 +32,7 @@ const SelectedService = (props) => {
     axios.post(`http://localhost:8000/api/cancelService/`, data).then((res) => {
       if (res.status === 200) {
         const message = props.actionProvider.createChatBotMessage(
-          `Service ${props.serviceDetail.serviceName} cancelled successfully`
+          `Your service for ${props.serviceDetail.serviceName} cancelled successfully`
         );
         setState((prev) => ({
           ...prev,
@@ -48,8 +42,8 @@ const SelectedService = (props) => {
     });
   };
 
-  let handleChat = () => {
-    //return redirectValFn(<Redirect to="/messenger" />);
+  const handleChat = () => {
+    return redirectValFn(<Redirect to="/messenger" />);
   };
   return (
     <>
@@ -68,7 +62,7 @@ const SelectedService = (props) => {
           <Button size="small" onClick={() => handleCancel()}>
             Cancel
           </Button>
-          <Button size="small" onClick={handleChat()}>
+          <Button size="small" onClick={() => handleChat()}>
             Chat
           </Button>
         </CardActions>

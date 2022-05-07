@@ -8,6 +8,8 @@ import TextField from "@mui/material/TextField";
 import { RatingView } from "react-simple-star-rating";
 import { makeStyles } from "@material-ui/styles";
 import Autocomplete from "@mui/material/Autocomplete";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -32,6 +34,7 @@ function JobSeekerLandingPage(props) {
   const [whereVal, handleWhereVal] = useState("");
   const [whatSearch, handleWhatSearch] = useState([]);
   const [whereSearch, handlewhereSearch] = useState([]);
+  const [whatWhereSearch, setWhatWhereSearch] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [findJobs, handleFindJobs] = useState({});
   const [jobType, setJobType] = useState("");
@@ -40,6 +43,13 @@ function JobSeekerLandingPage(props) {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [zip, setZip] = useState("");
+  const [openWhat, setOpenWhat] = React.useState(false);
+  const [openWhere, setOpenWhere] = React.useState(false);
+
+  const [whatOptions, setWhatOptions] = React.useState([]);
+  const [whereOptions, setWhereOptions] = React.useState([]);
+  const loadingWhat = openWhat;
+  const loadingWhere = openWhere;
   const [price, setPrice] = useState("");
   const [responsibilities, setResponsibilities] = useState("");
   const [rating, setRating] = useState(0);
@@ -66,6 +76,7 @@ function JobSeekerLandingPage(props) {
     };
     redirectValFn(<Redirect to={toVal} />);
   };
+
   const handleCardClick = (e, job) => {
     setJobId(job._id);
     setJobType(job.serviceCategory);
@@ -101,8 +112,10 @@ function JobSeekerLandingPage(props) {
   };
   useEffect(() => {
     console.log("I am here");
+    setWhatOptions([]);
+    setWhereOptions([]);
     axios
-      .get("http://localhost:5000/customer/home/" + currentPage + "/" + userid)
+      .get("http://localhost:8000/customer/home/" + currentPage + "/" + userid)
       .then((res) => {
         console.log("Home page data:", res);
         if (res.status == 200) {
@@ -136,9 +149,36 @@ function JobSeekerLandingPage(props) {
       });
   }, [currentPage]);
 
+  const getWhatServices = (what) => {
+    handleWhatVal(what);
+    const data = { where: `${whereVal}`, what: what };
+    axios
+      .post("http://localhost:8000/api/allServicesByWhat/", data)
+      .then((res) => {
+        console.log("Home page data:", res);
+        if (res.status == 200) {
+          let services = res.data;
+          setWhatOptions(services);
+        }
+      });
+  };
+
+  const getWhereServices = (where) => {
+    handleWhereVal(where);
+    const data = { where: where, what: `${whatVal}` };
+    axios
+      .post("http://localhost:8000/api/allServicesByWhere/", data)
+      .then((res) => {
+        console.log("Home page data:", res);
+        if (res.status == 200) {
+          let services = res.data;
+          setWhereOptions(services);
+        }
+      });
+  };
   const [showBooking, setShowBooking] = useState(false);
   return (
-    <div className='container-full'>
+    <div className="container-full">
       <ErrorMsg err={errMsg}></ErrorMsg>
       {redirectVal}
       {email !== "" && accountType === "Customer" ? (
@@ -153,34 +193,47 @@ function JobSeekerLandingPage(props) {
             <div class="row">
               <div class="col-4">
                 <div class="input-group mb-3">
-                  <button
-                    class="btn noLeftborder"
-                    type="button"
-                    id="button-addon1"
-                    disabled
-                  >
-                    <h6 style={{ marginTop: "10px" }}>{t('What')}</h6>
-                  </button>
                   <Autocomplete
-                    disablePortal
-                    id="free-solo-demo"
-                    freeSolo
-                    sx={{
-                      width: 180,
-                      borderBottom: "none",
-                      borderWidth: "0 0 0 0",
+                    id="asynchronous-demo"
+                    style={{ width: 300 }}
+                    open={openWhat}
+                    onOpen={() => {
+                      setOpenWhat(true);
                     }}
-                    value={whatVal}
-                    onChange={handleWhatVal.bind(this)}
-                    options={whatSearch.map((option) => option)}
-                    getOptionLabel={(option) => option}
+                    onClose={() => {
+                      setOpenWhat(false);
+                    }}
+                    getOptionSelected={(option, value) =>
+                      option.serviceName === value.serviceName
+                    }
+                    getOptionLabel={(option) => option.serviceName}
+                    options={whatOptions}
+                    loading={loadingWhat}
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        sx={{ width: 180, borderBottom: "none" }}
-                        //class="whatSearch2"
-                        onChange={handleWhatVal.bind(this)}
-                        value={whatVal}
+                        label="What"
+                        variant="outlined"
+                        onChange={(ev) => {
+                          // dont fire API if the user delete or not entered anything
+                          if (
+                            ev.target.value !== "" ||
+                            ev.target.value !== null
+                          ) {
+                            getWhatServices(ev.target.value);
+                          }
+                        }}
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <React.Fragment>
+                              {loadingWhat ? (
+                                <CircularProgress color="inherit" size={20} />
+                              ) : null}
+                              {params.InputProps.endAdornment}
+                            </React.Fragment>
+                          ),
+                        }}
                       />
                     )}
                   />
@@ -199,29 +252,47 @@ function JobSeekerLandingPage(props) {
               </div>
               <div class="col-4">
                 <div class="input-group mb-3">
-                  <button
-                    class="btn noLeftborder"
-                    type="button"
-                    id="button-addon1"
-                    disabled
-                  >
-                    <h6 style={{ marginTop: "10px" }}>{t('Where')}</h6>
-                  </button>
                   <Autocomplete
-                    id="free-solo-demo"
-                    freeSolo
-                    //sx={{ width: 180, borderBottom: 'none' }}
-                    value={whereVal}
-                    onChange={handleWhereVal}
-                    options={whereSearch.map((option) => option)}
-                    getOptionLabel={(option) => option}
+                    id="asynchronous-demo"
+                    style={{ width: 300 }}
+                    open={openWhere}
+                    onOpen={() => {
+                      setOpenWhere(true);
+                    }}
+                    onClose={() => {
+                      setOpenWhere(false);
+                    }}
+                    getOptionSelected={(option, value) =>
+                      option.serviceName === value.serviceName
+                    }
+                    getOptionLabel={(option) => option.serviceName}
+                    options={whereOptions}
+                    loading={loadingWhere}
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        sx={{ width: 180, borderBottom: "none" }}
-                        //class="whatSearch2"
-                        value={whereVal}
-                        onChange={handleWhereVal}
+                        label="Where"
+                        variant="outlined"
+                        onChange={(ev) => {
+                          // dont fire API if the user delete or not entered anything
+                          if (
+                            ev.target.value !== "" ||
+                            ev.target.value !== null
+                          ) {
+                            getWhereServices(ev.target.value);
+                          }
+                        }}
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <React.Fragment>
+                              {loadingWhere ? (
+                                <CircularProgress color="inherit" size={20} />
+                              ) : null}
+                              {params.InputProps.endAdornment}
+                            </React.Fragment>
+                          ),
+                        }}
                       />
                     )}
                   />
@@ -232,11 +303,14 @@ function JobSeekerLandingPage(props) {
                     disabled
                   >
                     <i
-                      class="bi bi-geo-alt"
+                      class="bi bi-search"
                       style={{ width: "32px", height: "32px" }}
                     ></i>
                   </button>
                 </div>
+              </div>
+              <div class="col-4">
+                <div class="input-group mb-3"></div>
               </div>
               <div class="col-1">
                 <button
@@ -245,7 +319,7 @@ function JobSeekerLandingPage(props) {
                   onClick={handleFindJobs.bind(this)}
                 >
                   <h5 style={{ marginTop: "4px", color: "white" }}>
-                    {t('Find Services')}
+                    {t("Find Services")}
                   </h5>
                 </button>
               </div>
@@ -255,7 +329,7 @@ function JobSeekerLandingPage(props) {
 
         <div class="row" style={{ marginTop: "10px" }}>
           <div class="col-4"></div>
-          
+
           <div class="col-4"></div>
         </div>
       </div>
@@ -267,11 +341,11 @@ function JobSeekerLandingPage(props) {
             <div class="row">
               <div class="col-3">
                 <h3 class="headinghoverUnderline" style={{ color: "#003399" }}>
-                  <span style={{ color: "#003399" }}>{t('Service Feed')} </span>
+                  <span style={{ color: "#003399" }}>{t("Service Feed")} </span>
                 </h3>
               </div>
               <div class="col-4">
-                <h3 class="headinghoverUnderline">{t('Recent Searches')}</h3>
+                <h3 class="headinghoverUnderline">{t("Recent Searches")}</h3>
               </div>
             </div>
           </div>
@@ -289,7 +363,7 @@ function JobSeekerLandingPage(props) {
             {/* <h4 style={{ marginTop: '10px' }}>
               {month} {day}, {year}
             </h4> */}
-            {t('Services based on your searches')}
+            {t("Services based on your searches")}
             {jobs.map((job) => (
               <div
                 class="card cardStyle2"
@@ -297,7 +371,9 @@ function JobSeekerLandingPage(props) {
                 onClick={(e) => handleCardClick(e, job)}
               >
                 <div class="card-body">
-                  <h4 class="card-title">{job.serviceCategory} - {job.serviceName}</h4>
+                  <h4 class="card-title">
+                    {job.serviceCategory} - {job.serviceName}
+                  </h4>
                   <h6 class="card-title">{job.freelancer.name}</h6>
                   {/* <h6 class="card-title">
                     {job.city}, {job.state}, {job.zip}
@@ -305,7 +381,11 @@ function JobSeekerLandingPage(props) {
                   <h6 class="card-title">$ {job.price}</h6>
                   <br />
                   <br />
-                  <p><small class="card-text">Posted On: {job.servicePostedDate}</small></p>
+                  <p>
+                    <small class="card-text">
+                      Posted On: {job.servicePostedDate}
+                    </small>
+                  </p>
                 </div>
               </div>
             ))}
@@ -339,7 +419,7 @@ function JobSeekerLandingPage(props) {
                     id={jobId}
                   >
                     <h5 style={{ marginTop: "4px", color: "white" }}>
-                      {t('Request Service')}
+                      {t("Request Service")}
                     </h5>
                   </button>
                 </div>
@@ -350,27 +430,29 @@ function JobSeekerLandingPage(props) {
                     id={companyId}
                     onClick={() => handleSaveJob(jobId)}
                   >
-                    <h5 style={{ marginTop: "4px", color: "white" }}>{t('Save')}</h5>
+                    <h5 style={{ marginTop: "4px", color: "white" }}>
+                      {t("Save")}
+                    </h5>
                   </button>
                 </div>
                 <br />
                 <br />
                 <hr />
                 <br />
-                <h5 class="card-title">{t('Service details')}</h5>
+                <h5 class="card-title">{t("Service details")}</h5>
                 <br />
-                <h6>{t('Service Type')}:</h6>
+                <h6>{t("Service Type")}:</h6>
                 <h6>{jobType}</h6> <br />
-                <h6>{t('Price')}:</h6>
+                <h6>{t("Price")}:</h6>
                 <h6>${price}</h6>
                 <br />
                 <hr />
-                <h5 class="card-title">{t('Full Service Description')}</h5>
+                <h5 class="card-title">{t("Full Service Description")}</h5>
                 <br />
                 <br />
-                <h6>{t('Service Description')}:</h6>
+                <h6>{t("Service Description")}:</h6>
                 <br />
-                <h6>{t('What you will get')}:</h6>
+                <h6>{t("What you will get")}:</h6>
                 <h6>{responsibilities}</h6>
                 <br />
               </div>
