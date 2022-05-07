@@ -161,7 +161,7 @@ function JobSeekerLandingPage(props) {
         window.removeEventListener("click", handleOutsideClick);
       };*/
   }, [currentPage]);
-  const onClick = () => toggleShow(false);
+
   const getWhatServices = (what) => {
     handleWhatVal(what);
     const data = { where: `${whereVal}`, what: what };
@@ -176,6 +176,16 @@ function JobSeekerLandingPage(props) {
       });
   };
 
+  const handleFindServices = () => {
+    const data = { where: `${whereVal}`, what: `${whatVal}` };
+    axios.post("http://localhost:8000/api/findServices/", data).then((res) => {
+      console.log("Home page data:", res);
+      if (res.status == 200) {
+        let services = res.data;
+        setJobs(services);
+      }
+    });
+  };
   const getWhereServices = (where) => {
     handleWhereVal(where);
     const data = { where: where, what: `${whatVal}` };
@@ -307,7 +317,7 @@ function JobSeekerLandingPage(props) {
                 <button
                   type="button"
                   class="btn findbtn"
-                  onClick={handleFindJobs.bind(this)}
+                  onClick={() => handleFindServices()}
                 >
                   <h5 style={{ marginTop: "4px", color: "white" }}>
                     {t("Find Services")}
