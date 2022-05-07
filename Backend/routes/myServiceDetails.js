@@ -111,123 +111,16 @@ router.post("/api/cancelService", (req, res) => {
     });
 });
 
-router.post("/api/findServices", async (req, res) => {
+router.post("/api/findServices", (req, res) => {
   const where = req.body.where;
   const what = req.body.what;
-  const agg = [
-    {
-      $search: {
-        index: "searchauto",
-        compound: {
-          should: [
-            {
-              autocomplete: {
-                query: what,
-                path: "serviceName",
-                fuzzy: {
-                  maxEdits: 2,
-                },
-              },
-            },
-            {
-              autocomplete: {
-                query: what,
-                path: "serviceCategory",
-                fuzzy: {
-                  maxEdits: 2,
-                },
-              },
-            },
-            {
-              autocomplete: {
-                query: what,
-                path: "serviceDescription",
-                fuzzy: {
-                  maxEdits: 2,
-                },
-              },
-            },
-          ],
-        },
-
-        index: "searchlocation",
-        compound: {
-          should: [
-            {
-              autocomplete: {
-                query: where,
-                path: "city",
-                fuzzy: {
-                  maxEdits: 2,
-                },
-              },
-            },
-            {
-              autocomplete: {
-                query: where,
-                path: "country",
-                fuzzy: {
-                  maxEdits: 2,
-                },
-              },
-            },
-            {
-              autocomplete: {
-                query: where,
-                path: "zipcode",
-                fuzzy: {
-                  maxEdits: 2,
-                },
-              },
-            },
-            {
-              autocomplete: {
-                query: where,
-                path: "streetAddress",
-                fuzzy: {
-                  maxEdits: 2,
-                },
-              },
-            },
-            {
-              autocomplete: {
-                query: where,
-                path: "state",
-                fuzzy: {
-                  maxEdits: 2,
-                },
-              },
-            },
-          ],
-        },
-      },
-    },
-    {
-      $limit: 5,
-    },
-    {
-      $project: {
-        _id: 1,
-        freelancer: 1,
-        serviceName: 1,
-        serviceCategory: 1,
-        serviceMode: 1,
-        serviceDescription: 1,
-        responsibilities: 1,
-        price: 1,
-        availability: 1,
-        servicePostedDate: 1,
-        servicePostedMonth: 1,
-      },
-    },
-  ];
-  await Services.aggregate(agg, (err, searchResult) => {
-    if (err) {
-      throw err;
-    } else {
-      res.status(200).send(searchResult);
-    }
-  });
+  Services.find({ serviceName: what, city: where })
+    .then((result) => {
+      res.status(200).send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 router.get("/api/savedServices/:userid", (req, res) => {
   const userId = req.params.userid;
