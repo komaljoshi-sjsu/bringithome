@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import axios from "axios";
-import backendServer from '../webConfig';
+import backendServer from "../webConfig";
 
 const PostAreviewForService = (props) => {
   const { setState } = props;
@@ -10,7 +10,7 @@ const PostAreviewForService = (props) => {
     let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
     let user = JSON.parse(userInfo).id;
     axios
-      .get(`http://localhost:8000/api/appliedServices/${user}`)
+      .get(`http://localhost:8000/api/pastServices/${user}`)
 
       .then((res) => {
         if (res.status === 200) {
@@ -42,7 +42,7 @@ const PostAreviewForService = (props) => {
         <div>
           {props.serviceReview.map((s) => (
             <Chip
-              label={s.serviceName}
+              label={s.serviceid.serviceName}
               color="primary"
               onClick={() => handleService(s)}
             />

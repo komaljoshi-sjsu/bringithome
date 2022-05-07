@@ -148,6 +148,24 @@ router.get("/api/allServices/:userid", (req, res) => {
     });
 });
 
+router.get("/api/pastServices/:userid", (req, res) => {
+  const userId = req.params.userid;
+
+  MyServices.find({
+    userid: userId,
+    $or: [{ status: "Booked" }],
+  })
+    .populate("serviceid")
+    .then((result) => {
+      console.log("result for all service", result);
+      res.status(200).send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).send("Could not un save the service.");
+    });
+});
+
 router.post("/api/allServicesByWhat/", async (req, res) => {
   try {
     const { what } = req.body;
