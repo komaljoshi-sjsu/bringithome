@@ -263,9 +263,9 @@ function JobSeekerLandingPage(props) {
                       setOpenWhere(false);
                     }}
                     getOptionSelected={(option, value) =>
-                      option.serviceName === value.serviceName
+                      option.city === value.city
                     }
-                    getOptionLabel={(option) => option.serviceName}
+                    getOptionLabel={(option) => option.city}
                     options={whereOptions}
                     loading={loadingWhere}
                     renderInput={(params) => (
