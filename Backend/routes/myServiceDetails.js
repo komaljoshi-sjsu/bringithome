@@ -9,7 +9,7 @@ router.get("/api/completedservices/:userid", (req, res) => {
   const userId = req.params.userid;
   MyServices.find({
     $and: [{ userid: userId }],
-    $or: [{ status: "Booked" }, { status: "cancelled" }],
+    $or: [{ status: "Booked" }, { status: "Cancelled" }],
   })
     .then(async (result) => {
       let serviceArr = [];
@@ -96,7 +96,7 @@ router.post("/api/cancelService", (req, res) => {
   console.log(`Request canceling userid ${userId} serviceid ${serviceId}`);
   MyServices.findOneAndUpdate(
     { serviceid: serviceId, userid: userId, status: "pending" },
-    { status: "cancelled" }
+    { status: "Cancelled" }
   )
     .then((result) => {
       console.log("result for cancelled service", result);

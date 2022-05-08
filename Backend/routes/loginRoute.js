@@ -16,8 +16,8 @@ router.post("/api/login", (req, res) => {
     if ("Customer" === accountType) {
         try {
             Customer.find({email:email}).then(async(result)=>{
-                let payload = { id: result[0]._id, accountType: accountType, user: result[0] };
                 if(result.length==1) {
+                    let payload = { id: result[0]._id, accountType: accountType, user: result[0] };
                     const isCorrect = await bcrypt.compare(password,result[0].password);
                     if(!isCorrect) {
                         res.status(400).send("Password incorrect");
@@ -44,8 +44,8 @@ router.post("/api/login", (req, res) => {
     } else if ("Freelancer" === accountType) {
         try {
             Freelancer.find({email:email}).then(async(result)=>{
-                let payload = { id: result[0]._id, accountType: accountType, user: result[0] };
                 if(result.length==1) {
+                    let payload = { id: result[0]._id, accountType: accountType, user: result[0] };
                     const isCorrect = await bcrypt.compare(password,result[0].password);
                     if(!isCorrect) {
                         res.status(400).send("Password incorrect");
