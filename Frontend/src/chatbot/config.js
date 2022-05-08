@@ -6,9 +6,16 @@ import ServiceUpcomingHistory from "../chatWidgets/ServiceUpcomingHistory";
 import SelectedService from "../chatWidgets/SelectedService";
 import PostAReviewForService from "../chatWidgets/PostAreviewForService";
 import AddReviewForService from "../chatWidgets/AddreviewForService";
+import { IconButton } from "@material-ui/core";
+import Minimize from "@mui/icons-material/Minimize";
+import { toggleButtonClasses } from "@mui/material";
+const toggleBtnCss = () => {
+  console.log("Hi");
+};
 const config = {
   initialMessages: [createChatBotMessage(`Hello there!`)],
   botName: "Liz",
+
   widgets: [
     {
       widgetName: "chatOptions",
@@ -64,4 +71,3 @@ const config = {
 };
 
 export default config;
-  

@@ -20,7 +20,7 @@ import backendServer from "../../webConfig";
 import ErrorMsg from "../Error/ErrorMsg";
 import Booking from "./Booking";
 import config from "../../chatbot/config.js";
-//import { getConfig } from "../../chatbot/getConfig.js";
+//import getConfig from "../../chatbot/getConfig.js";
 import Chatbot from "react-chatbot-kit";
 import "react-chatbot-kit/build/main.css";
 import MessageParser from "../../chatbot/MessageParser.js";
@@ -237,6 +237,7 @@ function JobSeekerLandingPage(props) {
                         {...params}
                         label="What"
                         variant="outlined"
+                        onSelect={(ev) => getWhatServices(ev.target.value)}
                         onChange={(ev) => {
                           // dont fire API if the user delete or not entered anything
                           if (
@@ -285,6 +286,7 @@ function JobSeekerLandingPage(props) {
                         {...params}
                         label="Where"
                         variant="outlined"
+                        onSelect={(ev) => getWhereServices(ev.target.value)}
                         onChange={(ev) => {
                           // dont fire API if the user delete or not entered anything
                           if (
@@ -310,9 +312,7 @@ function JobSeekerLandingPage(props) {
                   />
                 </div>
               </div>
-              <div class="col-3">
-                <div class="input-group mb-3"></div>
-              </div>
+
               <div class="col-1">
                 <button
                   type="button"
