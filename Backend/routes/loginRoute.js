@@ -4,6 +4,10 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const Customer = require('../models/Customer');
 const Freelancer = require('../models/Freelancer');
+const { auth } = require("../config/passport");
+const { secret } = require("../config/config");
+const jwt = require("jsonwebtoken");
+auth();
 
 router.post("/api/login", (req, res) => {
     const email = req.body.email;
@@ -12,12 +16,18 @@ router.post("/api/login", (req, res) => {
     if ("Customer" === accountType) {
         try {
             Customer.find({email:email}).then(async(result)=>{
+                let payload = { id: result[0]._id, accountType: accountType, user: result[0] };
                 if(result.length==1) {
                     const isCorrect = await bcrypt.compare(password,result[0].password);
                     if(!isCorrect) {
                         res.status(400).send("Password incorrect");
                     } else {
-                        res.status(200).send(result[0]);
+                        const token = jwt.sign(payload, secret, {
+                            expiresIn: 1008000,
+                        });
+                        // console.log("JWT " + token);
+                        // res.status(200).send({userData:result[0],JWT:token});
+                        res.status(200).send("JWT " + token);
                     }
                 } else {
                     res.status(400).send("Username incorrect");
@@ -34,12 +44,18 @@ router.post("/api/login", (req, res) => {
     } else if ("Freelancer" === accountType) {
         try {
             Freelancer.find({email:email}).then(async(result)=>{
+                let payload = { id: result[0]._id, accountType: accountType, user: result[0] };
                 if(result.length==1) {
                     const isCorrect = await bcrypt.compare(password,result[0].password);
                     if(!isCorrect) {
                         res.status(400).send("Password incorrect");
                     } else {
-                        res.status(200).send(result[0]);
+                        // res.status(200).send(result[0]);
+                        const token = jwt.sign(payload, secret, {
+                            expiresIn: 1008000,
+                        });
+                        // console.log("JWT " + token);
+                        res.status(200).send("JWT " + token);
                     }
                 } else {
                     res.status(400).send("Username incorrect");

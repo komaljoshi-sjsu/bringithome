@@ -4,6 +4,7 @@ const Message = require('../models/Message');
 const Customer = require('../models/Customer');
 const MyServices = require('../models/MyServices');
 const Freelancer = require('../models/Freelancer');
+const { checkAuth } = require("../config/passport");
 
 router.post("/api/addNewMessage", async (req, res) => {
 

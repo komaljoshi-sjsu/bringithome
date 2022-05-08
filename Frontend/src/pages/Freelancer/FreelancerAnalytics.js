@@ -37,7 +37,7 @@ const ReportEmployer = () => {
     let jobTitle = [];
     // console.log("FE employerid: ", employerId);
    await axios
-      .get(`${backendServer}/jobPosted`,{
+      .get(`${backendServer}/servicePosted`,{
         params: {
           employerId : employerId
         }
