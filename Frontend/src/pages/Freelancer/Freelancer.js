@@ -43,6 +43,7 @@ class Employer extends Component {
   }
   updateJobSeekerStatus = (statuschange)=>{
     console.log("BOOKING STATUS Changes", statuschange)
+    // axios.defaults.headers.common['authorization'] = this.props.userInfo.token;
      axios.post(`${backendServer}/updateJobSeekerStatus`, statuschange)
              .then(response => {
                  console.log(response)

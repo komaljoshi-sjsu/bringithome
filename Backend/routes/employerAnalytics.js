@@ -5,7 +5,7 @@ const Service =require('../models/Service');
 const MyServices = require('../models/MyServices');
 const Services = require('../models/Service');
 
-router.get('/jobPosted', async (req, res) => {
+router.get('/servicePosted', async (req, res) => {
   try {
     let employerId=req.query.employerId;
     let count =0;

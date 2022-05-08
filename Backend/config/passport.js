@@ -4,24 +4,27 @@ var ExtractJwt = require("passport-jwt").ExtractJwt;
 const passport = require("passport");
 var { secret } = require("./config");
 const conn = require("../config/mysql_connection");
+const Customer = require('../models/Customer');
+const Freelancer = require('../models/Freelancer');
 
 // Setup work and export for the JWT passport strategy
 function auth() {
     //console.log("auth");
+
     var opts = {    
-        jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("JWT"),
+        jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
         secretOrKey: secret
     };
-    //console.log(JSON.stringify(opts.jwtFromRequest));
+    // console.log("Check token",JSON.stringify(opts));
     passport.use(
-        new JwtStrategy(opts, (jwt_payload, callback) => {
-           
+        new JwtStrategy(opts, async (jwt_payload, callback) => {
             const accountType = jwt_payload.accountType
-            console.log("jwt_payload" + jwt_payload);
-            if("JobSeeker" === accountType) {
-                findJobSeekerById(jwt_payload.id, (err, results) => {
+            // console.log("jwt_payload", jwt_payload);
+            if("Customer" === accountType) {
+                Customer.find({_id:jwt_payload.id}, (err, results) => {
                     if (err) {
-                        return callback(err, false);
+                        callback(null, false);
+                        // return  false;
                     }
                     if (results) {
                         callback(null, results[0]);
@@ -30,32 +33,28 @@ function auth() {
                         callback(null, false);
                     }
                 });
-            } else if("Employer" === accountType) {
-                findEmployerById(jwt_payload.id, (err, results) => {
+            } else if("Freelancer" === accountType) {
+               Freelancer.find({_id:jwt_payload.id}, (err, results)=> {
                     if (err) {
-                        return callback(err, false);
+                        callback(null, false);
+                        // return false;
                     }
                     if (results) {
+                        // console.log("in here",results[0]);
                         callback(null, results[0]);
+                        // return results[0];
                     }
                     else {
                         callback(null, false);
+                        // return false;
                     }
-                });
+                })
             } else {
                 callback(null, false);
             }
             
         })
     )
-}
-
-function findJobSeekerById(id, callback) {
-    return conn.query("SELECT * from JobSeeker WHERE id = ?", [id], callback)
-}
-
-function findEmployerById(id, callback) {
-    return conn.query("SELECT * from Employer WHERE id = ?", [id], callback)
 }
 
 exports.auth = auth;
