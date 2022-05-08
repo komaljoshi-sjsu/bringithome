@@ -211,10 +211,10 @@ handleModalCloseProfile(){
               onClick={() => {
                 this.viewJobSeekerProfile(applicant.id);
               }}
-              style = {{width:"150px"}} variant="Link">{applicant.name}</Button>
+              style = {{width:"125px"}} variant="Link">{applicant.name}</Button>
               </Col>
               <Col>
-              <Button variant="Link">{applicant.servicename}</Button>
+              <Button style = {{width:"125px"}} variant="Link">{applicant.servicename}</Button>
               </Col>
               <Col>
               <Button variant="Link">{applicant.date}</Button>
@@ -363,7 +363,7 @@ handleModalCloseProfile(){
                     <ListGroupItem>Mode: {service.serviceMode}</ListGroupItem>
                     <ListGroupItem>Price: ${service.price}</ListGroupItem>
                     <ListGroupItem>From: {new Date(service.availability.startDate).toDateString()}, {service.availability.startTime} <br/>To: {new Date(service.availability.endDate).toDateString()}, {service.availability.endTime}</ListGroupItem>
-                    <ListGroupItem>Total Customers : {service.applicantsNo}</ListGroupItem>
+                    {/* <ListGroupItem>Total Customers : {service.applicantsNo}</ListGroupItem> */}
                   </ListGroup> 
                   </Card.Body> 
                   </Card>                           

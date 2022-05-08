@@ -1,100 +1,62 @@
-//job seeker API for viewing company reviews
+"use strict";
 const express = require("express");
 const router = express.Router();
-const connection = require("../config/mysql_connection");
-const mongoose = require("mongoose");
-const Company = mongoose.model("Company");
+const bcrypt = require("bcrypt");
+const mongoose = require('mongoose');
+const Service = require('../models/Service');
+const Review = require('../models/Review');
 
-const mysql = require('mysql');
-const http = require('http');
-const url = require('url');
-
-router.get("/allCompanyReviewsPaginated", (req, res) => {
-
-    const queryObject = url.parse(req.url,true).query;
-    const adminReviewStatus = 'APPROVED';
-    const pageNumber = queryObject.currentPage;
-    const limit = 5;
-    const offset = (pageNumber - 1) * limit;
-    console.log("pageNumber" +pageNumber);
-    console.log("offset" +offset);
-	let sql = 'SELECT r.*, c.companyName FROM Review r, Company c where r.companyId='+mysql.escape(queryObject.companyId)+ ' and r.companyId = c.companyId and r.adminReviewStatus=? LIMIT ?,?' ;
-    console.log(sql);
-    connection.query(sql, [adminReviewStatus, offset, limit], (err, results) => {
-        if (err) {
-            res.writeHead(401,{
-                'Content-Type' : 'application/json'
-            });
-            res.end("Server error. Please try again later!");
-        }
-        else if(results.length > 0){
-            res.writeHead(200,{
-                'Content-Type' : 'application/json'
-            });
-            
-            console.log("Review data : ",JSON.stringify(results));
-            res.end(JSON.stringify(results));
-            
-        }else{
-            res.writeHead(400,{
-                'Content-Type' : 'application/json'
-            });
-            console.log("No reviews available!");
-            res.end("No reviews available!!");
-        }
-    });	
-});
-
-router.get("/allCompanyReviews", (req, res) => {
-
-    const queryObject = url.parse(req.url,true).query;
-    const adminReviewStatus = 'APPROVED';
-	let sql = 'SELECT r.*, c.companyName FROM Review r, Company c where r.companyId='+mysql.escape(queryObject.companyId)+ ' and r.companyId = c.companyId and r.adminReviewStatus=?' ;
-    console.log(sql);
-    connection.query(sql, [adminReviewStatus], (err, results) => {
-        if (err) {
-            res.writeHead(401,{
-                'Content-Type' : 'application/json'
-            });
-            res.end("Server error. Please try again later!");
-        }
-        else if(results.length > 0){
-            res.writeHead(200,{
-                'Content-Type' : 'application/json'
-            });
-            
-            console.log("Review data : ",JSON.stringify(results));
-            res.end(JSON.stringify(results));
-            
-        }else{
-            res.writeHead(400,{
-                'Content-Type' : 'application/json'
-            });
-            console.log("No reviews available!");
-            res.end("No reviews available!!");
-        }
-    });	
-});
-
-router.post("/updateFeaturedReview", (req, res) => {
+router.get("/allCompanyReviews/:userid", (req, res) => {
+    const userId = req.params.userid;
+    Review.find({"freelancer.freelancerId":userId}).populate({path:'service'}).then(async(result)=> {
+        console.log(result);
+        res.status(200).send(result);
+    }).catch(err=> {
+        console.log(err);
+        res.status(400).send('Could not get reviews.');
+    })
     
-    let sql = 'UPDATE Review SET isFeatured = 1 WHERE reviewId = ?';
-    let data = [req.body.reviewId];
-    
-    connection.query(sql, data, (err, results) => {
-        if (err) {
-            res.writeHead(401,{
-                'Content-Type' : 'application/json'
-            });
-            res.end("Server error. Please try again later!");
-        }
-        else{
-            res.writeHead(200,{
-                'Content-Type' : 'application/json'
-            });
-            res.end("Featured review updated successfully");
-        }
-    });
 });
+
+
+router.get("/allCompanyReviewsPaginated/:currentPage", async (req, res) => {
+    const postsPerPage = 18;
+    const currentPage = req.params.currentPage;
+    const skip = postsPerPage*(currentPage-1);
+    const totalPosts = await Review.count();
+    Review.aggregate([{$group:{_id:'$service', data:{$push:"$$ROOT"}, rating:{$sum:"$rating"}}}]).then(async(result)=> {
+        console.log('total reviews;',result);
+        
+        let reviews = {
+            reviews: result,
+            totalReviews: totalPosts
+        }
+        if(result!=null && result.length>0) {
+            let servid = result[0]._id+'';
+            await Service.find({_id:servid}).then(r=> {
+                let serv = r[0];
+                reviews.serviceName = serv.serviceName;
+                reviews.serviceCategory = serv.serviceCategory;
+                reviews.freelancer = serv.freelancer;
+            }).catch(er=> {
+                console.log('Failed to fetch service details for review:',er)
+            })
+        }
+        res.status(200).send(reviews); 
+    })
+    // Review.find().skip(skip).limit(postsPerPage).populate('service').then(async(result)=> {
+    //     console.log('applied serv;',result);
+    //     let reviews = {
+    //         reviews: result,
+    //         totalReviews: totalPosts
+    //     }
+    //     res.status(200).send(reviews);
+    // })
+    .catch(err=> {
+        console.log(err);
+        res.status(400).send('Could not get reviews.');
+    })
+});
+
 
 module.exports = router;

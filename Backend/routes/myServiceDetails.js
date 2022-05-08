@@ -16,7 +16,7 @@ router.get("/api/completedservices/:userid", (req, res) => {
       console.log("applied serv;", result);
       for (let i = 0; i < result.length; i++) {
         let serv = result[i];
-        await Service.find({ _id: serv.serviceid }).then((service) => {
+        await Services.find({ _id: serv.serviceid }).then((service) => {
           let servc = service[0];
 
           let timeAr = serv.time.split(":");
@@ -33,6 +33,7 @@ router.get("/api/completedservices/:userid", (req, res) => {
             price: servc.price,
             time: timeAr[0] + ":" + min,
             bookingid: serv._id,
+            status: serv.status
           };
           console.log("result for applied services", json);
           serviceArr.push(json);
@@ -55,7 +56,7 @@ router.get("/api/appliedServices/:userid", (req, res) => {
       console.log("spplaied serv;", result);
       for (let i = 0; i < result.length; i++) {
         let serv = result[i];
-        await Service.find({ _id: serv.serviceid }).then((service) => {
+        await Services.find({ _id: serv.serviceid }).then((service) => {
           let servc = service[0];
 
           let timeAr = serv.time.split(":");
@@ -129,7 +130,7 @@ router.get("/api/savedServices/:userid", (req, res) => {
       let serviceArr = [];
       for (let i = 0; i < result.length; i++) {
         let serv = result[i];
-        await Service.find({ _id: serv.serviceid }).then((service) => {
+        await Services.find({ _id: serv.serviceid }).then((service) => {
           serviceArr.push(service[0]);
         });
       }

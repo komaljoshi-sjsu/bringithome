@@ -1,178 +1,84 @@
-//sample employer component
-import { React, Component} from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import {useState, useEffect} from 'react';
+import {Redirect} from 'react-router';
 import axios from 'axios';
-import { connect } from 'react-redux'
-import { Button, Row, Col, Card, Container,
-  } from 'react-bootstrap';
-  import ReactStars from "react-rating-stars-component";
+import ReactStars from "react-rating-stars-component";
+import Card from "react-bootstrap/Card";
 import backendServer from '../../webConfig';
-import '../../style/button-group.css';
-import { FaCheckCircle } from 'react-icons/fa';
-import Pagination from "./../Customer/Pagination";
-import FreelancerNavbar from './FreelancerNavbar';
+import {useSelector} from 'react-redux';
+import { useDispatch } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { userActionCreator } from '../../reduxutils/actions.js'
+import ErrorMsg from '../Error/ErrorMsg'
+import {Button, Row } from "react-bootstrap";
+import FreelancerNavbar from './FreelancerNavbar'
 
-
-class Reviews extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        reviewDetails: [],
-        successMsg: '',
-        totalPosts: 0,
-      };
-    }
-    
-    componentDidMount() {
-        // To-DO : Get company id from store
-        const companyId = this.props.company.compid;
-        console.log(this.props.company);
-        let { reviewDetails } = this.state;
-        const currentPage = 1;
-        reviewDetails = [];
-        axios.get(`${backendServer}/allCompanyReviews`, {
-          params: {
-            companyId,
-          },
-        })
-          .then((response) => {
-            this.setState({
-                //reviewDetails: reviewDetails.concat(response.data),
-                totalPosts: response.data.length,
-              });
-          });
-
-          axios.get(`${backendServer}/allCompanyReviewsPaginated`, {
-            params: {
-              companyId,
-              currentPage,
-            },
-          })
-            .then((response) => {
-              this.setState({
-                  reviewDetails: reviewDetails.concat(response.data),
-                });
-            });
-      }
-
-      paginate = (pageNumber) => {
-        let currentPage = pageNumber;
-        const companyId = this.props.company.compid;
-        let { reviewDetails } = this.state;
-        reviewDetails = [];
-        axios.get(`${backendServer}/allCompanyReviewsPaginated`, {
-          params: {
-            companyId,
-            currentPage,
-          },
-        })
-          .then((response) => {
-            this.setState({
-                reviewDetails: reviewDetails.concat(response.data),
-              });
-          });
-      }
-
-      handleSubmit = (e, reviewId) => {
-        
-        const { reviewDetails } = this.state;
-        const index = reviewDetails.findIndex((review) => review.reviewId === reviewId);
-        const reviews = [...reviewDetails];
-        const inputData = {
-          reviewId: reviews[index].reviewId,
-        }
-        reviews[index].isFeatured = 1;
-        this.setState({reviewDetails : reviews});
-        console.log(inputData);
-        axios
-          .post(`${backendServer}/updateFeaturedReview`, inputData)
-          .then((response) => {
-            if (response.status === 200) {
-              this.setState({ successMsg: response.data });
+function Reviews(props) {
+    const dispatch = useDispatch()
+    const userid = useSelector((state)=>state.userInfo.id);
+    const[errMsg,setErrMsg] = useState('');
+    const [jobs,setServices] = useState([]);
+    const showErrorModal = bindActionCreators(userActionCreator.showErrorModal,dispatch);
+    useEffect(()=> {
+        axios.get(backendServer+'/allCompanyReviews/'+userid)
+        .then(res => {
+            console.log('saved job results',res);
+            if(res.status== 200) {
+                setServices(res.data);
             } else {
-              this.setState({ errorMsg: response.data });
+                setErrMsg(res.data.msg);
+                showErrorModal(true);
             }
-          })
-          .catch((err) => {
-            console.error(err);
-          });
-      }
-
-    render() {
-      // To-DO Fetch logged in userid from store
-        const { reviewDetails, totalPosts } = this.state;
-        console.log(reviewDetails);
-       
-        const reviewsDisplay = reviewDetails.map((review) => (
-          <div>
-            <Card style={{ width: '60rem', margin: '0.8em' }}>
-              <Card.Body>
-                <Row>
-                <Col xs={2}>
-                <Card.Title>
-                  <b>{review.rating}</b>
-                  <ReactStars
-                    count={5}
-                    size={15}
-                    value={review.rating}
-                    isHalf={true}
-                    activeColor="#9d2b6b"
-                    edit={false}
-                  />
-                </Card.Title>
-                </Col>
-                <Col xs={8}>
-                <Card.Title>
-                  <b>{review.reviewTitle}</b>{' '}{review.isFeatured && <span style={{color:'green'}}><b>Featured<FaCheckCircle /></b></span>}
-                  {' '}{!review.isFeatured && 
-                  <Button onClick={(e) => { this.handleSubmit(e, review.reviewId)}} style={{backgroundColor:'white', color:'green', border: '1px solid gray'}}><b>Mark as featured</b></Button>}
-                </Card.Title>
-                <Card.Text>
-                  <small>{review.reviewerRole}{' - '}{review.city}{', '}{review.state}{' - '}{new Date(review.postedDate).toDateString()}</small>
-                </Card.Text>
-                <Card.Text>
-                {review.reviewComments}
-                </Card.Text>
-                <Card.Text>
-                <b>Pros</b><br />
-                {review.pros}<br />
-                <b>Cons</b><br />
-                {review.cons}<br />
-                </Card.Text>
-                </Col>
-                </Row>
-              </Card.Body>
-            </Card>
-          </div>
-        ));
-      return (
+        }).catch(err => {
+            setErrMsg('Failed to get saved job details. Please check console');
+            showErrorModal(true);
+            console.log(err);
+        }); 
+    },[]);
+    return (
         <div>
-           <FreelancerNavbar />
-            <br></br>
-            <Container style={{ display: 'flex', justifyContent: 'center' }}>
-            
-            <Card style={{ width: '60rem', margin: '0.8em', background:'whitesmoke' }}>
-            <Card.Title>
-              <br />
-               <Row>
-                 <Col> <h4>Reviews added by jobseekers</h4>
-                 </Col>
-                </Row>
-            </Card.Title>
-              </Card>
-              </Container>
-              <Container style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-              {reviewsDisplay}
-              </Container>
-              <Container style={{ display: 'flex', justifyContent: 'center' }}>
-              <Pagination postsPerPage={5} totalPosts={totalPosts} paginate={this.paginate}/>
-              </Container>
+            <ErrorMsg err={errMsg}></ErrorMsg>
+            {/* <CustomerLoggedIn /> */}
+            <FreelancerNavbar/>
+            <div class="container-fluid">
+                <div class="row" style={{marginLeft:'20%',marginRight:'20%', marginTop:'40px'}}>
+                    <h2><b>My Reviews</b></h2><br></br>
+                </div>
+                <div style={{marginLeft:'20%',marginRight:'20%'}}>
+                    <Row xs={1} md={1} className="g-4">
+                    {jobs.map(job=>  {
+                        return(
+                            <Card style={{ width: '100%', marginRight:'20px' }}>
+                                {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
+                                    <Card.Body>
+                                        <Card.Title><h3><b>{job.serviceName}</b></h3></Card.Title>
+                                        <Card.Text>
+                                            <h4><b>{job.service.serviceCategory} - {job.service.serviceName}</b></h4>
+                                            <h5><b>{job.service.freelancer.name}</b></h5><br></br><br></br>
+                                            
+                                            <h6><b>{job.title}</b></h6><br></br>
+                                            <ReactStars
+                                            count={5}
+                                            size={20}
+                                            value={job.rating}
+                                            isHalf={true}
+                                            activeColor="#9d2b6b"
+                                            edit={false}
+                                            />
+                                            <b>{job.review}</b><br></br>
+                                            <b></b><br></br>
+                                        </Card.Text>
+                                    </Card.Body>
+                            </Card>
+                        )
+                                
+                    })}
+                    </Row>
+                        
+                </div>
+            </div>
         </div>
-      );
-    }
-  }
-  const mapStateToProps = (state) => ({
-    userInfo: state.userInfo,
-    company: state.company
-  })
-  
-  export default connect(mapStateToProps)(Reviews);
+    )
+}
+
+export default Reviews;

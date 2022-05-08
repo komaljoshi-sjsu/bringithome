@@ -44,6 +44,7 @@ app.use(require("./routes/employerAnalytics"));
 
 app.use(require("./routes/messageRoute"));
 app.use(require("./routes/conversationRoute"));
+app.use(require("./routes/employerFeaturedReviews"));
 
 const PORT = process.env.PORT || 5000;
 //Server code will be running on port 5000
