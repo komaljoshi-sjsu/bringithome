@@ -29,6 +29,7 @@ app.use(require("./routes/loginRoute"));
 app.use(require("./routes/signupRoute"));
 app.use(require("./routes/customerHome"));
 app.use(require("./routes/myServiceDetails"));
+app.use(require("./routes/updateCustomerProfile"));
 app.use(require("./routes/reviews"));
 
 //Freelancer
@@ -45,6 +46,6 @@ app.use(require("./routes/messageRoute"));
 app.use(require("./routes/conversationRoute"));
 app.use(require("./routes/employerFeaturedReviews"));
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 5000;
 //Server code will be running on port 5000
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
