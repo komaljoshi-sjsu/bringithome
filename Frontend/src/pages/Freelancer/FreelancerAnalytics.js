@@ -14,6 +14,7 @@ const ReportEmployer = () => {
         data: []
       }]
   });
+  const token = useSelector((state) => state.userInfo.token);
 
   const [chartTwoData, setChartTwoData] = useState({
     labels: [],
@@ -36,6 +37,7 @@ const ReportEmployer = () => {
     let jobCnt = [];
     let jobTitle = [];
     // console.log("FE employerid: ", employerId);
+    axios.defaults.headers.common['authorization'] = token;
    await axios
       .get(`${backendServer}/servicePosted`,{
         params: {
@@ -71,6 +73,7 @@ const ReportEmployer = () => {
     let statusCnt = [];
     let status = [];
     // console.log("FE employerid: ", employerId);
+    axios.defaults.headers.common['authorization'] = token;
    await axios
       .get(`${backendServer}/applicantsDetail`,{
         params: {

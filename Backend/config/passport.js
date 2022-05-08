@@ -21,18 +21,21 @@ function auth() {
             const accountType = jwt_payload.accountType
             // console.log("jwt_payload", jwt_payload);
             if("Customer" === accountType) {
-                Customer.find({_id:jwt_payload.id}, (err, results) => {
+                Customer.find({_id:jwt_payload.id}, (err, results)=> {
                     if (err) {
                         callback(null, false);
-                        // return  false;
+                        // return false;
                     }
                     if (results) {
+                        // console.log("in here",results[0]);
                         callback(null, results[0]);
+                        // return results[0];
                     }
                     else {
                         callback(null, false);
+                        // return false;
                     }
-                });
+                })
             } else if("Freelancer" === accountType) {
                Freelancer.find({_id:jwt_payload.id}, (err, results)=> {
                     if (err) {

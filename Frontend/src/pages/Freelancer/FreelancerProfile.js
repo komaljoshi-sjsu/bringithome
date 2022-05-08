@@ -74,6 +74,7 @@ class FreelancerProfile extends Component {
 
     sendEmployerAPI = (data) => {
         console.log("add emp")
+        axios.defaults.headers.common['authorization'] = this.props.userInfo.token;
         axios.post(`${backendServer}/api/postEmployerDetails`, data)
             .then(response=> {
                 console.log(response.data)
