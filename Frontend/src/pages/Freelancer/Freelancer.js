@@ -92,8 +92,8 @@ handleModalCloseProfile(){
 }
   handleSubmit = (e) => {
     e.preventDefault();
-    const { history } = this.props;
-    history.push('/postService');
+    // console.log(this.props);
+    this.props.history.push('/postService');
   }
   viewJobSeekerProfile = (id) => {
     const jobSeekerId = {
