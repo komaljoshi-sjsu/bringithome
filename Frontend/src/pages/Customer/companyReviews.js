@@ -92,7 +92,7 @@ function Reviews(props) {
                         />
                         </Col>
                         <Col xs={4}>
-                        <Link style={{textDecoration: 'none'}} to="/reviews"><small>{review.data.length}{' '}reviews</small></Link>
+                        <Link style={{textDecoration: 'none'}}  to={{pathname:'/reviews',serviceid:review._id}}><small>{review.data.length}{' '}reviews</small></Link>
                         </Col>
                         </Row>
                         <Row>

@@ -17,6 +17,18 @@ router.get("/api/getReviews/:userid", (req, res) => {
     
 });
 
+router.get("/api/getReviewsByServiceId/:serviceid", (req, res) => {
+    const serviceid = req.params.serviceid;
+    Review.find({service:serviceid}).then(async(result)=> {
+        console.log(`found reviews for service id ${serviceid}: \n ${result}`)
+        res.status(200).send(result);
+    }).catch(err=> {
+        console.log(err);
+        res.status(400).send('Could not get reviews.');
+    })
+    
+});
+
 
 router.get("/api/allReviews/:currentPage", async (req, res) => {
     const postsPerPage = 18;
