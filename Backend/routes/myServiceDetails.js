@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const Services = require("../models/Service");
 const MyServices = require("../models/MyServices");
+const Review = require('../models/Review');
 
 router.get("/api/completedservices/:userid", (req, res) => {
   const userId = req.params.userid;
@@ -16,7 +17,7 @@ router.get("/api/completedservices/:userid", (req, res) => {
       console.log("applied serv;", result);
       for (let i = 0; i < result.length; i++) {
         let serv = result[i];
-        await Services.find({ _id: serv.serviceid }).then((service) => {
+        await Services.find({ _id: serv.serviceid }).then(async(service) => {
           let servc = service[0];
 
           let timeAr = serv.time.split(":");
@@ -35,6 +36,11 @@ router.get("/api/completedservices/:userid", (req, res) => {
             bookingid: serv._id,
             status: serv.status
           };
+          await Review.find({userid:userId,service:serv.serviceid}).then(result1=> {
+            if(result1.length>0) {
+              json.review = result1[0];
+            }
+          })
           console.log("result for applied services", json);
           serviceArr.push(json);
         });
