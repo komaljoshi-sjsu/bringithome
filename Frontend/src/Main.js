@@ -6,17 +6,12 @@ import Signup from "./pages/Signup/Signup.js";
 import Freelancer from "./pages/Freelancer/Freelancer";
 import PostService from "./pages/Freelancer/PostService";
 import JobSeekerLandingPage from "./pages/Customer/JobSeeker.js";
-// import CompanyTabs from "./pages/Company/CompanyTabs.js";
-// import JoinUs from "./pages/Company/JoinUs";
-// import Snapshot from "./pages/Company/Snapshot";
 import FreelancerProfile from "./pages/Freelancer/FreelancerProfile";
 import FreelancerUpdateProfile from "./pages/Freelancer/FreelancerUpdateProfile";
 import Reviews from "./pages/Customer/Reviews";
-// import AddSalaryReview from "./pages/Company/AddSalaryReview";
 import FindSalaries from "./pages/Customer/FindSalaries";
 import FreelancerAnalytics from "./pages/Freelancer/FreelancerAnalytics";
 import Preferences from "./pages/Customer/Preferences.js";
-// import CompanyJobs from "./pages/Company/Jobs.js";
 import Header from "./common/Header";
 import FeaturedReview from "./pages/Freelancer/featuredReview";
 import CompanyReviews from "./pages/Customer/companyReviews";
@@ -34,6 +29,10 @@ import Booking from "./pages/Customer/Booking.js";
 import Messenger from "./pages/Messenger/Messenger.js";
 import CompletedServices from "./pages/Customer/CompletedServices.js";
 import MyReviews from "./pages/Customer/MyReviews.js";
+import FreelancerRoute from './ProtectedRoute/FreelancerRoute.js';
+import CustomerRoute from './ProtectedRoute/CustomerRoute';
+import MessageRoute from './ProtectedRoute/MessageRoute.js';
+import { connect } from 'react-redux';
 
 class Main extends Component {
   render() {
@@ -44,25 +43,10 @@ class Main extends Component {
         <Route path="/login" component={Login} />
         <Route path="/home" component={Home} />
         <Route path="/header" component={Header} />
-        {/* <Route path="/snapshot" component={Snapshot} />
-        <Route path="/whyJoinUs" component={JoinUs} /> */}
         <Route path="/signup" component={Signup} />
-        <Route path="/postService" component={PostService} />
-        <Route path="/freelancerHome" component={Freelancer} />
-        <Route path="/freelancerProfile" component={FreelancerProfile} />
-        <Route
-          path="/freelancerUpdateProfile"
-          component={FreelancerUpdateProfile}
-        />
         <Route path="/landingPage" component={JobSeekerLandingPage} />
-        {/* <Route path="/company" component={CompanyTabs} /> */}
-        {/* <Route path="/photos" component={UploadPhotos} /> */}
-        {/* <Route path="/jobs" component={CompanyJobs} /> */}
         <Route path="/reviews" component={Reviews} />
-        <Route path="/featuredReviews" component={FeaturedReview} />
-        {/* <Route path="/addSalaryReview" component={AddSalaryReview} /> */}
         <Route path="/findSalaries" component={FindSalaries} />
-        <Route path="/freelancerAnalytics" component={FreelancerAnalytics} />
         <Route path="/preferences" component={Preferences} />
         <Route path="/allReviews" component={CompanyReviews} />
         <Route path="/myservices" component={MyServices} />
@@ -72,13 +56,29 @@ class Main extends Component {
         <Route path="/profileupdate" component={ProfileUpdate} />
         <Route path="/profileReviews" component={MyReviews} />
         <Route path="/booking" render={(props) => <Booking {...props} />} />
-        {/* <Route path="/findSalByTitle/:id" component={FindSalByTitle} /> */}
         <Route path="/findSalByTitle/:jobTitle" component={FindSalByTitle} />
 
+        {/* Message Route */}
         <Route path="/messenger" component={Messenger} />
-      </div>
+        {/* <MessageRoute path="/messenger" component={Messenger}  email={this.props.userInfo.email}  accountType={this.props.userInfo.accountType}/> */}
+
+        {/* Freelancer Routes */}
+        {/* <Route path="/postService" component={PostService} /> */}
+        <FreelancerRoute path="/postService" component={PostService} email={this.props.userInfo.email} accountType={this.props.userInfo.accountType}/>
+        <FreelancerRoute path="/freelancerHome" component={Freelancer} email={this.props.userInfo.email} accountType={this.props.userInfo.accountType}/>
+        <FreelancerRoute path="/freelancerProfile" component={FreelancerProfile} email={this.props.userInfo.email} accountType={this.props.userInfo.accountType}/>
+        <FreelancerRoute path="/freelancerUpdateProfile" component={FreelancerUpdateProfile} email={this.props.userInfo.email} accountType={this.props.userInfo.accountType}/>
+        <FreelancerRoute path="/featuredReviews" component={FeaturedReview} email={this.props.userInfo.email} accountType={this.props.userInfo.accountType}/>
+        <FreelancerRoute path="/freelancerAnalytics" component={FreelancerAnalytics} email={this.props.userInfo.email} accountType={this.props.userInfo.accountType}/>
+    </div>
     );
   }
 }
 //Export The Main Component
-export default Main;
+// export default Main;
+
+const mapStateToProps = (state) => ({
+  userInfo: state.userInfo,
+})
+
+export default connect(mapStateToProps)(Main)
