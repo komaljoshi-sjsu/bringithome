@@ -65,8 +65,13 @@ function JobSeekerLandingPage(props) {
   const email = useSelector((state) => state.userInfo.email);
   const accountType = useSelector((state) => state.userInfo.accountType);
   const userid = useSelector((state) => state.userInfo.id);
+  const token = useSelector((state) => state.userInfo.token);
 
   let setReDirect = (price, jobId) => {
+    if(email == null || email == '') {
+      redirectValFn(<Redirect to="/login" />)
+      return;
+    }
     let toVal = {
       pathname: "/booking",
       state: {
@@ -93,6 +98,10 @@ function JobSeekerLandingPage(props) {
   const handleCompanyLink = () => {};
   const handleApply = () => {};
   const handleSaveJob = (serviceId) => {
+    if(email == null || email == '') {
+      redirectValFn(<Redirect to="/login" />)
+      return;
+    }
     axios
       .post(backendServer + "/api/saveService/", {
         userId: userid,
