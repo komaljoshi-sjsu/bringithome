@@ -4,6 +4,7 @@ const router = express.Router()
 const conn = require('../config/mysql_connection')
 const mongoose = require('mongoose')
 const { json } = require('body-parser')
+const Review = require('../models/Review');
 
 const Service = require('../models/Service')
 const MyServices = require('../models/MyServices');
@@ -29,12 +30,22 @@ router.get('/customer/home/:currentPage/:userid', async(req, res) => {
       result.map(async(data)=> {
         var copy = JSON.parse(JSON.stringify(data));
         let isSaved = false;
+        await Review.aggregate([ { $match: { service: mongoose.Types.ObjectId(data._id) } }, { $group: { _id: "$service", totalRatings: { $sum: "$rating" },totalCount: { $sum: 1 } } } ]).then(rev=> {
+          console.log('res is ',rev)
+          if(rev.length>0) {
+            copy.totalReviews = rev[0].totalCount
+            copy.avgRating = rev[0].totalRatings/rev[0].totalCount;
+          } else {
+            copy.totalReviews = 0
+            copy.avgRating = 0;
+          }
+        })
         await MyServices.find({serviceid:data._id,status:'saved',userid:userid}).then(result1=> {
           //console.log('Service results:',result1)
           if(result1.length == 0) {
             //console.log('no saved service present');
           } else {
-            console.log('saved service present ',data);
+            //console.log('saved service present ',data);
             isSaved = true;
             
           }
@@ -43,7 +54,7 @@ router.get('/customer/home/:currentPage/:userid', async(req, res) => {
         return copy;
       })
     )
-    console.log('finalres',finalRes)
+    //console.log('finalres',finalRes)
     let results = {
       services: finalRes,
       totalPosts: totalPosts

@@ -19,6 +19,8 @@ import JobSeekerNavbar from "./JobSeekerNavbar";
 import CustomerLoggedIn from "./CustomerLoggedIn";
 import backendServer from "../../webConfig";
 import ErrorMsg from "../Error/ErrorMsg";
+import { Link } from 'react-router-dom';
+
 import Booking from "./Booking";
 import { IconButton } from "@mui/material";
 import config from "../../chatbot/config.js";
@@ -99,7 +101,8 @@ function JobSeekerLandingPage(props) {
     setState(job.state);
     setPrice(job.price);
     setResponsibilities(job.responsibilities);
-    setTotalReviews(job.setTotalReviews);
+    setTotalReviews(job.totalReviews);
+    setRating(job.avgRating);
     if(job!= null && job.save) {
       setSavedJob(true);
       document.getElementById('jobsavebtn').disabled = true
@@ -177,8 +180,9 @@ function JobSeekerLandingPage(props) {
             setState(job.state);
             setPrice(job.price);
             setResponsibilities(job.responsibilities);
-            setTotalReviews(job.setTotalReviews);
             setSavedJob(job.save);
+            setTotalReviews(job.totalReviews);
+            setRating(job.avgRating);
             if(job.save) {
               document.getElementById('jobsavebtn').disabled = true
             } else {
@@ -446,7 +450,9 @@ function JobSeekerLandingPage(props) {
                 </h6>
                 <RatingView ratingValue={rating} />
                 <br />
-                <h6 class="card-title">{totalReviews} reviews</h6>
+                <Link style={{textDecoration: 'none'}}  to={{pathname:'/reviews',serviceid:jobId}}><h6>{totalReviews} reviews</h6></Link>
+
+                {/* <h6 class="card-title" onClick={()=>setRedirectToReview(jobId)}>{totalReviews} reviews</h6> */}
                 <h6 class="card-title">
                   {city}, {state}
                 </h6>
