@@ -108,13 +108,13 @@ function Booking(props) {
                 </div>
                 
                 <div className="row" style={{border:'1px solid darkgray', boxShadow:'1px 1px 1px 1px darkgray',padding:'20px 20px 5px 20px'}}>
-                Calender:<DatePicker placeholder="Service Date" showTimeSelect timeIntervals={60} selected={selectedDate}  onChange={(date) => setDate(date)}  maxDate={endDate} minDate = {startDate} dateFormat="MM/dd/yyyy  EE hh:mm a" maxTime={endTime} minTime = {startTime}/>
                     <Form onSubmit={bookService} className="booking-form">
-                        {/* <Form.Group className="mb-3 spacer">
+                        <Form.Group className="mb-3 spacer">
                             <Form.Label>
+                            Calender:<DatePicker placeholder="Service Date" showTimeSelect timeIntervals={60} selected={selectedDate}  onChange={(date) => setDate(date)}  maxDate={endDate} minDate = {startDate} dateFormat="MM/dd/yyyy  EE hh:mm a" maxTime={endTime} minTime = {startTime}/>
 
                             </Form.Label>
-                        </Form.Group> */}
+                        </Form.Group>
                         <Form.Group className="mb-3 spacer">
                             <Form.Control type="text" placeholder="Address" name="address" maxLength="60" required></Form.Control>
                         </Form.Group>
