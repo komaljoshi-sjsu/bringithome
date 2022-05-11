@@ -382,23 +382,40 @@ router.get("/api/getBookedSlots/:serviceId/:userId", (req, res) => {
   })
     .select("date time -_id")
     .then((result) => {
-      const dateArr = result.map((ele) => {
-        let modifiedDate = ele.date.replace(/[/]/g, "-");
-        return modifiedDate;
-      });
-      const timeArr = result.map((ele) => {
+      console.log(result);
+      const dateTimeArr = [];
+      for(let i=0;i<result.length;i++) {
+        let ele = result[i];
+        let date = ele.date.split("/");
+        
+        let modifiedDate = new Date(parseInt(date[2]),parseInt(date[0])-1,parseInt(date[1]))
+        
         let tim = ele.time.split(":");
         let hour = parseInt(tim[0]);
         let min = parseInt(tim[1]);
 
-        date.setHours(hour, min);
-        console.log(`hour ${hour} min ${min}`);
-        console.log(date);
-        return date;
-      });
+        modifiedDate.setHours(hour, min);
+        
+        dateTimeArr.push(modifiedDate.toString())
+        console.log(`dateTimeArr is ${dateTimeArr} and modifiedDate is ${modifiedDate}`)
+      }
+      // const dateTimeArr = result.map((ele) => {
+        
+      //   return modifiedDate;
+      // });
+      // const timeArr = result.map((ele) => {
+      //   let tim = ele.time.split(":");
+      //   let hour = parseInt(tim[0]);
+      //   let min = parseInt(tim[1]);
+
+      //   date.setHours(hour, min);
+      //   console.log(`hour ${hour} min ${min}`);
+      //   console.log(date);
+      //   return date;
+      // });
       const json = {
-        date: dateArr,
-        time: timeArr,
+        // date: dateArr,
+        // time: timeArr,
         dateTimeArr: dateTimeArr,
       };
       console.log(json);

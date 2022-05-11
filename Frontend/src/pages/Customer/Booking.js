@@ -7,6 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import CustomerLoggedIn from "./CustomerLoggedIn";
 import { useSelector } from "react-redux";
+import moment from 'moment';
 function Booking(props) {
     const[bookedDates, setbookedDates] = useState([]);
     const[bookedTimeSlots, setbookedTimeSlots] = useState([]);
@@ -23,25 +24,23 @@ function Booking(props) {
         let eDate = new Date();
         eDate.setMonth(eDate.getMonth() + 2);
         setEndDate(eDate);
-        if(props.serviceid == null)
+        if(props.location.state.serviceid == null)
             return;
         // axios.defaults.headers.common['authorization'] = token;
         axios.get(backendServer+'/api/getBookedSlots/'+props.location.state.serviceid+'/'+props.location.state.userid).then(res=> {
             if(res.status == 200) {
-                
-                let dateArr = res.data.date;
                 let timeArr = res.data.dateTimeArr;
-                let bDates = dateArr.map(d=> {
-                    return new Date(d);
+                let bDates = timeArr.map(d=> {
+                    let newDate =  new moment(d).format('MM/DD/YYYY  ddd hh:mm A');
+                    return newDate
                 });
-                let bTimes = dateArr.map(t=> {
-                    return new Date(0,0,0,parseInt(t[0]),parseInt(t[1]));
-                });
-                console.log('booked dates:',bDates);
-                console.log('booked times:',timeArr);
-                //setbookedDates(bDates);
-                setbookedTimeSlots(timeArr);
-
+                setbookedTimeSlots(bDates);
+                let dateArr = res.data.date;
+                dateArr = res.data.date;
+                dateArr = res.data.date;
+                dateArr = res.data.date;
+                dateArr = res.data.date;
+                console.log('booked dates:',bookedTimeSlots);
             } else {
                 alert(res.data);
             }
@@ -84,13 +83,13 @@ function Booking(props) {
                 </div>
                 
                 <div className="row" style={{border:'1px solid darkgray', boxShadow:'1px 1px 1px 1px darkgray',padding:'20px 20px 5px 20px'}}>
+                Calender:<DatePicker placeholder="Service Date" showTimeSelect timeIntervals={60} selected={selectedDate} excludeTimes={bookedTimeSlots} onChange={(date) => setSelectedDate(date)}  maxDate={endDate} minDate = {startDate} dateFormat="MM/dd/yyyy  EE hh:mm a" maxTime={endTime} minTime = {startTime}/>
                     <Form onSubmit={bookService} className="booking-form">
-                        <Form.Group className="mb-3 spacer">
+                        {/* <Form.Group className="mb-3 spacer">
                             <Form.Label>
-                                Calender:<DatePicker placeholder="Service Date" showTimeSelect timeIntervals={60} selected={selectedDate} onChange={(date) => setSelectedDate(date)}  excludeTimes={bookedTimeSlots} maxDate={endDate} minDate = {startDate} dateFormat="MM/dd/yyyy  EE hh:mm a" maxTime={endTime} minTime = {startTime}/>
 
                             </Form.Label>
-                        </Form.Group>
+                        </Form.Group> */}
                         <Form.Group className="mb-3 spacer">
                             <Form.Control type="text" placeholder="Address" name="address" maxLength="60" required></Form.Control>
                         </Form.Group>
