@@ -87,7 +87,7 @@ function Booking(props) {
                     <Form onSubmit={bookService} className="booking-form">
                         <Form.Group className="mb-3 spacer">
                             <Form.Label>
-                                <img src='../../images/calender.png' height="20px" width="20px" style={{float:'left'}}/><DatePicker placeholder="Service Date" showTimeSelect timeIntervals={60} selected={selectedDate} onChange={(date) => setSelectedDate(date)}  excludeTimes={bookedTimeSlots} maxDate={endDate} minDate = {startDate} dateFormat="MM/dd/yyyy  EE hh:mm a" maxTime={endTime} minTime = {startTime}/>
+                                Calender:<DatePicker placeholder="Service Date" showTimeSelect timeIntervals={60} selected={selectedDate} onChange={(date) => setSelectedDate(date)}  excludeTimes={bookedTimeSlots} maxDate={endDate} minDate = {startDate} dateFormat="MM/dd/yyyy  EE hh:mm a" maxTime={endTime} minTime = {startTime}/>
 
                             </Form.Label>
                         </Form.Group>
