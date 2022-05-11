@@ -62,6 +62,7 @@ function JobSeekerLandingPage(props) {
   const [companyName, setCompanyName] = useState("");
   const [companyId, setCompanyId] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [savedJob, setSavedJob] = useState(false);
   const [redirectVal, redirectValFn] = useState(null);
 
   const [show, toggleShow] = useState(false);
@@ -99,6 +100,14 @@ function JobSeekerLandingPage(props) {
     setPrice(job.price);
     setResponsibilities(job.responsibilities);
     setTotalReviews(job.setTotalReviews);
+    if(job!= null && job.save) {
+      setSavedJob(true);
+      document.getElementById('jobsavebtn').disabled = true
+    } else if(job!= null && !job.save) {
+      setSavedJob(false);
+      document.getElementById('jobsavebtn').disabled = false
+    }
+    setSavedJob(job.save);
   };
   const handleCompanyLink = () => {};
   const handleApply = () => {};
@@ -116,6 +125,16 @@ function JobSeekerLandingPage(props) {
         console.log("saved job results", res);
         if (res.status == 200) {
           alert("saved");
+          document.getElementById('jobsavebtn').disabled = true
+          let serv = jobs.map(jb=> {
+            let newJob = JSON.parse(JSON.stringify(jb));
+            if(newJob._id == serviceId) {
+              newJob.save = true;
+            }
+            return newJob;
+          })
+          setJobs(serv);
+          setSavedJob(true);
         } else {
           alert(res.data);
         }
@@ -159,6 +178,12 @@ function JobSeekerLandingPage(props) {
             setPrice(job.price);
             setResponsibilities(job.responsibilities);
             setTotalReviews(job.setTotalReviews);
+            setSavedJob(job.save);
+            if(job.save) {
+              document.getElementById('jobsavebtn').disabled = true
+            } else {
+              document.getElementById('jobsavebtn').disabled = false
+            }
           }
         }
       });
@@ -445,11 +470,11 @@ function JobSeekerLandingPage(props) {
                   <button
                     type="button"
                     class="btn savebtn"
-                    id={companyId}
+                    id='jobsavebtn'
                     onClick={() => handleSaveJob(jobId)}
                   >
                     <h5 style={{ marginTop: "4px", color: "white" }}>
-                      {t("Save")}
+                      {savedJob ? t("Saved"):t("Save")}
                     </h5>
                   </button>
                 </div>
