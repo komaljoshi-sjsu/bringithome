@@ -8,8 +8,11 @@ import axios from "axios";
 import CustomerLoggedIn from "./CustomerLoggedIn";
 import { useSelector } from "react-redux";
 import moment from 'moment';
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
 function Booking(props) {
-    const[bookedDates, setbookedDates] = useState([]);
+    const[dateMap, setDateMap] = useState({});
+    const[traversed, settraversed] = useState(false);
     const[bookedTimeSlots, setbookedTimeSlots] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
@@ -30,16 +33,29 @@ function Booking(props) {
         axios.get(backendServer+'/api/getBookedSlots/'+props.location.state.serviceid+'/'+props.location.state.userid).then(res=> {
             if(res.status == 200) {
                 let timeArr = res.data.dateTimeArr;
+                let map = {}
                 let bDates = timeArr.map(d=> {
-                    let newDate =  new moment(d).format('MM/DD/YYYY  ddd hh:mm A');
-                    return newDate
+                    
+                    // let newDate =  new moment(new moment(d).format('MM/DD/YYYY  ddd hh:mm A'));
+                    let newDate =  new Date(d);
+                    let nd = setHours(setMinutes(newDate, newDate.getMinutes()), newDate.getHours());
+                    map[newDate.toString()]='';
+                    console.log(typeof(nd))
+                    return nd
                 });
-                setbookedTimeSlots(bDates);
-                let dateArr = res.data.date;
-                dateArr = res.data.date;
-                dateArr = res.data.date;
-                dateArr = res.data.date;
-                dateArr = res.data.date;
+                let isNew = true;
+                for (const [key, value] of Object.entries(map)) {
+                    if(dateMap[key]!=null) {
+                        isNew = false;
+                        break;
+                    }
+                }
+                if(isNew) {
+                    setDateMap(map);
+                    setbookedTimeSlots(bDates);
+                }
+                
+                
                 console.log('booked dates:',bookedTimeSlots);
             } else {
                 alert(res.data);
@@ -48,7 +64,7 @@ function Booking(props) {
             //alert('Failed to fetch booked slots.');
             console.log('Failed to fetch booked slots:',err);
         })
-    },[]);
+    },[bookedTimeSlots]);
     
     const bookService = (e)=> {
         e.preventDefault()
@@ -73,6 +89,15 @@ function Booking(props) {
             console.log(err);
         })
     }
+
+    const setDate = (val)=> {
+        if(dateMap[val]!=null) {
+            alert('Sorry the time slot for this date is already booked')
+            return
+        }
+        setSelectedDate(val);
+
+    }
     return (
         <div className="container-fullwidth" >
             <CustomerLoggedIn></CustomerLoggedIn>
@@ -83,7 +108,7 @@ function Booking(props) {
                 </div>
                 
                 <div className="row" style={{border:'1px solid darkgray', boxShadow:'1px 1px 1px 1px darkgray',padding:'20px 20px 5px 20px'}}>
-                Calender:<DatePicker placeholder="Service Date" showTimeSelect timeIntervals={60} selected={selectedDate} excludeTimes={bookedTimeSlots} onChange={(date) => setSelectedDate(date)}  maxDate={endDate} minDate = {startDate} dateFormat="MM/dd/yyyy  EE hh:mm a" maxTime={endTime} minTime = {startTime}/>
+                Calender:<DatePicker placeholder="Service Date" showTimeSelect timeIntervals={60} selected={selectedDate}  onChange={(date) => setDate(date)}  maxDate={endDate} minDate = {startDate} dateFormat="MM/dd/yyyy  EE hh:mm a" maxTime={endTime} minTime = {startTime}/>
                     <Form onSubmit={bookService} className="booking-form">
                         {/* <Form.Group className="mb-3 spacer">
                             <Form.Label>
