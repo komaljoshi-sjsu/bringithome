@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
+import { Redirect } from "react-router";
 const ServiceProviderOptions = (props, { actionProvider }) => {
   //const [imageUrl, setImageUrl] = useState("");
-
+  const [redirectVal, redirectValFn] = useState(null);
   const { setState } = props;
 
   //setState((state) => ({ ...state, options: data }));
@@ -17,9 +18,8 @@ const ServiceProviderOptions = (props, { actionProvider }) => {
       ...prev,
       messages: [...prev.messages, message],
     }));
-    if (option.target.innerHTML === "Find a Service") {
-      props.actionProvider.createClientMessage("Find a Service");
-      props.actionProvider.findServicesHandler();
+    if (option.target.innerHTML === "Chat with Service Provider") {
+      return redirectValFn(<Redirect to="/messenger" />);
     } else if (option.target.innerHTML === "Post a review") {
       props.actionProvider.postReviewHandler();
     } else if (option.target.innerHTML === "Service History") {

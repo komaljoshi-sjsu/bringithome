@@ -6,10 +6,11 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "../../CSS/JobSeekerLanding.css";
 import TextField from "@mui/material/TextField";
 import { RatingView } from "react-simple-star-rating";
-import { makeStyles } from "@material-ui/styles";
+import Draggable from "react-draggable";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import Minimize from "@mui/icons-material/ExpandMoreSharp";
+import Maximize from "@mui/icons-material/ExpandLessSharp";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -19,6 +20,7 @@ import CustomerLoggedIn from "./CustomerLoggedIn";
 import backendServer from "../../webConfig";
 import ErrorMsg from "../Error/ErrorMsg";
 import Booking from "./Booking";
+import { IconButton } from "@mui/material";
 import config from "../../chatbot/config.js";
 //import getConfig from "../../chatbot/getConfig.js";
 import Chatbot from "react-chatbot-kit";
@@ -46,7 +48,7 @@ function JobSeekerLandingPage(props) {
   const [zip, setZip] = useState("");
   const [openWhat, setOpenWhat] = React.useState(false);
   const [openWhere, setOpenWhere] = React.useState(false);
-
+  const onClick = () => toggleShow(false);
   const [whatOptions, setWhatOptions] = React.useState([]);
   const [whereOptions, setWhereOptions] = React.useState([]);
   const loadingWhat = openWhat;
@@ -61,11 +63,12 @@ function JobSeekerLandingPage(props) {
   const [companyId, setCompanyId] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [redirectVal, redirectValFn] = useState(null);
+
   const [show, toggleShow] = useState(false);
   const email = useSelector((state) => state.userInfo.email);
   const accountType = useSelector((state) => state.userInfo.accountType);
   const userid = useSelector((state) => state.userInfo.id);
-
+  const [minimizeBot, setMinimizeBot] = useState(true);
   let setReDirect = (price, jobId) => {
     let toVal = {
       pathname: "/booking",
@@ -116,7 +119,7 @@ function JobSeekerLandingPage(props) {
     setWhatOptions([]);
     setWhereOptions([]);
     axios
-      .get("http://localhost:8000/customer/home/" + currentPage + "/" + userid)
+      .get(`${backendServer}/customer/home/` + currentPage + "/" + userid)
       .then((res) => {
         console.log("Home page data:", res);
         if (res.status == 200) {
@@ -165,20 +168,22 @@ function JobSeekerLandingPage(props) {
   const getWhatServices = (what) => {
     handleWhatVal(what);
     const data = { where: `${whereVal}`, what: what };
-    axios
-      .post("http://localhost:8000/api/allServicesByWhat/", data)
-      .then((res) => {
-        console.log("Home page data:", res);
-        if (res.status == 200) {
-          let services = res.data;
+    axios.post(`${backendServer}/api/allServicesByWhat/`, data).then((res) => {
+      console.log("Home page data:", res);
+      if (res.status === 200) {
+        let services = res.data;
+        if (services.length === 0) {
+          setOpenWhere(false);
+        } else {
           setWhatOptions(services);
         }
-      });
+      }
+    });
   };
 
   const handleFindServices = () => {
     const data = { where: `${whereVal}`, what: `${whatVal}` };
-    axios.post("http://localhost:8000/api/findServices/", data).then((res) => {
+    axios.post(`${backendServer}/api/findServices/`, data).then((res) => {
       console.log("Home page data:", res);
       if (res.status == 200) {
         let services = res.data;
@@ -189,17 +194,18 @@ function JobSeekerLandingPage(props) {
   const getWhereServices = (where) => {
     handleWhereVal(where);
     const data = { where: where, what: `${whatVal}` };
-    axios
-      .post("http://localhost:8000/api/allServicesByWhere/", data)
-      .then((res) => {
-        console.log("Home page data:", res);
-        if (res.status == 200) {
-          let services = res.data;
+    axios.post(`${backendServer}/api/allServicesByWhere/`, data).then((res) => {
+      console.log("Home page data:", res);
+      if (res.status == 200) {
+        let services = res.data;
+        if (services.length === 0) {
+          setOpenWhere(false);
+        } else {
           setWhereOptions(services);
         }
-      });
+      }
+    });
   };
-  const [showBooking, setShowBooking] = useState(false);
   return (
     <div className="container-full">
       <ErrorMsg err={errMsg}></ErrorMsg>
@@ -237,7 +243,7 @@ function JobSeekerLandingPage(props) {
                         {...params}
                         label="What"
                         variant="outlined"
-                        onSelect={(ev) => getWhatServices(ev.target.value)}
+                        onSelect={(ev) => handleWhatVal(ev.target.value)}
                         onChange={(ev) => {
                           // dont fire API if the user delete or not entered anything
                           if (
@@ -286,7 +292,7 @@ function JobSeekerLandingPage(props) {
                         {...params}
                         label="Where"
                         variant="outlined"
-                        onSelect={(ev) => getWhereServices(ev.target.value)}
+                        onSelect={(ev) => handleWhereVal(ev.target.value)}
                         onChange={(ev) => {
                           // dont fire API if the user delete or not entered anything
                           if (
@@ -477,13 +483,38 @@ function JobSeekerLandingPage(props) {
           </nav>
         </div>
       </div>
-      <div className="appChatbotContainer_3u5t">
-        <Chatbot
-          config={config}
-          messageParser={MessageParser}
-          actionProvider={ActionProvider}
-        />
-      </div>
+      {minimizeBot ? (
+        <Draggable>
+          <div className="appChatbotContainer_3u5t">
+            <Chatbot
+              config={config}
+              messageParser={MessageParser}
+              actionProvider={ActionProvider}
+              headerText=""
+            />
+            <IconButton
+              style={{ height: "50px" }}
+              onClick={() => setMinimizeBot(!minimizeBot)}
+              className="btn-overlay"
+            >
+              <Minimize />
+            </IconButton>
+          </div>
+        </Draggable>
+      ) : (
+        <Draggable>
+          <div className="appChatbotContainer_3u5t">
+            <div className="react-chatbot-kit-chat-container">
+              <div className="react-chatbot-kit-chat-header">
+                Conversation with Liz
+                <IconButton onClick={() => setMinimizeBot(!minimizeBot)}>
+                  <Maximize />
+                </IconButton>
+              </div>
+            </div>
+          </div>
+        </Draggable>
+      )}
     </div>
   );
 }

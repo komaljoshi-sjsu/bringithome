@@ -65,7 +65,7 @@ function ProfileUpdate(props) {
     const phoneno = formData.get("phone");
     const password = formData.get("password");
 
-    const data = { phone: phone, name: name, password: password };
+    const data = { phone: phoneno, name: name, password: password };
     axios
       .post(backendServer + "/api/updateJobSeekerProfile", {
         id: id,
@@ -213,7 +213,7 @@ function ProfileUpdate(props) {
                 <Form.Control
                   type="password"
                   name="password"
-                  defaultValue={email}
+                  defaultValue={password}
                   required
                   maxLength="45"
                   style={{ color: "grey" }}

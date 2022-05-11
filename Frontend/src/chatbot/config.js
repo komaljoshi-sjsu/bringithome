@@ -1,17 +1,11 @@
 import { createChatBotMessage } from "react-chatbot-kit";
 import ServiceProviderOptions from "../chatWidgets/ServiceProviderOptions";
-import FindService from "../chatWidgets/FindServices";
 import ServiceHistory from "../chatWidgets/ServiceHistory";
 import ServiceUpcomingHistory from "../chatWidgets/ServiceUpcomingHistory";
 import SelectedService from "../chatWidgets/SelectedService";
 import PostAReviewForService from "../chatWidgets/PostAreviewForService";
 import AddReviewForService from "../chatWidgets/AddreviewForService";
-import { IconButton } from "@material-ui/core";
-import Minimize from "@mui/icons-material/Minimize";
-import { toggleButtonClasses } from "@mui/material";
-const toggleBtnCss = () => {
-  console.log("Hi");
-};
+
 const config = {
   initialMessages: [createChatBotMessage(`Hello there!`)],
   botName: "Liz",
@@ -21,11 +15,6 @@ const config = {
       widgetName: "chatOptions",
       widgetFunc: (props) => <ServiceProviderOptions {...props} />,
       mapStateToProps: ["options"],
-    },
-    {
-      widgetName: "serviceProviderList",
-      widgetFunc: (props) => <FindService {...props} />,
-      mapStateToProps: ["serviceProvidersList"],
     },
     {
       widgetName: "serviceHistoryList",
@@ -54,13 +43,7 @@ const config = {
     },
   ],
   state: {
-    options: [
-      "Find a Service",
-      "Chat with Service Provider",
-      "Post a review",
-      "Service History",
-      "Upcoming Services",
-    ],
+    options: ["Post a review", "Service History", "Upcoming Services"],
     serviceProvidersList: [],
     serviceHistoryList: [],
     serviceUpcomingList: [],
