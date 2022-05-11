@@ -32,7 +32,7 @@ const AddreviewForService = (props) => {
       title: title,
       postedOn: new Date(),
     };
-    axios.post(`http://localhost:8000/api/postReview`, data).then((res) => {
+    axios.post(`${backendServer}/api/postReview`, data).then((res) => {
       if (res.status === 200) {
         const message = props.actionProvider.createChatBotMessage(
           `Your review for service  ${props.serviceDetail.serviceid.serviceName} posted successfully`

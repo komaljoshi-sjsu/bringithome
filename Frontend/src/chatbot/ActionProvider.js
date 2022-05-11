@@ -1,4 +1,5 @@
 // ActionProvider starter code
+import { Redirect } from "react-router";
 class ActionProvider {
   constructor(
     createChatBotMessage,
@@ -12,6 +13,9 @@ class ActionProvider {
     this.setState = setStateFunc;
     this.createClientMessage = createClientMessage;
     this.stateRef = stateRef;
+    this.state = {
+      redirect: null,
+    };
     this.createCustomMessage = createCustomMessage;
   }
 
@@ -23,6 +27,12 @@ class ActionProvider {
       ...prev,
       messages: [...prev.messages, message],
     }));
+  };
+  chatWithServiceProviderHandler = () => {
+    this.setState({
+      redirect: <Redirect to="/messenger" />,
+    });
+    return this.state.redirect;
   };
   findServicesHandler = () => {
     const message = this.createChatBotMessage(

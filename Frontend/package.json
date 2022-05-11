@@ -39,6 +39,7 @@
     "react-country-region-selector": "^3.3.0",
     "react-datepicker": "^4.7.0",
     "react-dom": "^17.0.1",
+    "react-draggable": "^4.4.5",
     "react-grid-gallery": "^0.5.5",
     "react-i18next": "^11.16.9",
     "react-icons": "^4.3.1",
