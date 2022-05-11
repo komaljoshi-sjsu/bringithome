@@ -3,8 +3,9 @@
 const express = require("express");
 const router = express.Router();
 const Freelancer = require('../models/Freelancer');
+const { checkAuth } = require("../config/passport");
 
-router.post("/api/postEmployerDetails", (req, res) => {
+router.post("/api/postEmployerDetails",checkAuth, (req, res) => {
     // const companyName = req.body.companyName;
     console.log(req.body);
     const { 

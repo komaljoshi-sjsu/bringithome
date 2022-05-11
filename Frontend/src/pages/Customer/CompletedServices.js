@@ -21,6 +21,9 @@ function CompletedServices(props) {
     const [jobs,setServices] = useState([]);
     const [serviceid,setServiceId] = useState('');
     const[hide, hideModal] = useState(true);
+    const[reviewTitle, setReviewTitle] = useState('');
+    const[reviewComments, setReviewComments] = useState('');
+    const[rating, setRating] = useState(0);
     const showErrorModal = bindActionCreators(userActionCreator.showErrorModal,dispatch);
     useEffect(()=> {
         axios.get(backendServer+'/api/completedServices/'+userid)
@@ -28,6 +31,7 @@ function CompletedServices(props) {
             console.log('saved job results',res);
             if(res.status== 200) {
                 setServices(res.data);
+                
             } else {
                 setErrMsg(res.data.msg);
                 showErrorModal(true);
@@ -39,7 +43,16 @@ function CompletedServices(props) {
         }); 
     },[]);
 
-   const setReview = (e,serviceid) => {
+   const setReview = (e,serviceid,review) => {
+        if(review!=null) {
+            setReviewTitle(review.title);
+            setReviewComments(review.review);
+            setRating(review.rating);
+        } else {
+            setReviewTitle('');
+            setReviewComments('');
+            setRating(0);
+        }
        setServiceId(serviceid);
        hideModal(false);
    }
@@ -47,7 +60,7 @@ function CompletedServices(props) {
         <div>
             <ErrorMsg err={errMsg}></ErrorMsg>
             {/* <CustomerLoggedIn /> */}
-            <ReviewModal show={!hide} hideModal={hideModal} serviceid={serviceid}></ReviewModal>
+            <ReviewModal show={!hide} hideModal={hideModal} serviceid={serviceid} rating={rating} title={reviewTitle} review={reviewComments}></ReviewModal>
             <div class="container-fluid">
                 <div class="row">
                     <MyServices></MyServices>
@@ -68,7 +81,7 @@ function CompletedServices(props) {
                                             <b>{job.serviceMode}</b><br></br>
                                             <b>${job.price}</b>
                                         </Card.Text>
-                                        <Button variant="primary" className='book-button' onClick={(e)=>setReview(e,job._id)}>Review Service</Button>
+                                        <Button variant="primary" className='book-button' onClick={(e)=>setReview(e,job._id,job.review)}>Review Service</Button>
                                     </Card.Body>
                             </Card>
                         )

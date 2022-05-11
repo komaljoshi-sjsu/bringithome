@@ -17,6 +17,18 @@ router.get("/api/getReviews/:userid", (req, res) => {
     
 });
 
+router.get("/api/getReviewsByServiceId/:serviceid", (req, res) => {
+    const serviceid = req.params.serviceid;
+    Review.find({service:serviceid}).then(async(result)=> {
+        console.log(`found reviews for service id ${serviceid}: \n ${result}`)
+        res.status(200).send(result);
+    }).catch(err=> {
+        console.log(err);
+        res.status(400).send('Could not get reviews.');
+    })
+    
+});
+
 
 router.get("/api/allReviews/:currentPage", async (req, res) => {
     const postsPerPage = 18;
@@ -65,16 +77,28 @@ router.post("/api/postReview", (req, res) => {
     const title = req.body.title;
     const postedOn = Date().toLocaleString();
 
-    const reviewData = new Review({
+    const rData = {
         userid: userid,
         service: serviceid,
         rating: parseFloat(rating),
         review: review,
         title: title,
         postedOn: postedOn
-    });
+    }
+    const query = {
+        userid: userid,
+        service: serviceid
+    }
+    // const reviewData = new Review({
+    //     userid: userid,
+    //     service: serviceid,
+    //     rating: parseFloat(rating),
+    //     review: review,
+    //     title: title,
+    //     postedOn: postedOn
+    // });
 
-    reviewData.save().then(async(result)=> {
+    Review.findOneAndUpdate(query,rData,{upsert: true}).then(async(result)=> {
         console.log('saved review',result);
         res.status(200).send('success');
     }).catch(err=> {

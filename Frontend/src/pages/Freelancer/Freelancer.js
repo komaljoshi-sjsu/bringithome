@@ -43,6 +43,7 @@ class Employer extends Component {
   }
   updateJobSeekerStatus = (statuschange)=>{
     console.log("BOOKING STATUS Changes", statuschange)
+    // axios.defaults.headers.common['authorization'] = this.props.userInfo.token;
      axios.post(`${backendServer}/updateJobSeekerStatus`, statuschange)
              .then(response => {
                  console.log(response)
@@ -91,8 +92,8 @@ handleModalCloseProfile(){
 }
   handleSubmit = (e) => {
     e.preventDefault();
-    const { history } = this.props;
-    history.push('/postService');
+    // console.log(this.props);
+    this.props.history.push('/postService');
   }
   viewJobSeekerProfile = (id) => {
     const jobSeekerId = {

@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import CustomerLoggedIn from "./CustomerLoggedIn";
+import { useSelector } from "react-redux";
 function Booking(props) {
     const[bookedDates, setbookedDates] = useState([]);
     const[bookedTimeSlots, setbookedTimeSlots] = useState([]);
@@ -15,6 +16,7 @@ function Booking(props) {
     const [selectedTime, setSelectedTime] = useState(new Date());
     const [endTime, setEndTime] = useState(new Date(0, 0, 0, 23, 0));
     const [endDate, setEndDate] = useState(new Date());
+    const token = useSelector((state) => state.userInfo.token);
     // //dummy array for booked dates
     // const dates = [new Date('05-21-2022'), new Date('05-10-2022')];
     useEffect(()=> {
@@ -23,6 +25,7 @@ function Booking(props) {
         setEndDate(eDate);
         if(props.serviceid == null)
             return;
+        // axios.defaults.headers.common['authorization'] = token;
         axios.get(backendServer+'/api/getBookedSlots/'+props.location.state.serviceid+'/'+props.location.state.userid).then(res=> {
             if(res.status == 200) {
                 
@@ -84,7 +87,7 @@ function Booking(props) {
                     <Form onSubmit={bookService} className="booking-form">
                         <Form.Group className="mb-3 spacer">
                             <Form.Label>
-                                <img src='../../images/calender.png' height="20px" width="20px" style={{float:'left'}}/><DatePicker placeholder="Service Date" showTimeSelect timeIntervals={60} selected={selectedDate} onChange={(date) => setSelectedDate(date)}  excludeTimes={bookedTimeSlots} maxDate={endDate} minDate = {startDate} dateFormat="MM/dd/yyyy  EE hh:mm a" maxTime={endTime} minTime = {startTime}/>
+                                Calender:<DatePicker placeholder="Service Date" showTimeSelect timeIntervals={60} selected={selectedDate} onChange={(date) => setSelectedDate(date)}  excludeTimes={bookedTimeSlots} maxDate={endDate} minDate = {startDate} dateFormat="MM/dd/yyyy  EE hh:mm a" maxTime={endTime} minTime = {startTime}/>
 
                             </Form.Label>
                         </Form.Group>

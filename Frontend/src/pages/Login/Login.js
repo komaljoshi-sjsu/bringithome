@@ -60,7 +60,13 @@ function Login(props) {
             setErrMsg(res.data);
             showErrorModal(true);
         } else {
-            let user = res.data;
+            // let user = res.data.userData;
+            // setToken(res.data.JWT);
+            // console.log(user)
+            setToken(res.data);
+            var decoded = jwt_decode(res.data.split(' ')[1]);
+            const user = decoded.user;
+            console.log(decoded);
             setEmail(user.email);
             setName(user.name);
             setAccountType(accountType);

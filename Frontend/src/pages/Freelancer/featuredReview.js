@@ -18,11 +18,14 @@ function Reviews(props) {
     const userid = useSelector((state)=>state.userInfo.id);
     const[errMsg,setErrMsg] = useState('');
     const [jobs,setServices] = useState([]);
+    const token = useSelector((state) => state.userInfo.token);
+
     const showErrorModal = bindActionCreators(userActionCreator.showErrorModal,dispatch);
     useEffect(()=> {
+        axios.defaults.headers.common['authorization'] = token;
         axios.get(backendServer+'/allCompanyReviews/'+userid)
         .then(res => {
-            console.log('saved job results',res);
+            console.log('reviews result',res);
             if(res.status== 200) {
                 setServices(res.data);
             } else {
@@ -30,7 +33,7 @@ function Reviews(props) {
                 showErrorModal(true);
             }
         }).catch(err => {
-            setErrMsg('Failed to get saved job details. Please check console');
+            setErrMsg('Failed to get reviews. Please check console');
             showErrorModal(true);
             console.log(err);
         }); 
@@ -42,7 +45,7 @@ function Reviews(props) {
             <FreelancerNavbar/>
             <div class="container-fluid">
                 <div class="row" style={{marginLeft:'20%',marginRight:'20%', marginTop:'40px'}}>
-                    <h2><b>My Reviews</b></h2><br></br>
+                    <h2><b>Customer Reviews</b></h2><br></br>
                 </div>
                 <div style={{marginLeft:'20%',marginRight:'20%'}}>
                     <Row xs={1} md={1} className="g-4">
