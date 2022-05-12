@@ -20,7 +20,7 @@ import CustomerLoggedIn from "./CustomerLoggedIn";
 import backendServer from "../../webConfig";
 import ErrorMsg from "../Error/ErrorMsg";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { userActionCreator } from "../../reduxutils/actions.js";
 
 import Booking from "./Booking";
@@ -83,7 +83,6 @@ function JobSeekerLandingPage(props) {
 
   const [minimizeBot, setMinimizeBot] = useState(true);
   const token = useSelector((state) => state.userInfo.token);
-  const serviceData = [];
   let setReDirect = (price, jobId) => {
     if (email == null || email == "") {
       redirectValFn(<Redirect to="/login" />);
@@ -136,11 +135,10 @@ function JobSeekerLandingPage(props) {
       .then((res) => {
         console.log("saved job results", res);
         if (res.status == 200) {
-
           //alert("saved");
-          setErrMsg('Successfully saved the service');
-          document.getElementById('jobsavebtn').disabled = true
-          let serv = jobs.map(jb=> {
+          setErrMsg("Successfully saved the service");
+          document.getElementById("jobsavebtn").disabled = true;
+          let serv = jobs.map((jb) => {
             let newJob = JSON.parse(JSON.stringify(jb));
             if (newJob._id == serviceId) {
               newJob.save = true;
@@ -149,7 +147,7 @@ function JobSeekerLandingPage(props) {
           });
           setJobs(serv);
           setSavedJob(true);
-          
+
           showSuccessModal(true);
         } else {
           alert(res.data);
@@ -179,7 +177,7 @@ function JobSeekerLandingPage(props) {
           for (let i = 1; i <= pageForNow; i++) {
             pageNumber.push(i);
           }
-          createServiceData(res.data.services);
+          // createServiceData(res.data.services);
           setPageNumbers(pageNumber);
           console.log("pagenumber:", pageNumber);
           if (services.length > 0) {
@@ -206,12 +204,6 @@ function JobSeekerLandingPage(props) {
       });
   }, [currentPage]);
 
-  const createServiceData = (services) => {
-    services.forEach((element) => {
-      let data = { what: element.serviceName, where: city };
-      serviceData.push(data);
-    });
-  };
   const getServices = () => {
     axios
       .get(`${backendServer}/customer/home/` + currentPage + "/" + userid)
@@ -256,6 +248,10 @@ function JobSeekerLandingPage(props) {
   };
   const getWhatServices = (what) => {
     // handleWhatVal(what);
+    if (what === "") {
+      setWhatOptions([]);
+      return;
+    }
     const data = { where: `${whereVal}`, what: what };
     axios.post(`${backendServer}/api/allServicesByWhat/`, data).then((res) => {
       console.log("Home page data:", res);
@@ -289,6 +285,9 @@ function JobSeekerLandingPage(props) {
   };
   const getWhereServices = (where) => {
     // handleWhereVal(where);
+    if (where === "") {
+      setWhereOptions([]);
+    }
     const data = { where: where, what: `${whatVal}` };
     axios.post(`${backendServer}/api/allServicesByWhere/`, data).then((res) => {
       console.log("Home page data:", res);
@@ -343,6 +342,7 @@ function JobSeekerLandingPage(props) {
                     getOptionLabel={(option) => option.serviceName}
                     onSelect={(ev) => handleWhatVal(ev.target.value)}
                     options={whatOptions.map((option) => option)}
+                    filterOptions={(options, state) => options}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -387,6 +387,7 @@ function JobSeekerLandingPage(props) {
                     getOptionLabel={(option) => option.city}
                     options={whereOptions}
                     loading={loadingWhere}
+                    filterOptions={(options, state) => options}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -395,7 +396,6 @@ function JobSeekerLandingPage(props) {
                         value={whereVal}
                         onSelect={(ev) => handleWhereVal(ev.target.value)}
                         onChange={(ev) => {
-                          // dont fire API if the user delete or not entered anything
                           if (
                             ev.target.value !== "" ||
                             ev.target.value !== null
