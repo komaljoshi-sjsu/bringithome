@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { userActionCreator } from '../../reduxutils/actions.js'
 import ErrorMsg from '../Error/ErrorMsg'
-import {Button, Row } from "react-bootstrap";
+import {Button, Row, Col } from "react-bootstrap";
 import FreelancerNavbar from './FreelancerNavbar'
 
 function Reviews(props) {
@@ -54,12 +54,11 @@ function Reviews(props) {
                             <Card style={{ width: '100%', marginRight:'20px' }}>
                                 {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
                                     <Card.Body>
-                                        <Card.Title><h3><b>{job.serviceName}</b></h3></Card.Title>
-                                        <Card.Text>
-                                            <h4><b>{job.service.serviceCategory} - {job.service.serviceName}</b></h4>
-                                            <h5><b>{job.service.freelancer.name}</b></h5><br></br><br></br>
-                                            
-                                            <h6><b>{job.title}</b></h6><br></br>
+                                        <Card.Title><Row>
+                                            <Col>
+                                            <h4><b>{job.serviceName} - {job.serviceCategory}</b></h4>
+                                            </Col>
+                                            <Col style={{float:"right"}}>
                                             <ReactStars
                                             count={5}
                                             size={20}
@@ -68,7 +67,14 @@ function Reviews(props) {
                                             activeColor="#9d2b6b"
                                             edit={false}
                                             />
-                                            <b>{job.review}</b><br></br>
+                                            </Col>
+                                            </Row>
+                                            </Card.Title>
+                                        <Card.Text>
+                                            {/* <h5><b>{job.serviceCategory}</b></h5> */}
+                                            <h5 style ={{color:"Blue"}}><b>{job.userName}</b></h5><br/>
+                                            <h6><b> {job.title}</b></h6>
+                                            <b> {job.review}</b><br></br>
                                             <b></b><br></br>
                                         </Card.Text>
                                     </Card.Body>
