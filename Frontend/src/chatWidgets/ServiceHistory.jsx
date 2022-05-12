@@ -27,10 +27,10 @@ const ServiceHistory = (props) => {
       <Stack direction="row" spacing={1}>
         <div>
           {props.serviceHistoryList
-            .filter((s) => s.status === "completed")
+            .filter((s) => s.status === "Booked")
             .map((s) => (
               <Chip
-                label={s.serviceName}
+                label={s.serviceid.serviceName}
                 color="primary"
                 onClick={() => handleService(s)}
               />
