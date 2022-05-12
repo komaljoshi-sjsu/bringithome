@@ -4,19 +4,20 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const Services = require("../models/Service");
 const MyServices = require("../models/MyServices");
+const Review = require('../models/Review');
 
 router.get("/api/completedservices/:userid", (req, res) => {
   const userId = req.params.userid;
   MyServices.find({
     $and: [{ userid: userId }],
-    $or: [{ status: "Booked" }, { status: "cancelled" }],
+    $or: [{ status: "Booked" }, { status: "Cancelled" }],
   })
     .then(async (result) => {
       let serviceArr = [];
       console.log("applied serv;", result);
       for (let i = 0; i < result.length; i++) {
         let serv = result[i];
-        await Services.find({ _id: serv.serviceid }).then((service) => {
+        await Services.find({ _id: serv.serviceid }).then(async(service) => {
           let servc = service[0];
 
           let timeAr = serv.time.split(":");
@@ -35,6 +36,11 @@ router.get("/api/completedservices/:userid", (req, res) => {
             bookingid: serv._id,
             status: serv.status
           };
+          await Review.find({userid:userId,service:serv.serviceid}).then(result1=> {
+            if(result1.length>0) {
+              json.review = result1[0];
+            }
+          })
           console.log("result for applied services", json);
           serviceArr.push(json);
         });
@@ -96,7 +102,7 @@ router.post("/api/cancelService", (req, res) => {
   console.log(`Request canceling userid ${userId} serviceid ${serviceId}`);
   MyServices.findOneAndUpdate(
     { serviceid: serviceId, userid: userId, status: "pending" },
-    { status: "cancelled" }
+    { status: "Cancelled" }
   )
     .then((result) => {
       console.log("result for cancelled service", result);
@@ -376,23 +382,40 @@ router.get("/api/getBookedSlots/:serviceId/:userId", (req, res) => {
   })
     .select("date time -_id")
     .then((result) => {
-      const dateArr = result.map((ele) => {
-        let modifiedDate = ele.date.replace(/[/]/g, "-");
-        return modifiedDate;
-      });
-      const timeArr = result.map((ele) => {
+      console.log(result);
+      const dateTimeArr = [];
+      for(let i=0;i<result.length;i++) {
+        let ele = result[i];
+        let date = ele.date.split("/");
+        
+        let modifiedDate = new Date(parseInt(date[2]),parseInt(date[0])-1,parseInt(date[1]))
+        
         let tim = ele.time.split(":");
         let hour = parseInt(tim[0]);
         let min = parseInt(tim[1]);
 
-        date.setHours(hour, min);
-        console.log(`hour ${hour} min ${min}`);
-        console.log(date);
-        return date;
-      });
+        modifiedDate.setHours(hour, min);
+        
+        dateTimeArr.push(modifiedDate.toString())
+        console.log(`dateTimeArr is ${dateTimeArr} and modifiedDate is ${modifiedDate}`)
+      }
+      // const dateTimeArr = result.map((ele) => {
+        
+      //   return modifiedDate;
+      // });
+      // const timeArr = result.map((ele) => {
+      //   let tim = ele.time.split(":");
+      //   let hour = parseInt(tim[0]);
+      //   let min = parseInt(tim[1]);
+
+      //   date.setHours(hour, min);
+      //   console.log(`hour ${hour} min ${min}`);
+      //   console.log(date);
+      //   return date;
+      // });
       const json = {
-        date: dateArr,
-        time: timeArr,
+        // date: dateArr,
+        // time: timeArr,
         dateTimeArr: dateTimeArr,
       };
       console.log(json);

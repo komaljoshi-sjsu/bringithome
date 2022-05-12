@@ -3,8 +3,9 @@
 const express = require("express");
 const router = express.Router();
 const Freelancer = require('../models/Freelancer');
+const { checkAuth } = require("../config/passport");
 
-router.post('/api/getFreelancerDetails',  (req, res) => {
+router.post('/api/getFreelancerDetails', checkAuth, (req, res) => {
   // console.log(req.body)
   // const companyId = '6250af3cf71117d20cb7487b';
   const empid= req.body.empid;

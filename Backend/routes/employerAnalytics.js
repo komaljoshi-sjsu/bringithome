@@ -4,8 +4,9 @@ const router = express.Router()
 const Service =require('../models/Service');
 const MyServices = require('../models/MyServices');
 const Services = require('../models/Service');
+const { checkAuth } = require("../config/passport");
 
-router.get('/jobPosted', async (req, res) => {
+router.get('/servicePosted',checkAuth, async (req, res) => {
   try {
     let employerId=req.query.employerId;
     let count =0;
@@ -31,34 +32,32 @@ router.get('/jobPosted', async (req, res) => {
 }
 });
 
-router.get('/applicantsDetail', async (req, res) => {
+router.get('/applicantsDetail',checkAuth, async (req, res) => {
     try {
     let employerId=req.query.employerId;
     var serArr=[];
 
-    await MyServices.aggregate([
-      {
-        $lookup: {
-            from: "Service",
-            localField: "freelancer.freelancerId",
-            foreignField: employerId,
-            as: "id"
-        }
-      },
-        { $match: {$or : [{status:"pending"} ,{status: "Booked"},{status:"Cancelled"}]} },
+    await Services.find({"freelancer.freelancerId":employerId}).then(async result =>{
+      for(let i=0; i <result.length;i++){
+       serArr.push(result[i]._id);
+      }
+      // console.log("service id",serArr);
+      await MyServices.aggregate([
+        { $match:{$and :[{serviceid: {$in : serArr}}, {$or : [{status:"pending"} ,{status: "Booked"},{status:"Cancelled"}]}]} },
+        // { $match: {$or : [{status:"pending"} ,{status: "Booked"},{status:"Cancelled"}]} },
         {$group: {
-            _id: "$status", 
-            count: {$sum: 1} ,
-        }}
-    ],
-    function( err, data ) {
-      if ( err )
-        throw err;
-    console.log( "Customer booking Status", JSON.stringify( data, undefined, 2 ) );
-    res.status(200).send(JSON.stringify( data, undefined, 2 ));
-    }
-    );
-  // })
+          _id: "$status", 
+          count: {$sum: 1} ,
+      }}
+      ],
+      function( err, data ) {
+          if ( err )
+            throw err;
+        console.log( "Customer booking Status", JSON.stringify( data, undefined, 2 ) );
+        res.status(200).send(JSON.stringify( data, undefined, 2 ));
+        })
+    });
+
   } catch (error) {
     console.log(error);
     return res.status(400).send("Error while fetching service");

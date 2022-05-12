@@ -1,4 +1,4 @@
-import { React, Component, useState } from 'react';
+import { React, Component, useState, useEffect } from 'react';
 import {
   Modal, Button, Form, Row, Col,
 } from 'react-bootstrap';
@@ -16,6 +16,12 @@ function ReviewModal(props) {
   const[reviewComments, setReviewComments] = useState('');
   const[rating, setRating] = useState(0);
   const[errors, setErrors] = useState({reviewTitle:'',reviewComments:''});
+
+  useEffect(()=> {
+    setReviewComments(props.review);
+    setReviewTitle(props.title);
+    setRating(props.rating)
+  },[props.review,props.title,props.rating])
   const findFormErrors = () => {
     let err = {};
     if (!reviewTitle || reviewTitle === '') {
@@ -33,6 +39,7 @@ function ReviewModal(props) {
    
     return err;
   }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = findFormErrors();

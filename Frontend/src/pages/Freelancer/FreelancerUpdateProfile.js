@@ -46,6 +46,7 @@ class EmployerProfile extends Component {
             empid: this.props.userInfo.id
         };
         console.log(empid) 
+        axios.defaults.headers.common['authorization'] = this.props.userInfo.token;
         axios.post(`${backendServer}/api/getFreelancerDetails`,empid).then((response) => {
             console.log("Freelancer Details",response.data[0]);
             this.setState({
@@ -271,6 +272,7 @@ class EmployerProfile extends Component {
     }
 
     sendEmployerAPI = (data) => {
+        axios.defaults.headers.common['authorization'] = this.props.userInfo.token;
         axios.post(`${backendServer}/api/editFreelancerDetails`, data)
             .then(response=> {
                 // console.log("Updated data",response.data[0])
@@ -286,6 +288,7 @@ class EmployerProfile extends Component {
             );
     }    
     sendCompanyAPI = (data) => {
+        // axios.defaults.headers.common['authorization'] = this.props.userInfo.token;
         axios.post(`${backendServer}/editCompanyDetails`, data)
             .then(response=> {
                 if (response.status === 200) {

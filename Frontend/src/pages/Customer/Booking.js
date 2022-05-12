@@ -6,8 +6,13 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import CustomerLoggedIn from "./CustomerLoggedIn";
+import { useSelector } from "react-redux";
+import moment from 'moment';
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
 function Booking(props) {
-    const[bookedDates, setbookedDates] = useState([]);
+    const[dateMap, setDateMap] = useState({});
+    const[traversed, settraversed] = useState(false);
     const[bookedTimeSlots, setbookedTimeSlots] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
@@ -15,30 +20,43 @@ function Booking(props) {
     const [selectedTime, setSelectedTime] = useState(new Date());
     const [endTime, setEndTime] = useState(new Date(0, 0, 0, 23, 0));
     const [endDate, setEndDate] = useState(new Date());
+    const token = useSelector((state) => state.userInfo.token);
     // //dummy array for booked dates
     // const dates = [new Date('05-21-2022'), new Date('05-10-2022')];
     useEffect(()=> {
         let eDate = new Date();
         eDate.setMonth(eDate.getMonth() + 2);
         setEndDate(eDate);
-        if(props.serviceid == null)
+        if(props.location.state.serviceid == null)
             return;
+        // axios.defaults.headers.common['authorization'] = token;
         axios.get(backendServer+'/api/getBookedSlots/'+props.location.state.serviceid+'/'+props.location.state.userid).then(res=> {
             if(res.status == 200) {
-                
-                let dateArr = res.data.date;
                 let timeArr = res.data.dateTimeArr;
-                let bDates = dateArr.map(d=> {
-                    return new Date(d);
+                let map = {}
+                let bDates = timeArr.map(d=> {
+                    
+                    // let newDate =  new moment(new moment(d).format('MM/DD/YYYY  ddd hh:mm A'));
+                    let newDate =  new Date(d);
+                    let nd = setHours(setMinutes(newDate, newDate.getMinutes()), newDate.getHours());
+                    map[newDate.toString()]='';
+                    console.log(typeof(nd))
+                    return nd
                 });
-                let bTimes = dateArr.map(t=> {
-                    return new Date(0,0,0,parseInt(t[0]),parseInt(t[1]));
-                });
-                console.log('booked dates:',bDates);
-                console.log('booked times:',timeArr);
-                //setbookedDates(bDates);
-                setbookedTimeSlots(timeArr);
-
+                let isNew = true;
+                for (const [key, value] of Object.entries(map)) {
+                    if(dateMap[key]!=null) {
+                        isNew = false;
+                        break;
+                    }
+                }
+                if(isNew) {
+                    setDateMap(map);
+                    setbookedTimeSlots(bDates);
+                }
+                
+                
+                console.log('booked dates:',bookedTimeSlots);
             } else {
                 alert(res.data);
             }
@@ -46,7 +64,7 @@ function Booking(props) {
             //alert('Failed to fetch booked slots.');
             console.log('Failed to fetch booked slots:',err);
         })
-    },[]);
+    },[bookedTimeSlots]);
     
     const bookService = (e)=> {
         e.preventDefault()
@@ -71,6 +89,15 @@ function Booking(props) {
             console.log(err);
         })
     }
+
+    const setDate = (val)=> {
+        if(dateMap[val]!=null) {
+            alert('Sorry the time slot for this date is already booked')
+            return
+        }
+        setSelectedDate(val);
+
+    }
     return (
         <div className="container-fullwidth" >
             <CustomerLoggedIn></CustomerLoggedIn>
@@ -84,7 +111,7 @@ function Booking(props) {
                     <Form onSubmit={bookService} className="booking-form">
                         <Form.Group className="mb-3 spacer">
                             <Form.Label>
-                                <img src='../../images/calender.png' height="20px" width="20px" style={{float:'left'}}/><DatePicker placeholder="Service Date" showTimeSelect timeIntervals={60} selected={selectedDate} onChange={(date) => setSelectedDate(date)}  excludeTimes={bookedTimeSlots} maxDate={endDate} minDate = {startDate} dateFormat="MM/dd/yyyy  EE hh:mm a" maxTime={endTime} minTime = {startTime}/>
+                            Calender:<DatePicker placeholder="Service Date" showTimeSelect timeIntervals={60} selected={selectedDate}  onChange={(date) => setDate(date)}  maxDate={endDate} minDate = {startDate} dateFormat="MM/dd/yyyy  EE hh:mm a" maxTime={endTime} minTime = {startTime}/>
 
                             </Form.Label>
                         </Form.Group>

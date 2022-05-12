@@ -50,6 +50,7 @@ class PostService extends Component {
       };
       console.log(empid) 
       const { history } = this.props;
+      axios.defaults.headers.common['authorization'] = this.props.userInfo.token;
       axios.post(`${backendServer}/api/getFreelancerDetails`,empid).then((response) => {
           console.log("Freelancer Details",response.data[0]);
           console.log(JSON.stringify(response.data).includes(JSON.stringify('email')));
@@ -173,7 +174,8 @@ class PostService extends Component {
             }
             return result;
           }
-
+        
+          axios.defaults.headers.common['authorization'] = this.props.userInfo.token
           axios
             .post(`${backendServer}/api/postNewService`, inputData)
             .then((response) => {

@@ -19,6 +19,8 @@ import JobSeekerNavbar from "./JobSeekerNavbar";
 import CustomerLoggedIn from "./CustomerLoggedIn";
 import backendServer from "../../webConfig";
 import ErrorMsg from "../Error/ErrorMsg";
+import { Link } from 'react-router-dom';
+
 import Booking from "./Booking";
 import { IconButton } from "@mui/material";
 import config from "../../chatbot/config.js";
@@ -62,14 +64,22 @@ function JobSeekerLandingPage(props) {
   const [companyName, setCompanyName] = useState("");
   const [companyId, setCompanyId] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [savedJob, setSavedJob] = useState(false);
   const [redirectVal, redirectValFn] = useState(null);
 
   const [show, toggleShow] = useState(false);
   const email = useSelector((state) => state.userInfo.email);
   const accountType = useSelector((state) => state.userInfo.accountType);
   const userid = useSelector((state) => state.userInfo.id);
+
   const [minimizeBot, setMinimizeBot] = useState(true);
+  const token = useSelector((state) => state.userInfo.token);
+  
   let setReDirect = (price, jobId) => {
+    if(email == null || email == '') {
+      redirectValFn(<Redirect to="/login" />)
+      return;
+    }
     let toVal = {
       pathname: "/booking",
       state: {
@@ -91,11 +101,24 @@ function JobSeekerLandingPage(props) {
     setState(job.state);
     setPrice(job.price);
     setResponsibilities(job.responsibilities);
-    setTotalReviews(job.setTotalReviews);
+    setTotalReviews(job.totalReviews);
+    setRating(job.avgRating);
+    if(job!= null && job.save) {
+      setSavedJob(true);
+      document.getElementById('jobsavebtn').disabled = true
+    } else if(job!= null && !job.save) {
+      setSavedJob(false);
+      document.getElementById('jobsavebtn').disabled = false
+    }
+    setSavedJob(job.save);
   };
   const handleCompanyLink = () => {};
   const handleApply = () => {};
   const handleSaveJob = (serviceId) => {
+    if(email == null || email == '') {
+      redirectValFn(<Redirect to="/login" />)
+      return;
+    }
     axios
       .post(backendServer + "/api/saveService/", {
         userId: userid,
@@ -105,6 +128,16 @@ function JobSeekerLandingPage(props) {
         console.log("saved job results", res);
         if (res.status == 200) {
           alert("saved");
+          document.getElementById('jobsavebtn').disabled = true
+          let serv = jobs.map(jb=> {
+            let newJob = JSON.parse(JSON.stringify(jb));
+            if(newJob._id == serviceId) {
+              newJob.save = true;
+            }
+            return newJob;
+          })
+          setJobs(serv);
+          setSavedJob(true);
         } else {
           alert(res.data);
         }
@@ -147,7 +180,14 @@ function JobSeekerLandingPage(props) {
             setState(job.state);
             setPrice(job.price);
             setResponsibilities(job.responsibilities);
-            setTotalReviews(job.setTotalReviews);
+            setSavedJob(job.save);
+            setTotalReviews(job.totalReviews);
+            setRating(job.avgRating);
+            if(job.save) {
+              document.getElementById('jobsavebtn').disabled = true
+            } else {
+              document.getElementById('jobsavebtn').disabled = false
+            }
           }
         }
       });
@@ -410,7 +450,9 @@ function JobSeekerLandingPage(props) {
                 </h6>
                 <RatingView ratingValue={rating} />
                 <br />
-                <h6 class="card-title">{totalReviews} reviews</h6>
+                <Link style={{textDecoration: 'none'}}  to={{pathname:'/reviews',serviceid:jobId}}><h6>{totalReviews} reviews</h6></Link>
+
+                {/* <h6 class="card-title" onClick={()=>setRedirectToReview(jobId)}>{totalReviews} reviews</h6> */}
                 <h6 class="card-title">
                   {city}, {state}
                 </h6>
@@ -434,11 +476,11 @@ function JobSeekerLandingPage(props) {
                   <button
                     type="button"
                     class="btn savebtn"
-                    id={companyId}
+                    id='jobsavebtn'
                     onClick={() => handleSaveJob(jobId)}
                   >
                     <h5 style={{ marginTop: "4px", color: "white" }}>
-                      {t("Save")}
+                      {savedJob ? t("Saved"):t("Save")}
                     </h5>
                   </button>
                 </div>
