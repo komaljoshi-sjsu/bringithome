@@ -85,7 +85,7 @@ function SavedServices(props) {
                                                     <b>{job.serviceMode}</b><br></br>
                                                     <b>${job.price}</b>
                                                 </Card.Text>
-                                                <Button variant="primary" className='book-button'>Book Service</Button>
+                                                {/* <Button variant="primary" className='book-button'>Book Service</Button> */}
                                                 <Button variant="primary" className='book-button' style={{marginLeft:'10px'}} onClick={()=>unsaveService(job._id)}>Remove</Button>
                                             </Card.Body>
                                     </Card>

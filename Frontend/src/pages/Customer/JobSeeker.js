@@ -13,13 +13,14 @@ import Minimize from "@mui/icons-material/ExpandMoreSharp";
 import Maximize from "@mui/icons-material/ExpandLessSharp";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import JobSeekerNavbar from "./JobSeekerNavbar";
 import CustomerLoggedIn from "./CustomerLoggedIn";
 import backendServer from "../../webConfig";
 import ErrorMsg from "../Error/ErrorMsg";
 import { Link } from 'react-router-dom';
+import { userActionCreator } from "../../reduxutils/actions.js";
 
 import Booking from "./Booking";
 import { IconButton } from "@mui/material";
@@ -30,8 +31,11 @@ import "react-chatbot-kit/build/main.css";
 import MessageParser from "../../chatbot/MessageParser.js";
 import ActionProvider from "../../chatbot/ActionProvider.js";
 import { useTranslation } from "react-i18next";
+import { bindActionCreators } from "redux";
+import SuccessMsg from "../Success/SuccessMsg";
 //Create a Main Component
 function JobSeekerLandingPage(props) {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
@@ -66,6 +70,10 @@ function JobSeekerLandingPage(props) {
   const [errMsg, setErrMsg] = useState("");
   const [savedJob, setSavedJob] = useState(false);
   const [redirectVal, redirectValFn] = useState(null);
+  const showSuccessModal = bindActionCreators(
+    userActionCreator.showSuccessModal,
+    dispatch
+  );
 
   const [show, toggleShow] = useState(false);
   const email = useSelector((state) => state.userInfo.email);
@@ -127,7 +135,8 @@ function JobSeekerLandingPage(props) {
       .then((res) => {
         console.log("saved job results", res);
         if (res.status == 200) {
-          alert("saved");
+          //alert("saved");
+          setErrMsg('Successfully saved the service');
           document.getElementById('jobsavebtn').disabled = true
           let serv = jobs.map(jb=> {
             let newJob = JSON.parse(JSON.stringify(jb));
@@ -138,6 +147,8 @@ function JobSeekerLandingPage(props) {
           })
           setJobs(serv);
           setSavedJob(true);
+          
+          showSuccessModal(true);
         } else {
           alert(res.data);
         }
@@ -249,6 +260,7 @@ function JobSeekerLandingPage(props) {
   return (
     <div className="container-full">
       <ErrorMsg err={errMsg}></ErrorMsg>
+      <SuccessMsg msg={errMsg}></SuccessMsg>
       {redirectVal}
       {email !== "" && accountType === "Customer" ? (
         <CustomerLoggedIn />
