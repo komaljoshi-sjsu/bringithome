@@ -38,7 +38,7 @@ function JobSeekerLandingPage(props) {
   const [whatVal, handleWhatVal] = useState("");
   const [whereVal, handleWhereVal] = useState("");
   const [whatSearch, handleWhatSearch] = useState([]);
-  const [whereSearch, handlewhereSearch] = useState([]);
+  const [whereSearch, handleWhereSearch] = useState([]);
   const [whatWhereSearch, setWhatWhereSearch] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [findJobs, handleFindJobs] = useState({});
@@ -354,6 +354,13 @@ function JobSeekerLandingPage(props) {
                     id="asynchronous-demo"
                     style={{ width: 300 }}
                     open={openWhere}
+                    inputValue={whereSearch}
+                    onChange={(event, newValue) => {
+                      handleWhereVal(newValue);
+                    }}
+                    onInputChange={(event, newInputValue) => {
+                      handleWhereSearch(newInputValue);
+                    }}
                     onOpen={() => {
                       setOpenWhere(true);
                     }}
