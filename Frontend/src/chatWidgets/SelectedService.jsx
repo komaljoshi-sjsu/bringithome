@@ -51,7 +51,6 @@ const SelectedService = (props) => {
     <>
       {redirectVal}
       <Card sx={{ maxWidth: 345 }}>
-        <CardMedia component="img" height="140" image="" alt="green iguana" />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {props.serviceDetail.serviceName}
