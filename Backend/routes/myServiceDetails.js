@@ -139,8 +139,16 @@ router.post("/api/findServices", (req, res) => {
       .catch((err) => {
         console.log(err);
       });
-  } else {
+  } else if (what === "") {
     Services.find({ city: where })
+      .then((result) => {
+        res.status(200).send(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    Services.find({ serviceName: what, city: where })
       .then((result) => {
         res.status(200).send(result);
       })
