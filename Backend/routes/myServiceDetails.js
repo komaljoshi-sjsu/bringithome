@@ -4,7 +4,7 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const Services = require("../models/Service");
 const MyServices = require("../models/MyServices");
-const Review = require('../models/Review');
+const Review = require("../models/Review");
 
 router.get("/api/completedservices/:userid", (req, res) => {
   const userId = req.params.userid;
@@ -17,7 +17,7 @@ router.get("/api/completedservices/:userid", (req, res) => {
       console.log("applied serv;", result);
       for (let i = 0; i < result.length; i++) {
         let serv = result[i];
-        await Services.find({ _id: serv.serviceid }).then(async(service) => {
+        await Services.find({ _id: serv.serviceid }).then(async (service) => {
           let servc = service[0];
 
           let timeAr = serv.time.split(":");
@@ -34,13 +34,15 @@ router.get("/api/completedservices/:userid", (req, res) => {
             price: servc.price,
             time: timeAr[0] + ":" + min,
             bookingid: serv._id,
-            status: serv.status
+            status: serv.status,
           };
-          await Review.find({userid:userId,service:serv.serviceid}).then(result1=> {
-            if(result1.length>0) {
-              json.review = result1[0];
+          await Review.find({ userid: userId, service: serv.serviceid }).then(
+            (result1) => {
+              if (result1.length > 0) {
+                json.review = result1[0];
+              }
             }
-          })
+          );
           console.log("result for applied services", json);
           serviceArr.push(json);
         });
@@ -121,13 +123,31 @@ router.post("/api/cancelService", (req, res) => {
 router.post("/api/findServices", (req, res) => {
   const where = req.body.where;
   const what = req.body.what;
-  Services.find({ serviceName: what, city: where })
-    .then((result) => {
-      res.status(200).send(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  if (where === "" && what === "") {
+    Services.find()
+      .then((result) => {
+        res.status(200).send(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else if (where === "") {
+    Services.find({ serviceName: what })
+      .then((result) => {
+        res.status(200).send(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    Services.find({ city: where })
+      .then((result) => {
+        res.status(200).send(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 });
 router.get("/api/savedServices/:userid", (req, res) => {
   const userId = req.params.userid;
@@ -235,6 +255,7 @@ router.post("/api/allServicesByWhat/", async (req, res) => {
         $project: {
           _id: 0,
           serviceName: 1,
+          city: 1,
         },
       },
     ];
@@ -318,6 +339,7 @@ router.post("/api/allServicesByWhere/", async (req, res) => {
       {
         $project: {
           _id: 0,
+          serviceName: 1,
           city: 1,
         },
       },
@@ -384,23 +406,29 @@ router.get("/api/getBookedSlots/:serviceId/:userId", (req, res) => {
     .then((result) => {
       console.log(result);
       const dateTimeArr = [];
-      for(let i=0;i<result.length;i++) {
+      for (let i = 0; i < result.length; i++) {
         let ele = result[i];
         let date = ele.date.split("/");
-        
-        let modifiedDate = new Date(parseInt(date[2]),parseInt(date[0])-1,parseInt(date[1]))
-        
+
+        let modifiedDate = new Date(
+          parseInt(date[2]),
+          parseInt(date[0]) - 1,
+          parseInt(date[1])
+        );
+
         let tim = ele.time.split(":");
         let hour = parseInt(tim[0]);
         let min = parseInt(tim[1]);
 
         modifiedDate.setHours(hour, min);
-        
-        dateTimeArr.push(modifiedDate.toString())
-        console.log(`dateTimeArr is ${dateTimeArr} and modifiedDate is ${modifiedDate}`)
+
+        dateTimeArr.push(modifiedDate.toString());
+        console.log(
+          `dateTimeArr is ${dateTimeArr} and modifiedDate is ${modifiedDate}`
+        );
       }
       // const dateTimeArr = result.map((ele) => {
-        
+
       //   return modifiedDate;
       // });
       // const timeArr = result.map((ele) => {

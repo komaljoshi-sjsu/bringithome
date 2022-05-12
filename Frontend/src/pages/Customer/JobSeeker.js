@@ -19,7 +19,7 @@ import JobSeekerNavbar from "./JobSeekerNavbar";
 import CustomerLoggedIn from "./CustomerLoggedIn";
 import backendServer from "../../webConfig";
 import ErrorMsg from "../Error/ErrorMsg";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import Booking from "./Booking";
 import { IconButton } from "@mui/material";
@@ -74,10 +74,10 @@ function JobSeekerLandingPage(props) {
 
   const [minimizeBot, setMinimizeBot] = useState(true);
   const token = useSelector((state) => state.userInfo.token);
-  
+  const serviceData = [];
   let setReDirect = (price, jobId) => {
-    if(email == null || email == '') {
-      redirectValFn(<Redirect to="/login" />)
+    if (email == null || email == "") {
+      redirectValFn(<Redirect to="/login" />);
       return;
     }
     let toVal = {
@@ -103,20 +103,20 @@ function JobSeekerLandingPage(props) {
     setResponsibilities(job.responsibilities);
     setTotalReviews(job.totalReviews);
     setRating(job.avgRating);
-    if(job!= null && job.save) {
+    if (job != null && job.save) {
       setSavedJob(true);
-      document.getElementById('jobsavebtn').disabled = true
-    } else if(job!= null && !job.save) {
+      document.getElementById("jobsavebtn").disabled = true;
+    } else if (job != null && !job.save) {
       setSavedJob(false);
-      document.getElementById('jobsavebtn').disabled = false
+      document.getElementById("jobsavebtn").disabled = false;
     }
     setSavedJob(job.save);
   };
   const handleCompanyLink = () => {};
   const handleApply = () => {};
   const handleSaveJob = (serviceId) => {
-    if(email == null || email == '') {
-      redirectValFn(<Redirect to="/login" />)
+    if (email == null || email == "") {
+      redirectValFn(<Redirect to="/login" />);
       return;
     }
     axios
@@ -128,14 +128,14 @@ function JobSeekerLandingPage(props) {
         console.log("saved job results", res);
         if (res.status == 200) {
           alert("saved");
-          document.getElementById('jobsavebtn').disabled = true
-          let serv = jobs.map(jb=> {
+          document.getElementById("jobsavebtn").disabled = true;
+          let serv = jobs.map((jb) => {
             let newJob = JSON.parse(JSON.stringify(jb));
-            if(newJob._id == serviceId) {
+            if (newJob._id == serviceId) {
               newJob.save = true;
             }
             return newJob;
-          })
+          });
           setJobs(serv);
           setSavedJob(true);
         } else {
@@ -149,8 +149,57 @@ function JobSeekerLandingPage(props) {
   };
   useEffect(() => {
     console.log("I am here");
-    setWhatOptions([]);
-    setWhereOptions([]);
+    //setWhatOptions([]);
+    //setWhereOptions([]);
+    axios
+      .get(`${backendServer}/customer/home/` + currentPage + "/" + userid)
+      .then((res) => {
+        console.log("Home page data:", res);
+        if (res.status == 200) {
+          let services = res.data.services;
+          setTotalPosts(res.data.totalPosts);
+          setJobs(services);
+          let job;
+          let pageForNow = Math.ceil(res.data.totalPosts / 5);
+          const pageNumber = [];
+          console.log("Page for now:", pageForNow);
+          for (let i = 1; i <= pageForNow; i++) {
+            pageNumber.push(i);
+          }
+          createServiceData(res.data.services);
+          setPageNumbers(pageNumber);
+          console.log("pagenumber:", pageNumber);
+          if (services.length > 0) {
+            job = services[0];
+            setJobId(job._id);
+            setJobType(job.serviceCategory);
+            setMode(job.serviceMode);
+            setRoleName(job.serviceName);
+            setCity(job.city);
+            setZip(job.zip);
+            setState(job.state);
+            setPrice(job.price);
+            setResponsibilities(job.responsibilities);
+            setSavedJob(job.save);
+            setTotalReviews(job.totalReviews);
+            setRating(job.avgRating);
+            if (job.save) {
+              document.getElementById("jobsavebtn").disabled = true;
+            } else {
+              document.getElementById("jobsavebtn").disabled = false;
+            }
+          }
+        }
+      });
+  }, [currentPage]);
+
+  const createServiceData = (services) => {
+    services.forEach((element) => {
+      let data = { what: element.serviceName, where: city };
+      serviceData.push(data);
+    });
+  };
+  const getServices = () => {
     axios
       .get(`${backendServer}/customer/home/` + currentPage + "/" + userid)
       .then((res) => {
@@ -183,30 +232,17 @@ function JobSeekerLandingPage(props) {
             setSavedJob(job.save);
             setTotalReviews(job.totalReviews);
             setRating(job.avgRating);
-            if(job.save) {
-              document.getElementById('jobsavebtn').disabled = true
+            if (job.save) {
+              document.getElementById("jobsavebtn").disabled = true;
             } else {
-              document.getElementById('jobsavebtn').disabled = false
+              document.getElementById("jobsavebtn").disabled = false;
             }
           }
         }
       });
-    /*const handleOutsideClick = (e) => {
-        // simple implementation, should be made more robust.
-        if (!e.currentTarget.classList.includes("react-chatbot-kit")) {
-          toggleShow(false);
-        }
-      };
-
-      window.addEventListener("click", handleOutsideClick);
-
-      return () => {
-        window.removeEventListener("click", handleOutsideClick);
-      };*/
-  }, [currentPage]);
-
+  };
   const getWhatServices = (what) => {
-    handleWhatVal(what);
+    // handleWhatVal(what);
     const data = { where: `${whereVal}`, what: what };
     axios.post(`${backendServer}/api/allServicesByWhat/`, data).then((res) => {
       console.log("Home page data:", res);
@@ -216,12 +252,19 @@ function JobSeekerLandingPage(props) {
           setOpenWhere(false);
         } else {
           setWhatOptions(services);
+          setOpenWhat(true);
         }
       }
     });
   };
 
   const handleFindServices = () => {
+    if (
+      (whereVal === "" || whereVal === null) &&
+      (whatVal === "" || whatVal === null)
+    ) {
+      getServices();
+    }
     const data = { where: `${whereVal}`, what: `${whatVal}` };
     axios.post(`${backendServer}/api/findServices/`, data).then((res) => {
       console.log("Home page data:", res);
@@ -232,7 +275,7 @@ function JobSeekerLandingPage(props) {
     });
   };
   const getWhereServices = (where) => {
-    handleWhereVal(where);
+    // handleWhereVal(where);
     const data = { where: where, what: `${whatVal}` };
     axios.post(`${backendServer}/api/allServicesByWhere/`, data).then((res) => {
       console.log("Home page data:", res);
@@ -246,6 +289,7 @@ function JobSeekerLandingPage(props) {
       }
     });
   };
+
   return (
     <div className="container-full">
       <ErrorMsg err={errMsg}></ErrorMsg>
@@ -266,6 +310,13 @@ function JobSeekerLandingPage(props) {
                     id="asynchronous-demo"
                     style={{ width: 300 }}
                     open={openWhat}
+                    inputValue={whatSearch}
+                    onChange={(event, newValue) => {
+                      handleWhatVal(newValue);
+                    }}
+                    onInputChange={(event, newInputValue) => {
+                      handleWhatSearch(newInputValue);
+                    }}
                     onOpen={() => {
                       setOpenWhat(true);
                     }}
@@ -276,33 +327,21 @@ function JobSeekerLandingPage(props) {
                       option.serviceName === value.serviceName
                     }
                     getOptionLabel={(option) => option.serviceName}
-                    options={whatOptions}
-                    loading={loadingWhat}
+                    onSelect={(ev) => handleWhatVal(ev.target.value)}
+                    options={whatOptions.map((option) => option)}
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         label="What"
+                        value={whatVal}
                         variant="outlined"
-                        onSelect={(ev) => handleWhatVal(ev.target.value)}
                         onChange={(ev) => {
-                          // dont fire API if the user delete or not entered anything
                           if (
                             ev.target.value !== "" ||
                             ev.target.value !== null
                           ) {
                             getWhatServices(ev.target.value);
                           }
-                        }}
-                        InputProps={{
-                          ...params.InputProps,
-                          endAdornment: (
-                            <React.Fragment>
-                              {loadingWhat ? (
-                                <CircularProgress color="inherit" size={20} />
-                              ) : null}
-                              {params.InputProps.endAdornment}
-                            </React.Fragment>
-                          ),
                         }}
                       />
                     )}
@@ -332,6 +371,7 @@ function JobSeekerLandingPage(props) {
                         {...params}
                         label="Where"
                         variant="outlined"
+                        value={whereVal}
                         onSelect={(ev) => handleWhereVal(ev.target.value)}
                         onChange={(ev) => {
                           // dont fire API if the user delete or not entered anything
@@ -450,8 +490,12 @@ function JobSeekerLandingPage(props) {
                 </h6>
                 <RatingView ratingValue={rating} />
                 <br />
-                <Link style={{textDecoration: 'none'}}  to={{pathname:'/reviews',serviceid:jobId}}><h6>{totalReviews} reviews</h6></Link>
-
+                <Link
+                  style={{ textDecoration: "none" }}
+                  to={{ pathname: "/reviews", serviceid: jobId }}
+                >
+                  <h6>{totalReviews} reviews</h6>
+                </Link>
                 {/* <h6 class="card-title" onClick={()=>setRedirectToReview(jobId)}>{totalReviews} reviews</h6> */}
                 <h6 class="card-title">
                   {city}, {state}
@@ -476,11 +520,11 @@ function JobSeekerLandingPage(props) {
                   <button
                     type="button"
                     class="btn savebtn"
-                    id='jobsavebtn'
+                    id="jobsavebtn"
                     onClick={() => handleSaveJob(jobId)}
                   >
                     <h5 style={{ marginTop: "4px", color: "white" }}>
-                      {savedJob ? t("Saved"):t("Save")}
+                      {savedJob ? t("Saved") : t("Save")}
                     </h5>
                   </button>
                 </div>

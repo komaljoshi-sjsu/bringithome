@@ -19,7 +19,7 @@ const ServiceProviderOptions = (props, { actionProvider }) => {
       messages: [...prev.messages, message],
     }));
     if (option.target.innerHTML === "Chat with Service Provider") {
-      return redirectValFn(<Redirect to="/messenger" />);
+      props.actionProvider.chatWithServiceProviderHandler();
     } else if (option.target.innerHTML === "Post a review") {
       props.actionProvider.postReviewHandler();
     } else if (option.target.innerHTML === "Service History") {
