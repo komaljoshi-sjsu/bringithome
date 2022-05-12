@@ -280,6 +280,7 @@ function JobSeekerLandingPage(props) {
       if (res.status == 200) {
         let services = res.data;
         setJobs(services);
+        handleCardClick("", services[0]);
       }
     });
   };
@@ -341,7 +342,7 @@ function JobSeekerLandingPage(props) {
                     }
                     getOptionLabel={(option) => option.serviceName}
                     onSelect={(ev) => handleWhatVal(ev.target.value)}
-                    options={whatOptions.map((option) => option)}
+                    options={whatOptions}
                     filterOptions={(options, state) => options}
                     renderInput={(params) => (
                       <TextField
