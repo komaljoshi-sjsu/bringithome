@@ -30,7 +30,7 @@ const SelectedService = (props) => {
     const userId = user;
     const serviceId = props.serviceDetail.serviceId;
     const data = { userid: userId, serviceid: serviceId };
-    axios.post(`http://localhost:8000/api/cancelService/`, data).then((res) => {
+    axios.post(`${backendServer}/api/cancelService/`, data).then((res) => {
       if (res.status === 200) {
         const message = props.actionProvider.createChatBotMessage(
           `Your service for ${props.serviceDetail.serviceName} cancelled successfully`

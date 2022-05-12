@@ -10,7 +10,7 @@ const ServiceHistory = (props) => {
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
     let user = JSON.parse(userInfo).id;
-    axios.get(`http://localhost:8000/api/allServices/${user}`).then((res) => {
+    axios.get(`${backendServer}/api/allServices/${user}`).then((res) => {
       if (res.status === 200) {
         setState((state) => ({ ...state, serviceHistoryList: res.data }));
       }
@@ -27,10 +27,10 @@ const ServiceHistory = (props) => {
       <Stack direction="row" spacing={1}>
         <div>
           {props.serviceHistoryList
-            .filter((s) => s.status === "completed")
+            .filter((s) => s.status === "Booked")
             .map((s) => (
               <Chip
-                label={s.serviceName}
+                label={s.serviceid.serviceName}
                 color="primary"
                 onClick={() => handleService(s)}
               />
