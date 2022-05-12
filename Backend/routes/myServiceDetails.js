@@ -139,8 +139,16 @@ router.post("/api/findServices", (req, res) => {
       .catch((err) => {
         console.log(err);
       });
-  } else {
+  } else if (what === "") {
     Services.find({ city: where })
+      .then((result) => {
+        res.status(200).send(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    Services.find({ serviceName: what, city: where })
       .then((result) => {
         res.status(200).send(result);
       })
@@ -253,9 +261,22 @@ router.post("/api/allServicesByWhat/", async (req, res) => {
       },
       {
         $project: {
-          _id: 0,
+          _id: 1,
           serviceName: 1,
+          freelancer: 1,
+          serviceCategory: 1,
+          serviceMode: 1,
+          serviceDescription: 1,
+          responsibilities: 1,
+          price: 1,
           city: 1,
+          streetAddress: 1,
+          state: 1,
+          zipcode: 1,
+          country: 1,
+          availability: 1,
+          servicePostedDate: 1,
+          servicePostedMonth: 1,
         },
       },
     ];
@@ -338,9 +359,22 @@ router.post("/api/allServicesByWhere/", async (req, res) => {
       },
       {
         $project: {
-          _id: 0,
+          _id: 1,
           serviceName: 1,
+          freelancer: 1,
+          serviceCategory: 1,
+          serviceMode: 1,
+          serviceDescription: 1,
+          responsibilities: 1,
+          price: 1,
           city: 1,
+          streetAddress: 1,
+          state: 1,
+          zipcode: 1,
+          country: 1,
+          availability: 1,
+          servicePostedDate: 1,
+          servicePostedMonth: 1,
         },
       },
     ];
