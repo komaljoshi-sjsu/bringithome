@@ -347,7 +347,7 @@ function JobSeekerLandingPage(props) {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="What"
+                        label={t("What")}
                         value={whatVal}
                         variant="outlined"
                         onChange={(ev) => {
@@ -392,7 +392,7 @@ function JobSeekerLandingPage(props) {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Where"
+                        label={t("Where")}
                         variant="outlined"
                         value={whereVal}
                         onSelect={(ev) => handleWhereVal(ev.target.value)}
@@ -453,9 +453,9 @@ function JobSeekerLandingPage(props) {
                   <span style={{ color: "#003399" }}>{t("Service Feed")} </span>
                 </h3>
               </div>
-              <div class="col-4">
+              {/* <div class="col-4">
                 <h3 class="headinghoverUnderline">{t("Recent Searches")}</h3>
-              </div>
+              </div> */}
             </div>
           </div>
           <div class="col-1"></div>
