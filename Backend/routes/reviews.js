@@ -43,15 +43,20 @@ router.get("/api/allReviews/:currentPage", async (req, res) => {
             totalReviews: totalPosts
         }
         if(result!=null && result.length>0) {
-            let servid = result[0]._id+'';
-            await Service.find({_id:servid}).then(r=> {
-                let serv = r[0];
-                reviews.serviceName = serv.serviceName;
-                reviews.serviceCategory = serv.serviceCategory;
-                reviews.freelancer = serv.freelancer;
-            }).catch(er=> {
-                console.log('Failed to fetch service details for review:',er)
-            })
+            
+            for(let i = 0;i<result.length;i++) {
+                let rev = result[i];
+                let servid = rev._id+'';
+                await Service.find({_id:servid}).then(r=> {
+                    let serv = r[0];
+                    rev.serviceName = serv.serviceName;
+                    rev.serviceCategory = serv.serviceCategory;
+                    rev.freelancer = serv.freelancer;
+                }).catch(er=> {
+                    console.log('Failed to fetch service details for review:',er)
+                })
+            }
+            
         }
         res.status(200).send(reviews); 
     })

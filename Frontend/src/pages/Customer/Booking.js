@@ -5,22 +5,41 @@ import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import { Redirect } from "react-router";
+
 import CustomerLoggedIn from "./CustomerLoggedIn";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import moment from 'moment';
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
+import ErrorMsg from "../Error/ErrorMsg";
+import { userActionCreator } from "../../reduxutils/actions.js";
+import { bindActionCreators } from "redux";
+import SuccessMsg from "../Success/SuccessMsg";
+
+
 function Booking(props) {
+    const dispatch = useDispatch();
     const[dateMap, setDateMap] = useState({});
     const[traversed, settraversed] = useState(false);
     const[bookedTimeSlots, setbookedTimeSlots] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
-    const [startTime, setStartTime] = useState(new Date(0, 0, 0, 9, 0));
+    const [startTime, setStartTime] = useState(new Date(0, 0, 0, 0, 0));
     const [selectedTime, setSelectedTime] = useState(new Date());
     const [endTime, setEndTime] = useState(new Date(0, 0, 0, 23, 0));
     const [endDate, setEndDate] = useState(new Date());
+    const [redirectVal, redirectValFn] = useState(null);
     const token = useSelector((state) => state.userInfo.token);
+    const [errMsg, setErrMsg] = useState("");
+    const showSuccessModal = bindActionCreators(
+        userActionCreator.showSuccessModal,
+        dispatch
+      );
+    const showErrorModal = bindActionCreators(
+    userActionCreator.showErrorModal,
+    dispatch
+    );
     // //dummy array for booked dates
     // const dates = [new Date('05-21-2022'), new Date('05-10-2022')];
     useEffect(()=> {
@@ -68,6 +87,11 @@ function Booking(props) {
     
     const bookService = (e)=> {
         e.preventDefault()
+        if(selectedDate == null || selectedDate.length == 0) {
+            setErrMsg('Please select a date time slot');
+            showErrorModal(true);
+            return;
+        }
         const formData = new FormData(e.target)
         const address = formData.get('address')
         const phone = formData.get('phone');
@@ -80,9 +104,14 @@ function Booking(props) {
             serviceid: props.location.state.serviceid
         }).then(res => {
             if(res.status == 200) {
-                alert("Successfully booked service");
+                // setErrMsg("Successfully booked service");
+                // showSuccessModal(true);
+                redirectValFn(<Redirect to="/appliedservices" />)
+                //alert("Successfully booked service");
             } else {
-                alert(res.data);
+                setErrMsg("Failed to book this service. Please refer console");
+                showErrorModal(true);
+                console.log(res);
             }
         }).catch(err => {
             alert("Failed to book service.");
@@ -100,6 +129,9 @@ function Booking(props) {
     }
     return (
         <div className="container-fullwidth" >
+            {redirectVal}
+            <ErrorMsg err={errMsg}></ErrorMsg>
+            <SuccessMsg msg={errMsg}></SuccessMsg>
             <CustomerLoggedIn></CustomerLoggedIn>
 
             <div style={{marginTop:'5%',marginRight:'auto',marginLeft:'auto',width:'50%'}}>
@@ -119,7 +151,7 @@ function Booking(props) {
                             <Form.Control type="text" placeholder="Address" name="address" maxLength="60" required></Form.Control>
                         </Form.Group>
                         <Form.Group className="mb-3 spacer">
-                            <Form.Control type="text" name = "phone" placeholder="Contact Number" pattern="[0-9]{10}" title="Please enter a 10 digit phone number"></Form.Control>                    
+                            <Form.Control type="text" name = "phone" placeholder="Contact Number" pattern="[0-9]{10}" title="Please enter a 10 digit phone number" required></Form.Control>                    
                         </Form.Group>
                         <Button bsStyle="primary" bsSize="large" block type="submit" className="spacer" className='book-button'>Pay ${props.location.state.price}</Button>
                     </Form>

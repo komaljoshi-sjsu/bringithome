@@ -27,9 +27,9 @@ function Reviews(props) {
           .then((response) => {
             if(response.status == 200) {
               setReviewDetails(response.data.reviews);
-              setfreelancer(response.data.freelancer);
-              setserviceName(response.data.serviceName);
-              setserviceCategory(response.data.serviceCategory);
+              // setfreelancer(response.data.freelancer);
+              // setserviceName(response.data.serviceName);
+              // setserviceCategory(response.data.serviceCategory);
               let totalReviews = response.data.totalReviews;
               let totalPaginationList = Math.ceil(totalReviews / 18);
               
@@ -74,8 +74,8 @@ function Reviews(props) {
                           <Row>
                       <Col xs={2}><img src="../../../images/user.png" alt="user_image" style={{ maxHeight: '30px', maxWidth: '30px' }} /></Col>
                       <Col xs={5}>
-                      <Link style={{color:'black', textDecoration: 'none'}} to="/snapshot"><h5>{serviceCategory} - {serviceName}</h5><br></br></Link>
-                      <h7><b>{freelancer.name}</b></h7>
+                      <Link style={{color:'black', textDecoration: 'none'}} to="/snapshot"><h5>{review.serviceCategory} - {review.serviceName}</h5><br></br></Link>
+                      <h7><b>{review.freelancer.name}</b></h7>
                         </Col>
                         
                         <Col xs={4}/>

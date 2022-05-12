@@ -6,12 +6,42 @@ const mongoose = require('mongoose');
 const Service = require('../models/Service');
 const Review = require('../models/Review');
 const { checkAuth } = require("../config/passport");
+const Freelancer = require("../models/Freelancer");
+const Customer = require("../models/Customer");
 
-router.get("/allCompanyReviews/:userid", checkAuth,(req, res) => {
+router.get("/allCompanyReviews/:userid", checkAuth,async (req, res) => {
     const userId = req.params.userid;
-    Review.find({"freelancer.freelancerId":userId}).populate({path:'service'}).then(async(result)=> {
+    var serArr = [];
+    var final =[];
+    await Freelancer.find({_id:userId}).then(res =>{
+            let length =res[0].availableServices.length;
+            let serv = res[0].availableServices;
+
+            for(let i=0;i< length ; i++){
+            serArr.push(serv[i].serviceId);
+        }
+    })
+    await Review.find({service : {$in : serArr }}).populate({path:'service'}).then(async(result)=> {
         // console.log(result);
-        res.status(200).send(result);
+        {
+            for(let i=0; i<result.length; i++){
+                let rev =result[i];
+                await Customer.find({_id:rev.userid}).then(res =>{
+                    
+                    let json ={
+                        serviceName :rev.service.serviceName,
+                        serviceCategory :rev.service.serviceCategory,
+                        title :rev.title,
+                        rating : rev.rating,
+                        review : rev.review,
+                        userName : res[0].name
+                    }
+                final.push(json);
+                })
+            }
+          console.log(final); 
+        res.status(200).send(final);
+        }
     }).catch(err=> {
         console.log(err);
         res.status(400).send('Could not get reviews.');

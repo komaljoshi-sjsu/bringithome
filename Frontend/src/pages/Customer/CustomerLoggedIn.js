@@ -185,19 +185,7 @@ class CustomerLoggedIn extends Component {
                           <span className="spandrop">My Reviews</span>
                         </Link>
                       </a>
-                      <a class="dropdown-item ditems">
-                        <Link
-                          to="/myPhotos"
-                          style={{
-                            textDecoration: 'none',
-                            color: '#474747',
-                            outline: 'none',
-                          }}
-                        >
-                          <MdPhoto style={{ width: '40px', height: '25px' }} />
-                          <span className="spandrop">My Photos</span>
-                        </Link>
-                      </a>
+                      
                       
                       <div class="dropdown-divider ditems"></div>
                       <a class="dropdown-item" onClick={this.logoutAction}>
