@@ -18,14 +18,14 @@ router.get('/customer/home/:currentPage/:userid', async(req, res) => {
   console.log(`Current Page is ${currentPage} and total posts are ${totalPosts}`)
   Service.find().skip(skip).limit(postsPerPage).then(async(result) => {
     
-    if(userid == null || userid == 'null') {
-      let results = {
-        services: result,
-        totalPosts: totalPosts
-      }
-      console.log('Result:',results);
-      return res.status(200).send(results);
-    }
+    // if(userid == null || userid == 'null') {
+    //   let results = {
+    //     services: result,
+    //     totalPosts: totalPosts
+    //   }
+    //   console.log('Result:',results);
+    //   return res.status(200).send(results);
+    // }
     let finalRes = await Promise.all(
       result.map(async(data)=> {
         var copy = JSON.parse(JSON.stringify(data));
