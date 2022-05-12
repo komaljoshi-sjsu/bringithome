@@ -10,7 +10,7 @@ const PostAreviewForService = (props) => {
     let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
     let user = JSON.parse(userInfo).id;
     axios
-      .get(`http://localhost:8000/api/pastServices/${user}`)
+      .get(`${backendServer}/api/pastServices/${user}`)
 
       .then((res) => {
         if (res.status === 200) {

@@ -10,7 +10,7 @@ const ServiceUpcomingHistory = (props) => {
   useEffect(() => {
     let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
     let user = JSON.parse(userInfo).id;
-    axios.get(`http://localhost:8000/api/allServices/${user}`).then((res) => {
+    axios.get(`${backendServer}/api/allServices/${user}`).then((res) => {
       if (res.status === 200) {
         setState((state) => ({ ...state, serviceUpcomingList: res.data }));
       }

@@ -21,9 +21,11 @@ const AddreviewForService = (props) => {
   };
 
   const handlePost = () => {
+    if (rating === "" || review === "" || title === "") return;
     let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
     let user = JSON.parse(userInfo).id;
-
+    if (isReviewAdded(user, props.serviceDetail.serviceid._id)) {
+    }
     const data = {
       userid: user,
       serviceid: props.serviceDetail.serviceid._id,
@@ -46,6 +48,34 @@ const AddreviewForService = (props) => {
     });
 
     //post service call
+  };
+
+  const isReviewAdded = () => {
+    if (rating === "" || review === "" || title === "") return;
+    let userInfo = JSON.parse(localStorage.getItem("persist:root"))["userInfo"];
+    let user = JSON.parse(userInfo).id;
+    let serviceid = props.serviceDetail.serviceid._id;
+    axios
+      .get(`${backendServer}/api/getReviewsByServiceId/${serviceid}`)
+      .then((res) => {
+        if (res.status === 200) {
+          let review = res.data.filter((d) => d.userid === user);
+          if (review.length === 0) {
+            handlePost();
+            return;
+          } else {
+            const message = props.actionProvider.createChatBotMessage(
+              `You have already posted a review for service  ${props.serviceDetail.serviceid.serviceName}`
+            );
+            setState((prev) => ({
+              ...prev,
+              messages: [...prev.messages, message],
+            }));
+            props.actionProvider.helloHandler();
+            return;
+          }
+        }
+      });
   };
   return (
     <>
@@ -85,7 +115,7 @@ const AddreviewForService = (props) => {
           <Button size="small" onClick={() => handleCancel()}>
             Cancel
           </Button>
-          <Button size="small" onClick={() => handlePost()}>
+          <Button size="small" onClick={() => isReviewAdded()}>
             Post
           </Button>
         </CardActions>
