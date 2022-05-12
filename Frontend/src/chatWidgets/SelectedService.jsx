@@ -53,7 +53,7 @@ const SelectedService = (props) => {
       <Card sx={{ maxWidth: 345 }}>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {props.serviceDetail.serviceName}
+            {props.serviceDetail.serviceid.serviceName}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {props.serviceDetail.time}
